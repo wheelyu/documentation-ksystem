@@ -1,0 +1,85 @@
+IMAGE(tmptranst)
+/---------------------------------------------------------------------------------------------------------------------------\
+|t.SpekKerja                                                                                                                |
+|/------------t--------------------t----------------------t---------------------t--------------------t---------------------\|
+||t.Jabatan   |t.Pendidikan        |t.Pengalaman          |t.PelatihanWajib     |t.KetTeknis         |t.KetNonTeknis       ||
+|\------------.--------------------.----------------------.---------------------.--------------------.---------------------/|
+\---------------------------------------------------------------------------------------------------------------------------/
+
+IMAGE(tmptrans)
+!|____________|____________________|______________________|_____________________|____________________|______________________|
+
+FIELD(tmptrans)
+spknobuk    PROTECT        INPUTRI         1
+spknote     TEXTAREA PROTECT                INPUTRI         2
+lpengalaman        TEXTAREA PROTECT            INPUTRI         3
+lpelatihan   TEXTAREA PROTECT            INPUTRI         4
+lketteknis   TEXTAREA PROTECT                INPUTRI         5
+lketnonteknis   TEXTAREA PROTECT                INPUTRI         5
+
+
+MAP(mjoinspkpengalaman)
+spknote     lpengalaman       REPLACE
+
+DBCALCS(djoinspkpengalaman)
+        DBC_COMMAND     JOIN
+        DBC_TARGET      spkdatbuktyp   lDTJOBDESC tbdkode lJD12
+        DBC_SELECT      cselspkjobdesc
+        DBC_MAP         mjoinspkpengalaman
+
+MAP(mjoinspkpelatihan)
+spknote     lpelatihan       REPLACE
+
+DBCALCS(djoinspkpelatihan)
+        DBC_COMMAND     JOIN
+        DBC_TARGET      spkdatbuktyp   lDTJOBDESC tbdkode lJD13
+        DBC_SELECT      cselspkjobdesc
+        DBC_MAP         mjoinspkpelatihan
+
+MAP(mjoinspkketteknis)
+spknote     lketteknis       REPLACE
+
+DBCALCS(djoinspkketteknis)
+        DBC_COMMAND     JOIN
+        DBC_TARGET      spkdatbuktyp   lDTJOBDESC tbdkode lJD14
+        DBC_SELECT      cselspkjobdesc
+        DBC_MAP         mjoinspkketteknis
+
+MAP(mjoinspkketnonteknis)
+spknote     lketnonteknis       REPLACE
+
+DBCALCS(djoinspkketnonteknis)
+        DBC_COMMAND     JOIN
+        DBC_TARGET      spkdatbuktyp   lDTJOBDESC tbdkode lJD15
+        DBC_SELECT      cselspkjobdesc
+        DBC_MAP         mjoinspkketnonteknis
+
+
+
+CALCS()
+cdetspekkerja tmpkode=="SPEKKERJA"
+cjoinspkpengalaman     djoinspkpengalaman==1
+cjoinspkpelatihan   djoinspkpelatihan==1
+cjoinspkketteknis     djoinspkketteknis==1
+cjoinspkketnonteknis    djoinspkketnonteknis==1
+
+EDIT(tmptrans)
+e.Validate spknobuk VALIDATE tbddatkodidx mtbdjabspekker 0 {Pgv_dttabel} {Pgv_personal} {Pgv_jabatan} 
+
+MAP(mtbdjabspekker)
+tbdkode     spknobuk    REPLACE
+spkjrk      lspkjrk     REPLACE
+lpengalaman   lpengalaman   REPLACE_IF cjoinspkpengalaman
+lpelatihan   lpelatihan   REPLACE_IF cjoinspkpelatihan
+lketteknis   lketteknis   REPLACE_IF cjoinspkketteknis
+lketnonteknis   lketnonteknis   REPLACE_IF cjoinspkketnonteknis
+
+
+SUBFILE(tmptrans)
+SFL_TITLE(tmptranst)
+SFL_SORT_BY_FIELD spkjrk
+SFL_COND cdetspekkerja
+
+SFL_LINES(6)        /* Jml record yang kelihatan di layar */
+SFL_TARGET
+spkdatbuktyp   lDTJOBDESC tbdkode lJD11 

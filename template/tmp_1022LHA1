@@ -1,0 +1,61 @@
+IMAGE(tmptranst)
+/-------------------------------------------\
+|/-----------------------------------------\|
+|| t.Nobuk    : __________________________ ||
+|| t.KodeLHA  : __________________________ ||
+|| t.StsUpl   : ______                     ||
+|| t.ReviewL1 : ______________             ||
+|| t.TglMulai : ______________             ||
+|| t.TglSlesai: ______________             ||
+|| t.Ket      : __________________________ ||
+||		        ______                     ||
+|\-----------------------------------------/|
+|/-----------------------------------------\|
+||t.UplDOC                                 ||
+|\-----------------------------------------/|
+|/----------------DOCUPLOAD----------------\|
+||                                         ||
+||                                         ||
+|\-----------------------------------------/|
+\-------------------------------------------/
+
+IMAGE(tmptrans)
+
+FIELDS(tmptranst)
+svinobuk        PROTECT                         INPUTRI 1
+svikode         PROTECT                         INPUTRI 2
+svists          PROTECT                         INPUTRI 3
+svidtmkode      NOCHANGE                        INPUTRI 4
+svitgl1         PROTECT  NOLIMIT {DD-MM-YY}     INPUTRI 5
+svitgl2         PROTECT  NOLIMIT {DD-MM-YY}     INPUTRI 5
+sviket2         TEXTAREA                        INPUTRI 6
+lenter          NOCHANGE                        INPUTRI 7
+
+DEFAULTS(tmptranst)
+IF caudkettbh       svists          INIT_ADD        OPEN
+IF ctaccaudhead2    svists          INIT_ADD        {crevisi}
+IF cblmmulai        svidtmkode      DFALT_SCAN      BLANKS
+                                                    MULAI
+
+IF cslesai          svidtmkode      DFALT_SCAN      SELESAI
+
+SUBFILE(tmptrans)
+SFL_LINES(1)
+SFL_UPL_DIRFLD  tlmtgl
+SFL_DOCUPLFLD svioto
+SFL_DOCUPLFLD_DBCALCS   dupddocsvi
+SFL_SORT_BY_FIELD svikode
+SFL_SHOW_NEXT
+SFL_TITLE(tmptranst)
+SFL_TARGET
+        svidatbuktyp   lREPORTLHA tlmnobuk lLAYER1
+SFL_MAP
+lREPORTLHA     svidata        REPLACE
+tlmnobuk       svinobuk       REPLACE
+lLAYER1        svitype        REPLACE
+
+HOOKS(tmptranst)
+BEFORE_INPUT    cur_field=svidtmkode    DO_SKIP_IF cbukanaudhead1
+BEFORE_INPUT    cur_field=sviket2       DO_SKIP_IF cblmslesai
+AFTER_INPUT     cur_field=svidtmkode    DO_MAP SHOW mkodelha1
+AFTER_INPUT     cur_field=svidtmkode    DO_MAP SHOW IF cmulai mtglmulai

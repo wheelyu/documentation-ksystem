@@ -1,0 +1,186 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>MASTER_MP</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Langkah2 Untuk Membuat Program Dengan Bahasa K-System (K-Language)"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Tipe Program &#38; 19 Perintah Bahasa K-System"
+HREF="c57.html"><LINK
+REL="PREVIOUS"
+TITLE="SCAN"
+HREF="x164.html"><LINK
+REL="NEXT"
+TITLE="DBCALCS"
+HREF="x172.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Langkah2 Untuk Membuat Program Dengan Bahasa K-System (K-Language)</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x164.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 6. Tipe Program &#38; 19 Perintah Bahasa K-System</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x172.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN168"
+>6.14. MASTER_MP</A
+></H1
+><P
+>&#13;   Perintah ini mengadakan pengecekan untuk semua rekord detail terhadap
+      satu kondisi tertentu. Misalnya kita ingin tahu apakah semua
+      rekord detail sudah berstatus CLSD dan apabila ada yang belum
+      kita ingin memunculkan satu pesan di layar. Bila semua detail
+      rekord memenuhi syarat, kita mungkin ingin mengubah status dari
+      rekord master yang bersangkutan. Fungsi ini dapat digabung dengan
+      POSTING sehingga pengecekan terhadap semua rekord detail dapat
+      dilaksanakan sebelum POSTING dilaksanakan. Untuk saat ini
+      MASTER_MP hanya boleh untuk trans dan trans2, tidak bisa transa
+      atau trans2a. Bila POSTING(transa), maka MASTER_MP(trans) yang
+      akan dicek. Demikian juga dengan POSTING(trans2b), maka bila
+      ada MASTER_MP(trans2), MASTER_MP ini yang akan dijalankan. Khusus
+      untuk MASTER_MP yang ada di layar query akan dijalankan sesuai 
+      dengan permintaan, jadi MASTER_MP(transa) akan dijalankan bila
+      trans yang aktif adalah transa dan MASTER_MP di QUERY akan
+      dijalankan pada saat menekan tombol END dan bukannya sesudah
+      'R'ekam.
+	</P
+><PRE
+CLASS="programlisting"
+>&#13;   Cara memakai:
+   MASTER_MP(trans/trans2)
+      MST_DETCOND  namaCalcs
+		/* kondisi yang harus dipenuhi oleh tiap detail rekord*/
+		/* boleh ditiadakan, artinya selalu dilaksanakan */
+      MST_COND namaCalcs 
+                /* kondisi untuk menjalankan atau tidak */
+      MST_DETMAP namaMap
+		/* map yang akan dijalankan sesudah tiap detail */
+      MST_ERMSG  pesan anda disini 
+		/* pesan yang akan dikeluarkan bila ada satu detail rekord yang tidak memenuhi 
+		   kondisi di MST_DETCOND*/
+      MST_EXE_TIME BEFORE_POSTING/AFTER_POSTING
+		/* Waktu pelaksanaan sebelum posting atau sesudah posting, bila baris ini tidak ada 
+		   dianggap AFTER_POSTING */
+      MST_DETDBCALCS  namaDbcalcs
+		/* DBCALCS yang akan dilaksanakan untuk tiap detail rekord */
+
+      MST_DBCALCS  namaDbcalcs 
+		/*DBCALCS yang akan dilaksanakan bila semua detail memenuhi kondisi di MST_DETCOND*/
+	</PRE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x164.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x172.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>SCAN</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c57.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>DBCALCS</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

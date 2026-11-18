@@ -1,0 +1,330 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>&#13;Membuat Program Posting
+</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Tutorial Ksystem V2016.09.20"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="
+Membuat Program Pembayaran Hutang
+"
+HREF="c522.html"><LINK
+REL="PREVIOUS"
+TITLE="
+Membuat File Detail
+"
+HREF="x535.html"><LINK
+REL="NEXT"
+TITLE="
+Membuat Laporan
+"
+HREF="x562.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Tutorial Ksystem V2016.09.20</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x535.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 19. Membuat Program Pembayaran Hutang</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x562.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN551"
+>19.3. Membuat Program Posting</A
+></H1
+><P
+>&#13;Seperti yang sudah dibahas sebelumnya, program posting untuk APP_TYPE tidak bisa digabungkan dengan layar QUERY_TYPE. Oleh karena itu kita akan buat program posting ini di layar 472. Sebelum kita masuk ke layar 472, ketikkan terlebih dahulu perintah berikut di layar 471 di bwh perintah SCR_FILE pbc.</P
+><PRE
+CLASS="programlisting"
+>&#13;SCR_NXT_POSTING 472
+SCR_NXT_MAP mnext
+
+MAP(mnext)
+pbcnoprc	r_string1	REPLACE
+pbctgl		r_date1		REPLACE
+</PRE
+><P
+>&#13;Setelah menuliskan perintah di atas marilah kita segera masuk ke layar editor 472 dengan cara mengetikkan perintah vi prt9000/sct472 pada editor vi. Setelah kita masuk ke layar editor 472, ketikkan perintah sebagai berikut. </P
+><PRE
+CLASS="programlisting"
+>&#13;SCREEN 472 APP_TYPE Posting Bayar Hutang
+
+LOCAL
+PGM_FIELDS
+lmutawl		STRING		15
+lstatus		STRING		5
+lganti		INT2		2
+
+IMAGE(master) {BASE_ROW=1} {FRSFLD_BACKUP} {LSTFLD_ADVANCE}
+SCT472                                                               @DATE
+/---------------------Posting Pembayaran Hutang------------------------------\
+|                                                                            |
+|               Status        : ____                                         |
+|                                                                            |
+|               Nomor. Bukti  : ______________                               |
+|                                                                            |
+|----------------------------------------------------------------------------|
+| No          O/S Nomor          Sts  Kode         Jumlah       Suplier      |
+| Perencanaan       Cek               Rekening     Pembayaran                |
+\----------------------------------------------------------------------------/
+
+FIELD(master)
+   lstatus   PROTECT             NONE     1
+   lmutawl   ALLCAPS             INPUTRI  2
+
+CALCS()
+cganti0		lganti == 0
+
+DEFAULTS(master)
+lmutawl		INIT		{r_string1}
+lstatus		INIT		OPEN
+
+/*-------------------- SUBFILE INFORMATION (trans) --------------------*/
+IMAGE(transt) {NO_CLS} {LSTFLD_ADVANCE} {FRSFLD_BACKUP} {BASE_ROW=15}
++5                                                                   +5 {TOP}
+ Nomor Fak       Tgl jt                 Sisa Hutang    Jumlah Bayar
++6                                                                   +6 {TOP}
+
+IMAGE(trans) {NO_CLS} {LSTFLD_ADVANCE} {FRSFLD_BACKUP} {BASE_ROW=20}
+ ______________  ________   ____________  ___________.__  ____ __________ ____________ __________
+
+FIELD(trans)
+   pbdnofak      ALLCAPS SCROLL     INPUTRI           1
+   pbdtgljtp     PROTECT {DD-MM-YY}  NONE             3
+   pbddvs        PROTECT             NONE             5
+   pbdjml        NUMERIC             NONE             7
+   pbdnobuk      PROTECT SCROLL      NONE             2
+   pbdnobbm      PROTECT             NONE             2
+   pbccab2       PROTECT             NONE             2
+   pbccab        PROTECT             NONE             2
+
+SUBFILE(trans)
+SFL_TITLE(transt)
+SFL_LINES(2)
+SFL_TARGET
+pbdbukdvsidx   lmutawl
+
+/*-------------------- SUBFILE INFORMATION --------------------*/
+/*
+ No          O/S Nomor          Sts  Kode         Jumlah       Suplier
+ Perencanaan       Cek               Rekening     Pembayaran
+*/
+
+IMAGE(trans2) {NO_CLS} {LSTFLD_ADVANCE} {FRSFLD_BACKUP} {BASE_ROW=13}
+____________ _ _ ___________ ____ ________ _ ___________.__ ______ ____ ________
+
+FIELD(trans2)
+   pcmnoprc      NOCHANGE SCROLL        INPUTRI          1
+   pcmtype       NOCHANGE SCROLL        INPUTRI          2
+   pcmtype2      NOCHANGE SCROLL        INPUTRI          3
+   pcmnocek      NOCHANGE SCROLL        INPUTRI          4
+   pcmsts        PROTECT                INPUTRI          5
+   pcmnobbm      PROTECT SCROLL         INPUTRI          6
+   pcmtgl        PROTECT UNSEEN         INPUTRI          7
+   pcmtotal      PROTECT                INPUTRI          8
+   pcmplg        PROTECT SCROLL         INPUTRI          9
+   pcmdvs        PROTECT SCROLL         INPUTRI          10
+   pcmtgljtp     PROTECT {DD-MM-YY}     INPUTRI          11
+
+SUBFILE(trans2)
+SFL_LINES(4)
+SFL_COND cganti0
+SFL_TARGET
+    pcmnoprcidx    pbdnobuk
+
+/*--------------- dupdpmb ---------------*/
+CALCS()
+cpmbsisa	pmbsisa - pbdjml
+cCLSD		CLSD
+cINPG		INPG
+c1		1
+ctunai		pcmtype == "T"
+cCEK		pcmtype == "C"
+
+MAP(mupdpmb)
+cpmbsisa	pmbsisa		DO_CALC
+
+DBCALCS(dupdpmb)
+	DBC_COMMAND	UPDATE
+	DBC_TARGET	pmbnofakidx	pbdnofak
+	DBC_MAP		mupdpmb
+
+/*--------------- dupdpbc ---------------*/
+MAP(mupdpbc)
+cCLSD		pbcsts		DO_CALC
+g_tgltrn	pbcpostgl	REPLACE
+
+DBCALCS(dupdpbc)
+	DBC_COMMAND	UPDATE
+	DBC_TARGET	pbcnoprcidx	pbdnobuk
+	DBC_MAP		mupdpbc
+
+/*-------------- dupdpbd ---------------*/
+MAP(mupdpbd)
+cCLSD		pbdsts		DO_CALC
+
+DBCALCS(dupdpbd)
+	DBC_COMMAND	UPDATE
+	DBC_TARGET	pbdprmidx	pbdprm
+	DBC_MAP		mupdpbd
+
+/*-------------- dupdpcm ---------------*/
+MAP(mupdpcm)
+cCLSD		pcmsts		DO_CALC_IF ctunai
+cINPG		pcmsts		DO_CALC_IF cCEK
+c1		lganti		DO_CALC
+
+DBCALCS(dupdpcm)
+	DBC_COMMAND	UPDATE
+	DBC_TARGET	pcmprmidx	pcmprm
+	DBC_MAP		mupdpcm
+
+SPCALCS(spcal1)
+	dupdpmb <FONT
+COLOR="RED"
+>Berfungsi mengubah field pmbsisa yang menyimpan informasi sisa hutang</FONT
+>
+	dupdpbc <FONT
+COLOR="RED"
+>Berfungsi mengubah field pbcsts menjadi CLSD</FONT
+>
+	dupdpbd <FONT
+COLOR="RED"
+>Berfungsi mengubah field pbdsts menjadi CLSD</FONT
+>
+
+SPCALCS(spcal2)
+	dupdpcm
+
+POSTING(trans)
+	PST_COMMAND	spcal1
+
+POSTING(trans2)
+	PST_COMMAND	spcal2
+
+END_SCREEN
+
+<FONT
+COLOR="RED"
+>Kata - kata yang berwarna merah hanyalah keterangan saja jadi tidak perlu ditulis</FONT
+>
+</PRE
+><P
+>&#13;Setelah kita menyelesaikan program posting di atas, langkah terakhir yang kita lakukan adalah membuat program laporan rts.</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x535.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x562.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Membuat File Detail</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c522.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Membuat Laporan</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

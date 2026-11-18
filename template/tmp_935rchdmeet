@@ -1,0 +1,183 @@
+IMAGE(tmptranst)
+/---------------------------------------\
+|/-------------------------------------\|
+|| t.RecheduleMeeting                  ||
+|\-------------------------------------/|
+|/-------------------------------------\|
+||t.StsUbah      : ___________________ ||
+||t.Tglmeet      : ___________________ ||
+||t.TglRs        : ___________________ ||
+||t.WktMulai     : ___________________ ||
+||t.WktSeles     : ___________________ ||
+||t.JdlMeet      : ___________________ ||
+||t.Tempat       : ___________________ ||
+||t.Ket          : ___________________ ||
+||                 __________ 	       ||
+||spasi		  		       ||
+|\-------------------------------------/|
+\---------------------------------------/
+IMAGE(tmptrans)
+
+FIELDS(tmptranst)
+spkkode				NOCHANGE			INPUTRI	1	/*Status Ubah*/
+spktglft			PROTECT {DD-MM-YYYY}		INPUTRI	2	/*Tanggal Meeting*/
+spktglft2			NOLIMIT {DD-MM-YYYY}		INPUTRI 3	/*Tanggal Reschedule*/
+spkjam				NOCHANGE			INPUTRI	4	/*Waktu Mulai*/
+spkjam2				NOCHANGE			INPUTRI	5	/*Waktu Selesai*/
+spkkat				PROTECT				INPUTRI	6	/*Judul Meeting*/
+spkkat2				NOCHANGE			INPUTRI	7	/*Tempat*/
+spkket				TEXTAREA			INPUTRI	8	/*Keterangan Meeting*/
+lenter				NOCHANGE			INPUTRI	9	/*Enter*/
+
+
+CALCS()
+cjikabatal			spkkode == "BATAL"
+cjikagantitgl			spkkode == "GANTITGL"
+/*cupdtglmeet			(spkkode == "GANTITGL" && spktglft2 > g_tgltrn) || spkkode == "BATAL"*/
+creschkemin84			(spktglft2 - g_tgltrn) == 8 || (spktglft2 - g_tgltrn) == 4 
+creschkemin8			(spktglft2 - g_tgltrn) == 8
+creschkemin3			(spktglft2 - g_tgltrn) == 3
+ctglmin3			spktglft2 - 3
+ctglmin2			spktglft2 - 2
+
+DEFAULTS(tmptranst)
+lenter				INIT_LABEL		"Enter Disini"
+
+spkkode				DFALT_SCAN_BLANKS	BATAL
+							GANTITGL
+
+IF cjikagantitgl spkjam     	DFALT_SCAN_BLANKS       083000 090000 100000 110000 130000 140000 150000 160000 170000
+IF cjikagantitgl spkjam2    	DFALT_SCAN_BLANKS       090000 100000 110000 120000 130000 140000 150000 160000 170000 174500
+
+spkkat2				DFALT_SCAN_BLANKS	ONLINE
+							OFFLINE
+
+EDITS(tmptranst)	
+e.isi tanggal reschedule	spktglft2		MANDATORY_IF cjikagantitgl
+
+MAP(misireschbatal)
+tlmtgl 				spktglft		REPLACE_IF cjikabatal
+tlmjam1				spkjam			REPLACE_IF cjikabatal
+tlmjam2				spkjam2			REPLACE_IF cjikabatal
+tlmdari				spkkat			REPLACE_IF cjikabatal	
+tlmuntuk			spkkat2			REPLACE_IF cjikabatal
+DEBUG ldum			ldum			REPLACE
+
+MAP(misireschgantitgl)
+tlmdari				spkkat			REPLACE
+DEBUG ldum			ldum			REPLACE
+
+HOOKS(tmptranst)
+AFTER_INPUT			cur_field=spkkode	DO_MAP SHOW IF cjikabatal	misireschbatal
+AFTER_INPUT			cur_field=spkkode	DO_MAP SHOW IF cjikagantitgl	misireschgantitgl
+
+BEFORE_INPUT			cur_field=spkkode	DO_SKIP_IF cjikabatal
+BEFORE_INPUT			cur_field=spktglft2	DO_SKIP_IF cjikabatal
+BEFORE_INPUT			cur_field=spkjam	DO_SKIP_IF cjikabatal	
+BEFORE_INPUT			cur_field=spkjam2	DO_SKIP_IF cjikabatal
+BEFORE_INPUT			cur_field=spkkat	DO_SKIP_IF cjikabatal	
+BEFORE_INPUT			cur_field=spkkat2	DO_SKIP_IF cjikabatal
+/*
+AFTER_INPUT			cur_field=spktglft2	DO_MAP SHOW
+				IF cupdtglmeet		mdum
+				ELSE HKCURSOR
+				HKMSG Tanggal Tidak Boleh Kurang Dari Hari Ini
+*/
+
+SUBFILE(tmptrans)
+SFL_LINES(1)
+SFL_TITLE(tmptranst)
+SFL_TARGET	spkdatbuktyp lRSCHMEET tlmnobuk
+
+SFL_MAP
+lRSCHMEET	spkdata		REPLACE
+tlmnobuk	spknobuk	REPLACE
+
+/****** pilihan batal *******/
+MAP(mbatalmeeting)
+gv_VOID		tlmsts		REPLACE
+DEBUG ldum	ldum		REPLACE
+
+MAP(mbukaabkbtlmeet)
+gv_VOID		abksts		REPLACE
+
+/******** pilihan gantitgl ********/
+MAP(mupdjdwlmeet)
+spktglft2	tlmtgl		REPLACE
+spkjam		tlmjam1		REPLACE
+spkjam2		tlmjam2		REPLACE
+spkkat2		tlmuntuk	REPLACE
+
+MAP(mupdmst935bahanmeeting)
+gv_INPG		tlmsts		REPLACE
+lUPLBHNMEET	tlmkodeapr	REPLACE
+DEBUG ldum	ldum		REPLACE
+
+MAP(mbukasemuakunci935)
+gv_CLSD		abksts		REPLACE
+DEBUG ldum	ldum		REPLACE
+
+MAP(maddabkuplbhnmeetsendev8)
+lKUNCIABSEN		abkdata		REPLACE
+tlmnobuk		abknobuk	REPLACE
+lnipsendev		abkkym		REPLACE
+lketuplbhnmeet		abkkym2		REPLACE
+gt_RINP			abksts		REPLACE
+ctglmin3		abktgl		DO_CALC
+g_scrnumstr		abkscr		REPLACE
+lUPBHNMET		abktype		REPLACE
+DEBUG ldum		ldum		REPLACE
+
+MAP(maddabkuplbhnmeetheaddev8)
+lKUNCIABSEN		abkdata		REPLACE
+tlmnobuk		abknobuk	REPLACE
+lnipheaddev		abkkym		REPLACE
+lketuplbhnmeet		abkkym2		REPLACE
+gt_RINP			abksts		REPLACE
+ctglmin3		abktgl		DO_CALC
+g_scrnumstr		abkscr		REPLACE
+lUPBHNMET		abktype		REPLACE
+DEBUG ldum		ldum		REPLACE
+
+MAP(maddabkuplbhnmeetsendev3)
+lKUNCIABSEN		abkdata		REPLACE
+tlmnobuk		abknobuk	REPLACE
+lnipsendev		abkkym		REPLACE
+lketuplbhnmeet		abkkym2		REPLACE
+gt_RINP			abksts		REPLACE
+ctglmin2		abktgl		DO_CALC
+g_scrnumstr		abkscr		REPLACE
+lUPBHNMET		abktype		REPLACE
+DEBUG ldum		ldum		REPLACE
+
+MAP(maddabkuplbhnmeetheaddev3)
+lKUNCIABSEN		abkdata		REPLACE
+tlmnobuk		abknobuk	REPLACE
+lnipheaddev		abkkym		REPLACE
+lketuplbhnmeet		abkkym2		REPLACE
+gt_RINP			abksts		REPLACE
+ctglmin2		abktgl		DO_CALC
+g_scrnumstr		abkscr		REPLACE
+lUPBHNMET		abktype		REPLACE
+DEBUG ldum		ldum		REPLACE
+
+SPCALCS(spreschedule)
+/******************** jika batal *********************/
+DO_LIB_IF cjikabatal		ap_dbclc(DNAME dbatalmeeting,DCOMMAND UPDATE,DTARGET tlmprmidx tlmprm,DMAP mbatalmeeting);
+DO_LIB_IF cjikabatal		ap_dbclc(DNAME dbukaabkbtlmeet,DCOMMAND UPDATE_RANGE,DTARGET abkdatbukidx lKUNCIABSEN tlmnobuk,DMAP mbukaabkbtlmeet);			/*buka semua kunci 935*/
+
+/******************** jika ganti tgl ****************/
+DO_LIB_IF cjikagantitgl		ap_dbclc(DNAME dupdjdwlmeeting,DCOMMAND UPDATE,DTARGET tlmprmidx tlmprm,DMAP mupdjdwlmeet);
+
+DO_LIB_IF creschkemin84		ap_dbclc(DNAME dupdmst935bahanmeet,DCOMMAND UPDATE,DTARGET  tlmprmidx tlmprm,DMAP mupdmst935bahanmeeting);				/*jika maju ubah sts 2 ke BAHAN_MEETING*/
+DO_LIB_IF creschkemin84		ap_dbclc(DNAME dbukasemuakunci935,DCOMMAND UPDATE_RANGE,DTARGET abkdatbukidx lKUNCIABSEN tlmnobuk,DMAP mbukasemuakunci935);			/*buka semua kunci 935*/
+
+DO_LIB_IF creschkemin8		ap_dbclc(DNAME daddkuncibahanmeetsendev8,DCOMMAND ADD,DFILE abk,DMAP maddabkuplbhnmeetsendev8);	
+DO_LIB_IF creschkemin8		ap_dbclc(DNAME daddkuncibahanmeetheaddev8,DCOMMAND ADD,DFILE abk,DMAP maddabkuplbhnmeetheaddev8);	
+
+DO_LIB_IF creschkemin3		ap_dbclc(DNAME daddkuncibahanmeetsendev3,DCOMMAND ADD,DFILE abk,DMAP maddabkuplbhnmeetsendev3);	
+DO_LIB_IF creschkemin3		ap_dbclc(DNAME daddkuncibahanmeetheaddev3,DCOMMAND ADD,DFILE abk,DMAP maddabkuplbhnmeetheaddev3);	
+
+
+POSTING(tmptrans)
+PST_ADDCMD	spreschedule

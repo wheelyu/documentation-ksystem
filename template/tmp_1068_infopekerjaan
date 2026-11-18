@@ -1,0 +1,107 @@
+IMAGE(tmptranst)
+/---------------------------------------------------------------------------------------------------------------------------\
+|/---------------------------------------\/---------------------------------------\/---------------------------------------\|
+||t.Survey				 ||t.Resurvey				  ||t.Kunj				   ||
+||t.PkrjnDeb 	  :____________________	 ||t.PkrjnDeb	   :____________________  ||t.Kerja :______ _________ t.Kunj   t.1 ||
+||t.PendapatanDeb :____________________	 ||t.PendapatanDeb :____________________  ||t.Kerja :______ _________ t.Kunj   t.2 ||
+||t.PlnDeb	  :____________________	 ||t.PkrjnPnj	   :____________________  ||t.Kerja :______ _________ t.Kunj   t.3 ||
+||t.PkrjnPnj	  :____________________	 ||t.PendapatanPnj :____________________  ||					   ||
+||t.PendapatanPnj :____________________	 ||t.HCTLRumah	   :____________________  ||					   ||
+||t.PlnPnj	  :____________________	 ||t.HTCKPkrj	   :____________________  || 					   ||
+|\---------------------------------------/\---------------------------------------/\---------------------------------------/|
+|/---------------------------------------------------\									    |
+||t.Nip		  :__________			     |									    |
+||t.Nama 	  :_______________________________   |									    |
+||t.HasilValidasi :__________ 			     |									    |
+||t.Analisa	  :_______________________________   |									    |
+||						_____|									    |
+|\---------------------------------------------------/									    |
+\---------------------------------------------------------------------------------------------------------------------------/
+IMAGE(tmptrans)
+
+FIELD(tmptranst)
+lsurpkrjdeb	PROTECT         INPUTRI	1
+lrespkrjdeb	PROTECT         INPUTRI	2
+lkunpkrjkon1	PROTECT         INPUTRI	3
+lpkrjkonaot1	PROTECT		INPUTRI	4
+lsurpendeb	PROTECT         INPUTRI	5
+lrespendeb	PROTECT         INPUTRI	6
+lkunpkrjkon2	PROTECT         INPUTRI	7
+lpkrjkonaot2	PROTECT		INPUTRI	8
+lsurplndeb	PROTECT         INPUTRI	9
+lrespkrjpj	PROTECT         INPUTRI	10
+lkunpkrjkon3	PROTECT         INPUTRI	11
+lpkrjkonaot3	PROTECT		INPUTRI	12
+lsurpkrjpj	PROTECT         INPUTRI	13
+lrespenpj	PROTECT         INPUTRI	14
+lsurpenpj	PROTECT         INPUTRI	15
+lHCTLrh		PROTECT         INPUTRI	16
+lsurplnpj	PROTECT         INPUTRI	17
+lHTCKpkrj	PROTECT         INPUTRI	18
+
+ketkode		PROTECT         INPUTRI	19
+lnama		PROTECT         INPUTRI	20
+ketstr1		NOCHANGE	INPUTRI	21
+ketisi	    TEXTAREA ALLCAPS	INPUTRI	22
+lenter		NOCHANGE	INPUTRI	23
+
+DEFAULTS(tmptranst)
+ketkode		INIT	{g_usrkode}
+ketstr1		DFALT_SCAN_BLANKS	SAMA
+					TIDAK
+
+EDITS(tmptranst)
+t.Validate	ketkode	VALIDATE psikodidx mpikisi1 
+
+MAP(mpikisi1)
+cBLANKS		lsurpkrjdeb	DO_CALC
+cBLANKS		lrespkrjdeb	DO_CALC
+cBLANKS		lkunpkrjkon1	DO_CALC
+cBLANKS		lsurpendeb	DO_CALC
+cBLANKS		lrespendeb	DO_CALC
+cBLANKS		lkunpkrjkon2	DO_CALC
+cBLANKS		lsurplndeb	DO_CALC
+cBLANKS		lrespkrjpj	DO_CALC
+cBLANKS		lkunpkrjkon3	DO_CALC
+cBLANKS		lsurpkrjpj	DO_CALC
+cBLANKS		lrespenpj	DO_CALC
+cBLANKS		lsurpenpj	DO_CALC
+cBLANKS		lHCTLrh		DO_CALC
+cBLANKS		lsurplnpj	DO_CALC
+cBLANKS		lHTCKpkrj	DO_CALC
+cBLANKS		lpkrjkonaot1	DO_CALC
+cBLANKS		lpkrjkonaot2	DO_CALC
+cBLANKS		lpkrjkonaot3	DO_CALC
+
+psinama		lnama		REPLACE
+
+lsurpkrjdeb	lsurpkrjdeb	REPLACE_IF cjoinspkmaster
+lrespkrjdeb	lrespkrjdeb	REPLACE_IF cjoinspkmaster
+lkunpkrjkon1	lkunpkrjkon1	REPLACE_IF cjoinspkmaster
+lsurpendeb	lsurpendeb	REPLACE_IF cjoinspkmaster
+lrespendeb	lrespendeb	REPLACE_IF cjoinspkmaster
+lkunpkrjkon2	lkunpkrjkon2	REPLACE_IF cjoinspkmaster
+lsurplndeb	lsurplndeb	REPLACE_IF cjoinspkmaster
+lrespkrjpj	lrespkrjpj	REPLACE_IF cjoinspkmaster
+lkunpkrjkon3	lkunpkrjkon3	REPLACE_IF cjoinspkmaster
+lsurpkrjpj	lsurpkrjpj	REPLACE_IF cjoinspkmaster
+lrespenpj	lrespenpj	REPLACE_IF cjoinspkmaster
+lsurpenpj	lsurpenpj	REPLACE_IF cjoinspkmaster
+lHCTLrh		lHCTLrh		REPLACE_IF cjoinspkmaster
+lsurplnpj	lsurplnpj	REPLACE_IF cjoinspkmaster
+lHTCKpkrj	lHTCKpkrj	REPLACE_IF cjoinspkmaster
+lpkrjkonaot1	lpkrjkonaot1	REPLACE_IF cjoinspkmaster
+lpkrjkonaot2	lpkrjkonaot2	REPLACE_IF cjoinspkmaster
+lpkrjkonaot3	lpkrjkonaot3	REPLACE_IF cjoinspkmaster
+
+SUBFILE(tmptrans)
+SFL_LINES(1)
+SFL_TITLE(tmptranst)
+SFL_SHOW_NEXT
+SFL_TARGET
+ ketdatbuktgl	lVERFKTFID tlmnobuk lPEKERJAAN
+SFL_MAP
+lVERFKTFID	ketdata		REPLACE
+tlmnobuk	ketnobuk	REPLACE
+lPEKERJAAN	kettype		REPLACE
+

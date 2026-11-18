@@ -1,0 +1,242 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Membuat Laporan</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Tutorial Ksystem V2016.09.20"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Membuat Program Penjualan"
+HREF="c478.html"><LINK
+REL="PREVIOUS"
+TITLE="Membuat Perintah Posting"
+HREF="x507.html"><LINK
+REL="NEXT"
+TITLE="
+Membuat Program Pembayaran Hutang
+"
+HREF="c522.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Tutorial Ksystem V2016.09.20</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x507.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 18. Membuat Program Penjualan</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="c522.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN515"
+>18.4. Membuat Laporan</A
+></H1
+><P
+>&#13;Untuk membuat laporan tahapnya sama pada bab - bab sebelumnya. Karena sudah pernah dijelaskan mengenai fungsi - fungsi yang ada di program rts, maka marilah kita langsung membuatnya dengan langkah - langkah sebagai berikut: </P
+><P
+>&#13;1. Masuk kembali ke layar 571 dan ketikkan perintah seperti berikut di atas END_SCREEN</P
+><PRE
+CLASS="programlisting"
+>&#13;IMAGE(report) {LSTFLD_ADVANCE}
+/-------------------------Mencetak Faktur dan DO-------------------------------\
+| /--------------------------------------------------------------------------\ |
+| |                                                                          | |
+| |   No Faktur : ______________                                             | |
+| |   Status    : _______                                                    | |
+| |   Cetak     :  _                                                         | |
+| \--------------------------------------------------------------------------/ |
+\-----------------------------------------------------------------------------/
+
+
+FIELD(report)
+ppmnofak        PROTECT         NONE            1
+ppmsts          PROTECT         NONE            2
+r_dev           NOCHANGE        ZERO            5
+
+DEFAULTS(report)
+r_dev           DFALT_LIST      6 1 2 0 3
+
+DEFAULTS(qrts)
+ppdnofak        INIT_QUERY     {ppmnofak}
+
+RTREE(report)
+USES_SCRIPT(scr571.rts)
+RT_DEFAULT qrts
+</PRE
+><P
+>&#13;2. Setelah itu marilah kita masuk ke layar sct571.rts dan ketikkan perintah sebagai berikut.</P
+><PRE
+CLASS="programlisting"
+>&#13;START
+
+VIRTUAL
+vnourt          INT2            2       COUNTER + 1
+vlaba           DFLOAT          8       ppmtotfak - ppmhpp
+
+SEARCH
+FILE "ppm.dat" ALL
+FILE "plg.dat" JTN "ppm.dat" BY_FIELD ppmplg USING_KEY plgkodidx
+
+SORT USING_KEY
+NO_MOD          ppmtglfak
+NO_MOD          ppmplg
+
+CONTROL
+1 ppmtglfak
+
+ACCUMULATOR
+atotal  SUM     ppmtotfak
+ahpp    SUM     ppmhpp
+alaba   SUM     vlaba
+
+DISPLAY
+DEVICE          r_dev
+PAGE_LENGTH     66
+THOUSAND_SEPARATOR PERIOD
+DECIMAL_POINT  COMMA
+SCREEN_LINES   24
+
+IMAGE
+
+REPORT_HDR
++
++@xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+g_persh
++@xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+g_alamat
++
++                          Faktur Penjualan
++
+CONTROL_HDR(1)
++Tanggal : @xxxxxxxxxxxx
+ppmtglfak
++/---t----------------------------t-------------------------t-------------t-------------\
++|NO |         PELANGGAN          |      TOTAL FAKTUR       |     HPP     |     LABA    |
++|---|----------------------------|-------------------------|-------------|-------------|
+CONTROL_FTR(2)
++|@99|@xxxxxxxxxxxxxxxxxxxxxxxxxxx|@9,9999999999999999999999|@9,9999999999|@9,9999999999|
+ INCREMENT (vnourt) plgnama ppmtotfak ppmhpp vlaba
+
+ CONTROL_FTR(1)
++|---.----------------------------|-------------------------|-------------|-------------|
++|   T  O  T  A  L                |@9,9999999999999999999999|@9,9999999.00|@9,9999999999|
+atotal ahpp alaba
++\--------------------------------.-------------------------.-------------.-------------/
+PAGE_FTR
++
++
+EXIT
+</PRE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x507.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="c522.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Membuat Perintah Posting</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c478.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Membuat Program Pembayaran Hutang</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,186 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>RTREE</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Tutorial Ksystem V2016.09.20"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Daftar Perintah Program Ksystem"
+HREF="c173.html"><LINK
+REL="PREVIOUS"
+TITLE="POSTING"
+HREF="x279.html"><LINK
+REL="NEXT"
+TITLE="END_SCREEN"
+HREF="x287.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Tutorial Ksystem V2016.09.20</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x279.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 15. Daftar Perintah Program Ksystem</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x287.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN283"
+>15.18. RTREE</A
+></H1
+><P
+>&#13;	Perintah ini akan menjalankan program laporan rts pada saat
+	menekan tombol 'o'.
+	</P
+><PRE
+CLASS="programlisting"
+>&#13;RTREE(report)
+	USES_IMAGE(report)
+	USES_SCRIPT(scr???.rts)
+	RT_SAVE_TO(lap???)  /* nama file bila disimpan ke file atau html */
+	RT_SAVE_TO({lnamafile}) /* nama file dalam field */
+	RT_COND  namaCalc
+	RT_MAP   namaMap
+	RT_DBCALCS namaDbcalcs
+	RT_SPCALCS namaSpcalcs
+	RT_PRINT_DBCALCS namaDbcalcs /* Call DBCALCS after printing*/
+	RT_NXT_POSTING nomorScrPosting /* jalankan posting scr ini 
+						dulu sebelum laporan*/
+	RT_NXT_MAP namaMap          /* Jalankan Map ini sebelum posting */
+	RT_NXT_COND  namaCalc /* kondisi untuk menjalankan RT_NXT_POSTING */
+	RT_DEV6_PRINT1   /* Print ke printer dari layar naik turun hanya 1x */
+	RT_DEV6_PRINT0   /* Print ke Dev6 saja, ke printer tidak boleh */
+	RT_JOIN_OUTPUT   /* Join laporan dengan laporan selanjutnya */
+	RT_DEFAULT /* Pilih rekord yang akan dicetak lewat DEFAULT */
+	RT_NO_KS  /* Tidak usah mengeluarkan pesan K-System di awal laporan */
+	RT_NO_CR /* Tidak usah ada ^[@ (reset printer) pada awal laporan &#38; RT_CHAR_SIZE diabaikan */
+	RT_NO_CHANGE /* Laporan asli tidak diubah sama sekali mis.
+		     ** /---   akan tetap keluar /----
+		     ** !-sa  akan tetap keluar !-sa
+		     */
+	RT_NO_PRINT_O /* Pilihan print O dihilangkan untuk laporan ini */
+	RT_NO_SCR_FONT /* Tampilan di layar naik-turun dibuat ukuran font 
+	                  normal, pada saat dicetak akan mengikuti font
+			  yang di rts */
+	RT_NO_SPACE  /* Spasi di string dan nomor dihilangkan, untuk dipakai
+	             ** di blackberry messenger */
+	RT_JOIN_FIELD1 namaField /* berguna untuk RT_DEFAULT yang ingin 
+	                               mencari berdasarkan kombinasi file 
+				       asli dan file hasil JOIN, 
+				       mis.brg dan kat */
+	RT_JOIN_FIELD2 namaField
+	</PRE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x279.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x287.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>POSTING</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c173.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>END_SCREEN</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,366 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>&#13;Membuat Program Pembelian
+</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Tutorial Ksystem V2016.09.20"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="
+	Mengenal Perintah POSTING untuk APP_TYPE
+	"
+HREF="x415.html"><LINK
+REL="NEXT"
+TITLE="
+Membuat File Detail
+"
+HREF="x442.html"></HEAD
+><BODY
+CLASS="chapter"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Tutorial Ksystem V2016.09.20</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x415.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x442.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="chapter"
+><H1
+><A
+NAME="AEN428"
+></A
+>Chapter 17. 
+Membuat Program Pembelian
+</H1
+><P
+>&#13;Pada bab ini kita akan membuat program pembelian. Karena pada bab sebelumnya sudah diterangkan mengenai fungsi dari masing - masing perintah maka pada bab ini kita akan langsung membuatnya. Untuk memulainya langkah pertama yang harus dilakukan adalah dengan membuat file master terlebih dahulu. Setelah itu kita akan membuat file detail. Dan langkah terakhir adalah membuat program posting. Pada program pembelian ini kita akan menggunakan file pmb sebagai file master.</P
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN431"
+>17.1. Membuat File Master</A
+></H1
+><P
+>&#13;Program pembelian ini akan kita masukkan ke layar 371. Untuk memulainya marilah kita buka editor vi dan ketikkan perintah "vi prt9000/sct371". Setelah itu akan tampak halaman kosong dan ketikkan perintah sebagai berikut untuk membuat file master.</P
+><PRE
+CLASS="programlisting"
+>&#13;SCREEN 371 QUERY_TYPE Input Pembelian
+SCR_FILE pmb
+
+IMAGE(master) {BASE_ROW=2} {FRSFLD_BACKUP} {LSTFLD_ADVANCE} {IMG_BOX_COLOR1=250,228,205} {IMG_BOX_COLOR2=150,244,252} {IMG_BOX_COLOR3=238,240,162} {IMG_BOX_COLOR4=227,210,210}
+/---SCT371---------------------------PEMBELIAN-----------------------------------------------------\
+| /-----------------------------------------------\ /--------------------\ /---------------------\ |
+| |No.Faktur  : ______________   Type Beli:__     | |Tanggal  :_________ | |Bruto: ___________.__| |
+| |Cabang     : __________       Divisi   :_____  | |Status   :_________ | |Disc : ___________.__| |
+| |Suplier __ : __________  _____________________ | |Mt.Uang  :_________ | |PPN  : ___________.__| |
+| |BR/JS      : ___              Type Brg :___    | |Kurs     :_________ | |Bayar: ___________.__| |
+| |Keterangan : __________________________________| |No.Kirim :_________ | |Biaya: ___________.__| |
+| \-----------------------------------------------/ \--------------------/ \---------------------/ |
+|  ___________ ____________                                                          _      ___    |
+|                                                                                                  |
+|                                                                                                  |
+|                                                                                                  |
+|                                                                                                  |
+|                                                                                                  |
+|                                                                                                  |
+|                                                                                                  |
+|                                                                                                  |
+|                                              /------------------Total Hutang-------------------\ |
+|                                              | ____________________________________________.__ | |
+|                                              |                                                 | |
+|                                              |                                                 | |
+|                                              \-------------------------------------------------/ |
+\--------------------------------------------------------------------------------------------------/
+
+FIELD(master)
+
+   pmbnofak             ALLCAPS            INPUTRI              1
+   pmbtk                NOCHANGE           INPUTRI              2
+   pmbtglfak            NONE {DD-MM-YY}    INPUTRI              20
+   pmbtothrg            PROTECT            NONE                 30 /* Total Bruto */
+
+   pmbcab               ALLCAPS SCROLL     INPUTRI              3  /* Cabang */
+   pmbdvs               ALLCAPS SCROLL     INPUTRI              4  /* Divisi */
+   pmbsts               ALLCAPS PROTECT    INPUTRI              21
+   pmbtotdis            PROTECT            INPUTRI              31  /* Diskon */
+
+
+   pmbfl2               NOCHANGE           INPUTRI              6 /* DN/LN */
+   pmbsup               ALLCAPS SCROLL     INPUTRI              7
+   pmbnorangka          ALLCAPS            INPUTRI              8
+   pmbmtuangas1         ALLCAPS SCROLL     INPUTRI              22
+   pmbtotppn            PROTECT            NONE                 32  /* Total PPN */
+
+   pmbstsimp            NOCHANGE PROTECT   INPUTRI              9 /* BR/JS */
+   pmbfl1               NOCHANGE           INPUTRI              10 /* Type SP/MT*/
+   pmbkursas1           NUMERIC            INPUTRI              23  /* Total PPN */
+   pmbbyr               PROTECT            INPUTRI              33  /* Total PPN */
+
+   pmbket               ALLCAPS SCROLL     INPUTRI              11
+   pmbnoret             ALLCAPS SCROLL     INPUTRI              24
+   pmbtotbbm6           PROTECT            INPUTRI              34
+
+   ltomdet_d            TOMBOL             INPUTRI              34 /* Tombol Detil d*/
+   ltomdet_2d           TOMBOL             INPUTRI              35 /* Tombol Detil 2d */
+   pmbstspst            ALLCAPS            NONE                 40
+   pmbscr               PROTECT UNSEEN     NONE                 42
+   pmbtotfak            PROTECT            BIG                  41
+
+DEFAULTS(master)
+pmbtk                   DFALT_SCAN      K "Pembelian Kredit"
+                                        T "Pembelian Tunai"
+ltomdet_d               INIT            1d.Isi Barang
+ltomdet_2d              INIT            2d.Isi Kas/Bank
+pmbsts			INIT		OPEN
+pmbfl2                  DFALT_SCAN      DN "Dalam Negeri"
+                                        LN "Luar Negeri"
+pmbscr			INIT_QUERY	{g_scrnumstr}
+
+MAP(msup)
+supkode         pmbsup          REPLACE
+supnama         pmbnorangka     REPLACE
+
+MAP(mcab)
+cabno           pmbcab          REPLACE
+
+MAP(mdvs)
+dvskode         pmbdvs          REPLACE
+dvskat          dvskat          REPLACE
+dvstydvs        pmbnobbm5       REPLACE
+
+EDITS(master)
+Tombol d tidak ltomdet_d SHOW_SFL trans
+Tombol 2d tidak ltomdet_2d SHOW_SFL transa
+<FONT
+COLOR="RED"
+>2 perintah di atas berfungsi untuk merubah field ltomdet_d menjadi tombol detail trans dan field ltomdet_2d menjadi tombol detail transa</FONT
+>
+Nama Suplier harus diisi        pmbsup  MANDATORY
+Kode Suplier ini tidak ada      pmbsup  VALIDATE suptypkodidx msup ssup {Ppmbfl2}
+Kode cabang tidak ada           pmbcab  VALIDATE cabnoidx mcab scab
+Kode Divisi Tidak ada           pmbdvs  VALIDATE dvskodidx mdvs sdvs
+
+/****************************************************************************/
+IMAGE(suphead) {LSTFLD_ADVANCE} {FRSFLD_BACKUP}  {POP_UP} {BASE_ROW=7} {BASE_COLUMN=20}
+/-------------Daftar Supplier---------------------\
+|  Kode           Keterangan                      |
+|-------------------------------------------------|
+
+
+
+
+
+
+
+
+
+|-------------------------------------------------|
+|      Tekan ESC untuk keluar                     |
+\-------------------------------------------------/
+
+IMAGE(suproll) {POP_UP} {LSTFLD_ADVANCE} {FRSFLD_BACKUP} {BASE_ROW=10} {BASE_COLUMN=20}
+  ______________  _______________________________
+
+FIELD(suproll)
+/* Nama Field           Input Attribute  Output Attribute       Input Order   */
+   supkode               NOCHANGE SCROLL          NONE              1
+   supnama               PROTECT SCROLL           NONE              2
+
+SCAN(ssup) {IMAGE_OUT=suphead} {IMAGE_ROL=suproll} {IMAGE_INP=suproll} {SELECT_BAR} {ROLL_LINES=8}
+SCAN(ssup1) {IMAGE_OUT=suphead} {IMAGE_ROL=suproll} {IMAGE_INP=suproll} {SCAN_SCR_ADD=311} {SELECT_BAR} {ROLL_LINES=10}
+
+/****************************************************************************/
+IMAGE(cabhead) {LSTFLD_ADVANCE} {FRSFLD_BACKUP}  {POP_UP} {BASE_ROW=7} {BASE_COLUMN=20}
+/-------------Daftar Cabang-----------------------\
+|  Kode           Keterangan                      |
+|-------------------------------------------------|
+
+
+
+
+
+
+
+
+
+|-------------------------------------------------|
+|      Tekan ESC untuk keluar                     |
+\-------------------------------------------------/
+
+IMAGE(cabroll) {POP_UP} {LSTFLD_ADVANCE} {FRSFLD_BACKUP} {BASE_ROW=10} {BASE_COLUMN=20}
+  ______________  _______________________________
+
+FIELD(cabroll)
+/* Nama Field    Input Attribute  Output Attribute  Input Order   */
+   cabno               NOCHANGE SCROLL          NONE              1
+   cabnama               PROTECT SCROLL           NONE              2
+
+SCAN(scab) {IMAGE_OUT=cabhead} {IMAGE_ROL=cabroll} {IMAGE_INP=cabroll} {SELECT_BAR} {ROLL_LINES=8}
+
+/****************************************************************************/
+IMAGE(dvshead) {LSTFLD_ADVANCE} {FRSFLD_BACKUP}  {POP_UP} {BASE_ROW=7} {BASE_COLUMN=20}
+/-------------Daftar Divisi-----------------------\
+|  Kode           Keterangan                      |
+|-------------------------------------------------|
+
+
+
+
+
+
+
+
+
+|-------------------------------------------------|
+|      Tekan ESC untuk keluar                     |
+\-------------------------------------------------/
+
+IMAGE(dvsroll) {POP_UP} {LSTFLD_ADVANCE} {FRSFLD_BACKUP} {BASE_ROW=10} {BASE_COLUMN=20}
+  ______________  _______________________________
+
+FIELD(dvsroll)
+/* Nama Field    Input Attribute  Output Attribute  Input Order   */
+   dvskode               NOCHANGE SCROLL          NONE              1
+   dvsket               PROTECT SCROLL           NONE              2
+
+SCAN(sdvs) {IMAGE_OUT=dvshead} {IMAGE_ROL=dvsroll} {IMAGE_INP=dvsroll} {SELECT_BAR} {ROLL_LINES=8}
+
+END_SCREEN
+</PRE
+><P
+>&#13;Dengan perintah di atas kita sudah membuat file master yang sederhana. Seperti yang terlihat dari gambar di bawah ini. Tambahkan perintah HOOKS, DEFAULT, SCAN, MAP, dan EDIT sesuai yang kita inginkan.</P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="gambar5.png"></P
+></DIV
+><P
+>&#13;Sebelum kita lanjutkan dengan membuat file detail, alangkah baiknya apabila kita mengenal terlebih dahulu field - field pmb yang digunakan di layar pembelian ini.
+</P
+><PRE
+CLASS="programlisting"
+>&#13;Nama File	: pmb
+Fungsi		: file yang menyimpan informasi pembelian dan hutang ( hutang dagang, hutang lain, dan hutang komisi )
+Field - field pmb yang digunakan di program pembelian ini
+pmbnofak	: no faktur pembelian
+pmbtk		: tipe dari pembelian ( T : Tunai , K : Kredit )
+pmbtglfak	: tanggal dari faktur pembelian
+pmbcab		: cabang yang melakukan pembelian
+pmbfl2		: DN ( Pembelian dari suplier dalam negeri ), LN ( Pembelian dari suplier luar negeri )
+pmbsup		: nama suplier
+pmbtotfak	: total nominal pembelian dari faktur
+pmbtotdis	: total diskon
+</PRE
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x415.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x442.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Mengenal Perintah POSTING untuk APP_TYPE</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Membuat File Detail</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

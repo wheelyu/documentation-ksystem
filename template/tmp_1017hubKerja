@@ -1,0 +1,72 @@
+IMAGE(tmptranst)
+/---------------------------------------------------------------------------------------------------------------------------\
+|t.HubKerja                                                                                                            |
+|/------------t-----------------------t-----------------------------t------------------------t-----------------------------\|
+||t.Jabatan   |t.Internal             |t.TujHubKerja                |t.External              |t.TujHubKerja                ||
+|\------------.-----------------------.-----------------------------.------------------------.-----------------------------/|
+\---------------------------------------------------------------------------------------------------------------------------/
+
+IMAGE(tmptrans)
+!|____________|_______________________|_____________________________|________________________|______________________________|
+
+FIELD(tmptrans)
+spknobuk    PROTECT        INPUTRI         1
+spknote     TEXTAREA PROTECT                INPUTRI         2
+ltujhubkerja1   TEXTAREA PROTECT                INPUTRI         3
+lexteral        TEXTAREA PROTECT            INPUTRI         4
+ltujhubkerja2   TEXTAREA PROTECT            INPUTRI         5
+
+
+MAP(mjoinspkhubkerja)
+spknote     ltujhubkerja1       REPLACE
+
+DBCALCS(djoinspkhubkerja)
+        DBC_COMMAND     JOIN
+        DBC_TARGET      spkdatbuktyp   lDTJOBDESC tbdkode lJD05
+        DBC_SELECT      cselspkjobdesc
+        DBC_MAP         mjoinspkhubkerja
+
+MAP(mjoinspkeksternal)
+spknote     lexteral       REPLACE
+
+DBCALCS(djoinspkeksternal)
+        DBC_COMMAND     JOIN
+        DBC_TARGET      spkdatbuktyp   lDTJOBDESC tbdkode lJD06
+        DBC_SELECT      cselspkjobdesc
+        DBC_MAP         mjoinspkeksternal
+
+MAP(mjoinspkhubkerja2)
+spknote     ltujhubkerja2       REPLACE
+
+DBCALCS(djoinspkhubkerja2)
+        DBC_COMMAND     JOIN
+        DBC_TARGET      spkdatbuktyp   lDTJOBDESC tbdkode lJD07
+        DBC_SELECT      cselspkjobdesc
+        DBC_MAP         mjoinspkhubkerja2
+
+
+
+CALCS()
+cdethubkerja tmpkode=="HUBKERJA"
+cjoinsphubkerja     djoinspkhubkerja==1
+cjoinspkeksternal   djoinspkeksternal==1
+cjoinsphubkerja2     djoinspkhubkerja2==1
+
+EDIT(tmptrans)
+e.Validate spknobuk VALIDATE tbddatkodidx mtbdjabhubker 0 {Pgv_dttabel} {Pgv_personal} {Pgv_jabatan} 
+
+MAP(mtbdjabhubker)
+tbdkode     spknobuk    REPLACE
+spkjrk      lspkjrk     REPLACE
+ltujhubkerja1   ltujhubkerja1   REPLACE_IF cjoinsphubkerja
+lexteral   lexteral   REPLACE_IF cjoinspkeksternal
+ltujhubkerja2   ltujhubkerja2   REPLACE_IF cjoinsphubkerja2
+
+SUBFILE(tmptrans)
+SFL_TITLE(tmptranst)
+SFL_SORT_BY_FIELD spkjrk
+SFL_COND    cdethubkerja
+
+SFL_LINES(6)        /* Jml record yang kelihatan di layar */
+SFL_TARGET
+spkdatbuktyp   lDTJOBDESC tbdkode lJD04 

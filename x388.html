@@ -1,0 +1,246 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>&#13;	Mengenal Perintah POSTING
+	</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Tutorial Ksystem V2016.09.20"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Membuat Program Kas Keluar"
+HREF="c290.html"><LINK
+REL="PREVIOUS"
+TITLE="
+	Mengenal Perintah SUBFILE
+	"
+HREF="x373.html"><LINK
+REL="NEXT"
+TITLE="
+	Mengenal Perintah RESTRICT
+	"
+HREF="x401.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Tutorial Ksystem V2016.09.20</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x373.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 16. Membuat Program Kas Keluar</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x401.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN388"
+>16.8. Mengenal Perintah POSTING</A
+></H1
+><P
+>&#13;Berfungsi untuk mengubah, menambah atau menghapus data baik file sendiri maupun file lainnya pada saat menyimpan data atau pada saat proses konfirmasi data. Posting ini dibedakan menjadi 2, yaitu: Posting untuk program type QUERY_TYPE dan untuk APP_TYPE. Yang akan kita bahas terlebih dahulu di sini adalah POSTING untuk program type QUERY_TYPE. Perintah ini dijalankan pada saat kita menekan tombol end pada keyboard.
+	</P
+><PRE
+CLASS="programlisting"
+>&#13;  Perintah - perintah yang ada di POSTING adalah sebagai berikut :
+
+  PST_ADDCMD nama SPCALCS (supercalc) : perintah ini dijalankan ketika kita menekan tombol END pada saat kita menambah data.
+  PST_UPDCMD nama SPCALCS (supercalc) : perintah ini dijalankan ketika kita menekan tombol END pada saat kita mengubah data.
+  PST_DELCMD nama SPCALCS (supercalc) : perintah ini dijalankan ketika kita menghapus data.
+  PST_SUB_ADDCMD nama SPCALCS	      : perintah ini digunakan untuk penambahan nomor otomatis.
+	</PRE
+><P
+>&#13;  Perintah SPCALCS ini merupakan satu kesatuan dengan POSTING dan DBCALCS yang berfungsi sebagai penghubung antara POSTING dan DBCALCS. Setiap SPCALCS bisa terdiri dari satu atau beberapa DBCALCS.
+	</P
+><PRE
+CLASS="programlisting"
+>&#13;  Susunan perintah SPCALCS
+  SPCALCS(nama supercalc)
+  nama dbcalcs
+  nama dbcalcs  (bila dbcalcs lebih dari 1)
+  	</PRE
+><P
+>&#13;  DBCALCS berfungsi untuk menyatakan file data yang akan ditambah, diubah, atau dihapus satu record dalam harddisk. Pada saat diubah atau dihapus diperlukan satu index yang tidak duplikat. Susunan perintah DBCALCS adalah sebagai berikut :
+  	</P
+><PRE
+CLASS="programlisting"
+>&#13;  *Untuk Menambah 1 record file
+   DBCALCS(nama dbcalcs)
+   DBC_COMMAND ADD
+   DBC_FILE file yang ditambah
+   DBC_MAP nama map
+   <FONT
+COLOR="RED"
+>(4 perintah di atas harus ada untuk menambah 1 record data) </FONT
+>
+   DBC_COND nama kondisi
+   DBC_LAST_TARGET
+     index file yang ditambah	field index
+   DBC_LAST_COND nama kondisi
+
+  *Untuk mengubah 1 record data					*Untuk menghapus 1 record data
+   DBCALCS(nama dbcalcs)					 DBCALCS(nama dbcalcs)
+   DBC_COMMAND UPDATE						 DBC_COMMAND DELETE
+   DBC_TARGET							 DBC_TARGET
+     index yg diubah	field penghubung			 index yang dihapus	field penghubung
+   DBC_MAP nama map						 DBC_COND nama kondisi
+   DBC_COND nama kondisi
+
+  *Untuk membuat nomor otomatis pada saat tambah data
+   DBCALCS(nama dbcalcs)
+   DBC_COMMAND ADD_SUBSTITUTE
+   DBC_FILE nama file yang ditambah
+   DBC_LAST_TARGET
+     index tidak duplikat	field yang dibuat otomatis
+   DBC_LEN panjang nomor otomatis
+   	</PRE
+><P
+>&#13; Di bawah ini adalah contoh program bagian fungsi POSTING yang ada di screen 271. Susunan dalam menjalankan program POSTING terlihat seperti contoh di bawah ini.
+ 	</P
+><PRE
+CLASS="programlisting"
+>&#13;  /*--------------daddbkk-------------*/
+  CALCS()
+  caddbkk      bkkjmlmut + pcmtotal
+
+  MAP(maddbkk)
+    caddbkk      bkkjmlmut       DO_CALC
+
+    DBCALCS(daddbkk)
+    DBC_COMMAND     UPDATE
+    DBC_TARGET      bkkprmidx              bkkprm
+    DBC_MAP         maddbkk
+
+  SPCALCS(spcaladd)
+  daddbkk
+
+  POSTING(transa)
+  PST_ADDCMD spcaladd
+
+  <FONT
+COLOR="RED"
+>urutannya tidak boleh diubah - ubah ( DBCALCS, SPCALCS, POSTING )</FONT
+>
+
+  urutan dari perintah yang ada di atas adalah sebagai berikut:
+  1. Menjalankan perintah POSTING terlebih dahulu. POSTING yang ada di atas maksudnya adalah ketika kita menambah data di file transa
+     dan menekan tombol END maka dilakukan PST_ADDCMD spcaladd.
+  2. SPCALCS(spcaladd) akan menjalankan DBCALCS sesuai urutan (karena dalam hal ini hanya ada 1 DBCALCS yaitu daddbkk maka
+     hanya daddbkk yang dijalankan).
+  3. daddbkk akan mengubah nilai dari bkkjmlmut dengan nilai baru yang berasal dari perhitungan bkkjmlmut ditambah dengan pcmtotal.
+  4. CALCS harus selalu di atas MAP, DBCALCS harus selalu di atas SPCALCS, dan SPCALCS harus selalu di atas POSTING. Urutan ini
+     tidak boleh diubah - ubah.
+     	</PRE
+><P
+>&#13;Dengan menjalankan perintah di atas maka ketika kita menambah data di file transa (dalam hal ini adalah file pcm) dan menekan tombol END maka perintah POSTING di atas dijalankan yaitu melakukan perhitungan bkkjmlmut ditambah dengan pcmtotal dan hasilnya dimasukkan ke dalam field bkkjmlmut. Untuk PST_DELCMD dan PST_UPDCMD caranya sama dengan contoh yang ada di atas. Hanya bedanya kalau PST_UPDCMD dijalankan ketika kita mengubah data dan menekan tombol END, sedangkan PST_DELCMD dijalankan ketika kita menghapus data.
+	</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x373.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x401.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Mengenal Perintah SUBFILE</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c290.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Mengenal Perintah RESTRICT</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

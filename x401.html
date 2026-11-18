@@ -1,0 +1,184 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>&#13;	Mengenal Perintah RESTRICT
+	</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Tutorial Ksystem V2016.09.20"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Membuat Program Kas Keluar"
+HREF="c290.html"><LINK
+REL="PREVIOUS"
+TITLE="
+	Mengenal Perintah POSTING
+	"
+HREF="x388.html"><LINK
+REL="NEXT"
+TITLE="
+	Mengenal Perintah RTREE
+	"
+HREF="x405.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Tutorial Ksystem V2016.09.20</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x388.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 16. Membuat Program Kas Keluar</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x405.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN401"
+>16.9. Mengenal Perintah RESTRICT</A
+></H1
+><P
+>&#13;RESTRICT adalah fasilitas untuk membatasi (tidak dapat melakukan) perubahan, penambahan, dan penghapusan data apabila kondisi RESTRICT terpenuhi. Susunan RESTRICT adalah sebagai berikut:
+	</P
+><PRE
+CLASS="programlisting"
+>&#13;	RESTRICT(master/trans/transa)
+	RST_ADD_COND nama kondisi (tidak bisa menambah record ketika kondisi terpenuhi)
+	RST_UPD_COND nama kondisi (tidak bisa mengubah record ketika kondisi terpenuhi)
+	RST_DEL_COND nama kondisi (tidak bisa menghapus record ketika kondisi terpenuhi)
+	RST_DET_COND nama kondisi (tidak bisa masuk ke detail bila kondisi terpenuhi)
+	RST_IGNDET_COND nama kondisi (boleh menghapus master meskipun ada detailnya bila kondisi terpenuhi)
+	RST_EXIT_COND nama kondisi (tidak bisa keluar dari layar bila kondisi tidak terpenuhi)
+	RST_EXIT_MSG nama pesan (pesan yang ditampilkan ketika kondisi RST_EXIT_COND tidak terpenuhi)
+
+	contoh untuk penggunaan perintah RESTRICT ini di layar 271 adalah sebagai berikut :
+
+	CALCS()
+	cnotOPEN	bkksts !=OPEN
+	csamajml	bkkjmlmut - bkktotal == 0.0
+
+	RESTRICT(master)
+        	RST_UPD_COND cnotOPEN
+	        RST_DEL_COND cnotOPEN
+		RST_EXIT_COND   csamajml
+		RST_EXIT_MSG Jml Kas dgn Biaya Tdk Sama
+
+	Keterangan dari perintah di atas adalah sebagai berikut:
+	1. RST_UPD_COND cnotOPEN : ketika kondisi cnotOPEN terpenuhi yaitu isi dari field bkksts bukan OPEN maka kita tidak bisa
+	   mengubah data yang ada di master.
+	2. RST_DEL_COND cnotOPEN : ketika kondisi cnotOPEN terpenuhi yaitu isi dari field bkksts bukan OPEN maka kita tidak bisa
+	   menghapus data yang ada di master.
+	3. RST_EXIT_COND : kita hanya dapat keluar dari layar 271 apabila kondisi csamajml terpenuhi. Jika kondisi tersebut tidak
+	   terpenuhi maka kita tidak akan bisa keluar dari layar 271.
+	4. RST_EXIT_MSG : Akan menampilkan pesan "Jml Kas dgn Biaya Tdk Sama" apabila RST_EXIT_COND tidak memenuhi kondisi.
+	</PRE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x388.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x405.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Mengenal Perintah POSTING</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c290.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Mengenal Perintah RTREE</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

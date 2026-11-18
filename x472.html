@@ -1,0 +1,248 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>&#13;Membuat Laporan
+</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Tutorial Ksystem V2016.09.20"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="
+Membuat Program Pembelian
+"
+HREF="c428.html"><LINK
+REL="PREVIOUS"
+TITLE="
+Membuat Perintah Posting
+"
+HREF="x458.html"><LINK
+REL="NEXT"
+TITLE="Membuat Program Penjualan"
+HREF="c478.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Tutorial Ksystem V2016.09.20</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x458.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 17. Membuat Program Pembelian</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="c478.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN472"
+>17.4. Membuat Laporan</A
+></H1
+><P
+>&#13;Seperti yang sudah dijelaskan pada bab sebelumnya yaitu cara membuat laporan adalah dengan menggunakan perintah RTREE dan program rts. Untuk itu kita harus kembali lagi ke layar editor sct371 terlebih dahulu dan mengetikkan perintah RTREE seperti berikut di atas perintah END_SCREEN.</P
+><PRE
+CLASS="programlisting"
+>&#13;IMAGE(report) {LSTFLD_ADVANCE} {BASE_ROW=2}
+/--SCT371------------Mencetak Faktur Pembelian---------------------------------\
+| /--------------------------------------------------------------------------\ |
+| |   Device   :  _                                                          | |
+| \--------------------------------------------------------------------------/ |
+\-----------------------------------------------------------------------------/
+
+
+FIELD(report)
+      r_dev          NOCHANGE              ZERO       5
+
+DEFAULTS(qrts)
+pmbnofak	INIT_QUERY	{pmbnofak}
+
+RTREE(report)
+USES_SCRIPT(scr371.rts)
+RT_DEFAULT qrts
+</PRE
+><P
+>&#13;Setelah menuliskan perintah RTREE maka langkah selanjutnya adalah membuat program rts untuk menampilkan format laporan seperti yang kita inginkan. Buka kembali editor vi dan ketikkan vi prt9000/sct371.rts. Setelah masuk ke layar editor marilah kita membuat program rts untuk layar 371 ini dengan mengetikkan perintah sebagai berikut:</P
+><PRE
+CLASS="programlisting"
+>&#13;START
+
+SEARCH
+FILE "pmb.dat" ALL
+FILE "ppd.dat" DTN "pmb.dat" BY_FIELD pmbnofak   USING_KEY ppdfakurtidx
+FILE "brg.dat" JTN "ppd.dat" BY_FIELD ppdbrg     USING_KEY brgkodidx
+FILE "sup.dat" JTN "pmb.dat" BY_FIELD pmbsup     USING_KEY supkodidx
+
+SELECT
+pmbnofak = ppdnofak
+
+CONTROL
+   1 pmbnofak
+   2 pmbtothrg
+   3 pmbtotppn
+   4 pmbtotfak
+   5 ppdnourt
+   6 ppdbrg
+
+SORT USING_KEY
+NO_MOD  pmbnofak
+NO_MOD  ppdnourt
+NO_MOD  ppdbrg
+NO_MOD  ppdlok
+
+DISPLAY
+     DEVICE         r_dev
+     PAGE_LENGTH    66
+     THOUSAND_SEPARATOR PERIOD
+     DECIMAL_POINT COMMA
+     SCREEN_LINES   24
+     SET_INITIAL    27   77
+     SETFONT0       27 77  /* 12 cpi */
+     SETFONT1       27 80
+
+IMAGE
+
+REPORT_HDR
++
++@xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+g_persh
++                                     FAKTUR PEMBELIAN
++/------------------------------------------------------------------------------------------------\
+CONTROL_HDR(1)
++|No Faktur      : @xxxxxxxxxxxxxx      Tgl Fak : @xxxxxxx      Tgl jt : @xxxxxxx                 |
+                  pmbnofak                       pmbtglfak             pmbtgljtp
++|Supplier       : @xxxxxxxxx           Nama    : @wwwwwwwwwwwwwwwwwwwwwwwww                      |
+                  pmbsup                         supnama
++|-----------------------------------t------t-------------------t---------------t-----------------|
++|       N a m a    B a r a n g      |Lok.  |   Jumlah Barang   | Harga Satuan  |   Sub Total     |
++|-----------------------------------|------|-------------------|---------------|-----------------|
+BODY
++|@xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|@xxxxx|@9,99999999.0 @wwww|@999,999,999.00|@99999,999,999.00|
+OUTLINE 6 ppdbrg  ppdlok ppdtmp  brgsat ppdhrg ppdsubtot
+
+CONTROL_FTR(1)
++|-----------------------------------.------.-------------------.---------------|-----------------|
++|                                              ***   JUMLAH    ***             |@9,999,999,999.00|
+ pmbtothrg
++|                                              ***   PPN       ***             |@9,999,999,999.00|
+ pmbtotppn
++|                                              ***   TOTAL     ***             |@9,999,999,999.00|
+ pmbtotfak
++\------------------------------------------------------------------------------.-----------------/
++
++@
+SETFONT1 ""
+PAGE_FTR
++
++
++
+EXIT
+</PRE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x458.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="c478.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Membuat Perintah Posting</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c428.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Membuat Program Penjualan</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

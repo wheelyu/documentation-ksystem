@@ -1,0 +1,388 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>&#13;	Mengenal Perintah RTREE
+	</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Tutorial Ksystem V2016.09.20"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Membuat Program Kas Keluar"
+HREF="c290.html"><LINK
+REL="PREVIOUS"
+TITLE="
+	Mengenal Perintah RESTRICT
+	"
+HREF="x401.html"><LINK
+REL="NEXT"
+TITLE="
+	Mengenal Perintah POSTING untuk APP_TYPE
+	"
+HREF="x415.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Tutorial Ksystem V2016.09.20</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x401.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 16. Membuat Program Kas Keluar</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x415.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN405"
+>16.10. Mengenal Perintah RTREE</A
+></H1
+><P
+>&#13;Berfungsi untuk menentukan nomor program rts yang akan dipakai sesuai dengan kondisi yang ditentukan. Dalam satu program laporan bisa terdiri banyak RTREE sesuai dengan jenis laporan yang diinginkan. Misalnya, dalam satu laporan minta ada jenis rekap dan rinci. Kondisi ini memerlukan 2 program rts. Program rts adalah program untuk membuat tampilan laporan yang ingin dibuat. Program rts harus diakhiri dengan .rts. Susunan RTREE adalah sebagai berikut :
+	</P
+><PRE
+CLASS="programlisting"
+>&#13;
+	IMAGE(report) {LSTFLD_ADVANCE} {BASE_ROW=2}
+	/--SCT???------------Ganti Dgn Judul yang sesuai-------------------------------\
+	| /--------------------------------------------------------------------------\ |
+	| |   Cetak   :  _                                                           | |
+	| \--------------------------------------------------------------------------/ |
+	\-----------------------------------------------------------------------------/
+                                                                              
+	FIELD(report)
+	r_dev          NOCHANGE              ZERO       5
+
+	MAP(mrts)
+	ltglawl         r_date1         REPLACE
+	ltglakh         r_date2         REPLACE
+
+	DEFAULTS(qrts)
+	???tglfak       INIT_QUERY     {ltglawl} : {ltglakh}
+
+	RTREE(reportn)
+	RT_COND cpil1
+	USES_SCRIPT(scr???.rts)
+	RT_MAP mrts
+	RT_DEFAULT qrts
+
+	berikut adalah keterangannya :
+	1. RTREE(reportn) : n adalah no.urut untuk program laporan. RTREE ini berfungsi untuk menentukan program rts mana yang akan
+	   ditampilkan.
+	2. RT_COND : kondisi untuk menjalankan RTREE. jika kondisi benar, maka RTREE akan dijalankan.
+	3. USES_SCRIPT : untuk menentukan nomor program rts yang akan dijalankan oleh RTREE.
+	4. RT_MAP : untuk memindahkan variabel yang ada di program sct ke global variabel yang sudah disediakan oleh K-system. Sehingga,
+	   isi dari global variabel ini dapat dipakai di program rts. Macam-macam global variabel untuk laporan ini adalah :
+	   * r_string1 s/d r_string12 ini digunakan untuk data type Text.
+	   * r_count1 s/d r_count4 ini digunakan untuk data type Interger.
+	   * r_date1 s/d r_date4 ini untuk data type tanggal.
+	   * r_double1 s/d r_double8 ini untuk data type desimal.
+	5. RT_DEFAULT : berfungsi untuk mencari data utama dari file yang akan dipakai untuk menampilkan laporan. Dalam satu default
+	   hanya untuk 1 file saja. Jika dalam pencarian perlu file lain maka pencarian dilakukan di program rts. Misalnya anda akan
+	   mencetak laporan faktur penjualan tanpa ada informasi barang, maka file utama yang dicari adalah ppm. Tetapi kalau anda
+	   mencetak laporan penjualan yang ada informasi barangnya, maka file utama yang anda cari adalah ppd.
+	</PRE
+><P
+>&#13;	Setelah mengetahui fungsi - fungsi dari tiap perintah yang ada di RTREE maka alangkah baiknya bila kita mencoba membuatnya untuk layar 271 ini. Contoh RTREE untuk layar 271 ini adalah sebagai berikut:
+	</P
+><PRE
+CLASS="programlisting"
+>&#13;
+	IMAGE(report) {LSTFLD_ADVANCE} {BASE_ROW=2}
+	/--SCT271------------Mencetak Bukti Keluar Kas/Bank----------------------------\
+	| /--------------------------------------------------------------------------\ |
+	| |   No. Bukti  : ___________________                                       | |
+	| |                                                                          | |
+	| |   Status     : ________                                                  | |
+	| |                                                                          | |
+	| |   Device     : _                                                         | |
+	| \--------------------------------------------------------------------------/ |
+	\-----------------------------------------------------------------------------/
+
+
+	FIELD(report)
+      	bkknum         PROTECT               INPUTRI      1
+	bkksts         PROTECT               INPUTRI      2
+	r_dev          NUMERIC               INPUTRI      4
+
+	DEFAULTS(qrts)
+	bkknum  INIT_QUERY      {bkknum}
+
+	RTREE(report)
+	USES_SCRIPT(scr271.rts)
+	RT_DEFAULT qrts
+	</PRE
+><P
+>&#13;	Setelah membuat RTREE maka untuk menampilkan format laporan yang kita inginkan, kita harus membuat program rts. Program rts ini berfungsi untuk menampilkan format laporan sesuai yang kita inginkan. Fungsi - fungsi program rts adalah sebagai berikut:
+	</P
+><PRE
+CLASS="programlisting"
+>&#13;	1. START
+	   Berfungsi untuk memulai membuat program rts.
+
+	2. VIRTUAL
+	   Berfungsi untuk membuat variabel yang tidak ada di dalam struktur, membuat perhitungan, atau kondisi. Fungsi ini seperti
+	   fungsi LOCAL dan CALCS di program scr/sct. Susunan fungsi VIRTUAL adalah :
+           /------------------------------------------------------------------------\
+	   |Nama Variabel + Type Variabel + Panjang Variabel + Perhitungan / Kondisi|
+           \------------------------------------------------------------------------/
+	   *Nama Variabel
+	    Nama variabel bebas sesuai keinginan anda, tetapi untuk mempermudah mengingat fungsi dari variabel tersebut berilah na-
+	    ma yang berhubungan dengan fungsinya. Misalnya anda menghitung jumlah dikalikan harga, maka beri nama variabel hasil
+	    perhitungannya dengan "vhasil"
+	   *Type variabel
+	    -STRING jika isi variabel tersebut adalah text.
+	    -DFLOAT jika isi variabel tersebut adalah angka dan dapat berupa desimal s/d +/- milyaran.
+	    -INT2 jika isi variabel tersebut adalah angka yang tidak mempunyai desimal dan hanya dapat diisi angka max +/-32.000
+	    -INT4 jika isi variabel tersebut adalah angka yang tidak mempunyai desimal dan hanya dapat diisi angka lebih +/-milyaran.
+	    -DATE jika isi variabel tersebut adalah tanggal.
+	   *Panjang variabel
+	    type STRING	adalah sesuai yang anda butuhkan
+	    type DFLOAT adalah 8 byte
+	    type INT2 adalah 2 byte
+	    type INT4 adalah 4 byte
+	    type DATE adalah 4 byte
+	   *Perhitungan / Kondisi
+	    fungsi ini sama dengan CALCS di scr/sct
+
+	3. SEARCH
+	   berfungsi untuk mengumpulkan record-record data/file yang akan digunakan dalam membuat suatu laporan. Semakin banyak record
+	   data yang dipakai dalam pembuatan laporan, maka semakin memperlambat proses penyajian laporan.
+	   Dalam menentukan record file yang digunaka, dibagi dalam 2 susunan record file, yaitu file utama dan file kedua.
+	   *File utama adalah satu file data yang dicari pada saat membuat program sct di bagian fungsi RT_DEFAULT. Satu file (misal:pmb)
+	    tersebut harus diletakkan di baris pertama setelah SEARCH dengan susunan sebagai berikut: FILE "pmb.dat" ALL
+	   *File kedua adalah file - file yang membantu file utama dalam menyajikan informasi yang dibutuhkan.
+	    Misalnya file utama yang anda pakai adalah file pmb dan anda ingin menampilkan nama supplier di mana file pmb hanya ada info
+	    kode suplier dan tidak ada nama suplier. Maka anda harus memanggil file sup yang mempunyai informasi nama suplier. Fasilitas
+	    untuk memanggil file sup ini menggunakan JTN. Contohnya adalah sebagai berikut:
+
+	    SEARCH
+	    FILE "pmb.dat" ALL
+	    FILE "sup.dat" JTN "pmb.dat" BY_FIELD pmbsup USING_KEY supkodidx
+
+	 4. SELECT
+	    berfungsi untuk menyeleksi lagi record - record yang sudah dikumpulkan di dalam SEARCH, sehingga record - record yang di-
+	    tampilkan adalah record - record yang betul - betul diinginkan. Contoh cara pemakaian SELECT adalah sbg berikut:
+	    SELECT
+	    suptype = "DN" AND (supkota="JKT" OR supkota ="SMG")
+
+	    artinya record yang sudah dikumpulkan di SEARCH masih diseleksi lagi, jika isi field suptype = DN dan isi supkota =JKT atau
+	    isi supkota = SMG yang memenuhi seleksi tersebut adalah record yang ditampilkan.
+	    Note:Jika dari record SEARCH tidak ada yang diseleksi lagi, maka fungsi SELECT tidak perlu ditulis lagi.
+
+	 5. SORT USING KEY
+	    adalah fasilitas untuk mengurutkan record yang dikumpulkan sesuai urutan field. Contoh cara pemakaian fungsi CONTROL DAN SORT :
+	    SORT USING_KEY
+	    NO_MOOD pmbsup
+	    NO_MOOD pmbtglfak
+	    NO_MOOD ppdnourt
+
+	 6. CONTROL
+	    berfungsi untuk mengontrol bentuk tampilan gambar dan sangat berhubungan dengan fungsi SORT. Urutan field yang ada di SORT
+	    harus sama dengan yang ada di CONTROL. Fungsi control dibedakan menjadi CONTROL_HDR dan CONTROL_FTR.
+	    *CONTROL_HDR
+	     adalah menampilkan gambar di setiap awal record dari isi field nomor control yang berbeda dengan record sebelumnya.
+	    *CONTROL_FTR
+	     adalah tampilan layar akan ditampilkan setiap akhir record dari isi field nomor control yang berbeda dengan record sesudahnya.
+         
+         7. ACCUMULATOR
+	    berfungsi untuk menjumlahkan / mengakumulasi suatu field / variable. Contoh :
+	    ACCUMULATOR
+	    total	SUM		pmbtotfak
+	    artinya total akan terisi penjumlahan nilai field pmbtotfak.
+
+	 8. DISPLAY
+	    untuk mengatur tampilan laporan seperti panjang halaman, jumlah karakter per baris, besar dan kecilnya huruf
+
+	 9. IMAGE
+	    berfungsi untuk membuat tampilan gambar laporan yang dikehendaki. Fungsi - fungsi bagian IMAGE :
+	    * BODY
+	      berfungsi menampilkan semua data yang dikumpulkan oleh SEARCH dan yang sudah diseleksi oleh SELECT
+	    * CONTROL_HDR(n)
+	      berfungsi menampilkan gambar di awal setiap isi field control ke n yang sama.
+	    * CONTROL_FTR(n)
+	      berfungsi menampilkan gambar di akhir setiap isi field control ke n yang sama.
+	    * REPORT_HDR
+	      berfungsi menampilkan gambar sekali dalam 1 laporan, yaitu setiap awal laporan.
+	    * REPORT_FTR
+	      berfungsi menampilkan gambar sekali dalam 1 laporan, yaitu setiap akhir laporan.
+	    * PAGE_HDR
+	      berfungsi menampilkan gambar di setiap awal halaman.
+	    * PAGE_FTR
+	      berfungsi menampilkan gambar di setiap akhir halaman.
+
+	 10.EXIT
+	    berfungsi untuk mengakhiri program rts. letaknya di baris paling akhir program rts.
+	 </PRE
+><P
+>&#13;Setelah kita mengetahui fungsi - fungsi yang ada di program rts, untuk lebih jelasnya marilah kita membuat program rts untuk layar 271 ini sebagai contoh.
+	</P
+><PRE
+CLASS="programlisting"
+>&#13;
+	START
+
+	VIRTUAL
+	vnourt		INT2	2	COUNTER + 1
+
+	SEARCH
+	FILE "bkk.dat" ALL
+	FILE "bkd.dat" DTN "bkk.dat" BY_FIELD bkknum USING_KEY bkdnumidx
+	FILE "plg.dat" JTN "bkk.dat" BY_FIELD bkkkode USING_KEY plgkodidx
+	FILE "bbm.dat" JTN "bkd.dat" BY_FIELD bkdnobbm USING_KEY bbmnoidx
+
+	CONTROL
+	1 bkdnobbm
+
+	SORT USING_KEY
+	NO_MOD          bkdnobbm
+	
+	ACCUMULATOR
+	total		SUM	bkdjml
+
+	DISPLAY
+        DEVICE          r_dev
+	PAGE_LENGTH     66
+	THOUSAND_SEPARATOR PERIOD
+	DECIMAL_POINT  COMMA
+	SCREEN_LINES   24
+
+
+	IMAGE
+
+	REPORT_HDR
+	+
+	+@xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx                    No.     : @xxxxxxxxxxxxx
+	g_persh                                                                   bkknum
+	+@xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx               Tgl    : @xxxxxxxxxxxxx
+	g_alamat                                                                  bkktgl
+	+              
+	+                          Bukti Pengeluaran Kas
+
+	CONTROL_HDR(1)
+	+/---t-------------t---------------------------------------t-------------------\
+	+|No.|   REKENING  |              KETERANGAN               |       JUMLAH      |
+	+|---|-------------|---------------------------------------|-------------------|
+ 	BODY
+	+|@xx|@xxxxxxxxxxxx|@xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|@9,9999999999999.00|
+  	INCREMENT(vnourt) bkdnobbm       bbmket    bkdjml
+	CONTROL_FTR(1)
+	+|-----------------.---------------------------------------|-------------------|
+  	+               T O T A L			            @9,9999999999999.00
+   	total
+	+\-----------------------------------------------------------------------------/
+    	PAGE_FTR
+    	+
+    	+
+    	EXIT
+	</PRE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x401.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x415.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Mengenal Perintah RESTRICT</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c290.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Mengenal Perintah POSTING untuk APP_TYPE</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

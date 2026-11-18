@@ -1,0 +1,239 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>&#13;	Mengenal Perintah SCAN
+	</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Tutorial Ksystem V2016.09.20"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Membuat Program Kas Keluar"
+HREF="c290.html"><LINK
+REL="PREVIOUS"
+TITLE="
+	Mengenal Perintah EDIT
+	"
+HREF="x355.html"><LINK
+REL="NEXT"
+TITLE="
+	Mengenal Perintah SUBFILE
+	"
+HREF="x373.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Tutorial Ksystem V2016.09.20</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x355.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 16. Membuat Program Kas Keluar</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x373.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN360"
+>16.6. Mengenal Perintah SCAN</A
+></H1
+><P
+>&#13;	Perintah SCAN berfungsi untuk membantu perintah EDIT bagian VALIDATE.
+	PERINTAH VALIDATE ini mempunyai format 
+	pesan bila tidak memenuhi namaField VALIDATE namaIndex namaMap namaScan fieldPrefix ...  fieldSuffix ...
+	Mari kita ambil 1 baris perintah VALIDATE yang ada di bagian EDIT.
+	</P
+><PRE
+CLASS="programlisting"
+>&#13;	EDIT(master)
+	Kode Bank tidak ada bkknobbm  VALIDATE_IF cBK bbmrinbbmidx mbbm9 sbbm {Pstsrekbank}
+	</PRE
+><P
+>&#13;	Di sini kita lihat bahwa field bkkdvs akan divalidasi dengan menggunakan
+	index dvskodidx, bila ketemu 1 rekord akan dilakukan map mbbm9 dan
+	bila ditekan spasi akan muncul SCAN sbbm.
+	Pertama kita masukkan bagian sbbm sbb:
+	Letakkan progarm MAP(mbbm9) ini sesudah baris terakhir dari
+	EDIT(master).
+	<PRE
+CLASS="programlisting"
+>&#13;MAP(mbbm9)
+bbmno       bkknobbm    REPLACE
+bbmket      lbbmket     REPLACE
+	</PRE
+>
+	Untuk membuat program scan, anda tidak perlu mengetik dari awal,
+	gunakan file contoh yang sudah disediakan. Nama file itu adalah
+	scan dan berada di direktori kerangka. Untuk mengambil file scan
+	dengan editor vi, letakkan posisi kursor di atas tulisan END_SCREEN, 
+	kemudian ketik :r kerangka/scan, maka file scan sudah terbaca ke dalam
+	prt9000/sct271 yang sedanng kita edit. File scan yang muncul adalah sbb:
+	</P
+><PRE
+CLASS="programlisting"
+>&#13;/****************************************************************************/
+IMAGE(???head) {LSTFLD_ADVANCE} {FRSFLD_BACKUP}  {POP_UP} {BASE_ROW=7} {BASE_COLUMN=20}
+/-------------Daftar xxxxxxxx---------------------\			
+|  Kode           Keterangan                      |
+|-------------------------------------------------|
+
+
+
+
+
+
+
+
+
+|-------------------------------------------------|
+|      Tekan ESC untuk keluar                     |
+\-------------------------------------------------/
+
+IMAGE(???roll) {POP_UP} {LSTFLD_ADVANCE} {FRSFLD_BACKUP} {BASE_ROW=10} {BASE_COLUMN=20}
+  ______________  _______________________________ 
+
+FIELD(???roll)
+/* Nama Field    Input Attribute  Output Attribute  Input Order   */
+   ???               NOCHANGE SCROLL          NONE              1  
+   ???               PROTECT SCROLL           NONE              2  
+
+SCAN(s???) {IMAGE_OUT=???head} {IMAGE_ROL=???roll} {IMAGE_INP=???roll} {SELECT_BAR} {ROLL_LINES=8} 
+/* {SCAN_SCR_ADD=nomorScr} {SCAN_SELECT=namaCalcs} */
+/* {SCAN_SCR_QRYFLD=fld_yg_diquery} {SCAN_SCR_EQLFLD=sama_dgn_fld_ini} */
+	</PRE
+><P
+>&#13;	Sekarang kita ubah ???head menjadi bbmhead dan ???roll menjadi 
+	bbmroll. Gunakan pencarian dengan /???, kemudian ubah dengan 
+	3sbbm kemudian escape. Untuk nama field pertama diubah jadi
+	bbmno dan field ke dua di bawahnya menjaid bbmket. Tulisan
+	Daftar xxxxxxxxx sekalian diubah jadi Daftar Buku Besar.
+	</P
+><P
+>&#13;	Sesudah sct271 diparser lagi (kspar prt9000/sct271), jalankan
+	ksrun -x9000 lagi (atau keluarkan ksrun yang sedang jalan dari
+	sct271), kemudain masuk ke sct271 lagi.
+	Tekan 't' untuk menambah rekord, tekan enter hingga sampai ke 
+	field  bkkdvs (gunakan F7 bila ingin mengetahui nama field), kemudian
+	tekan spasi untuk menjalankan SCAN sbbm, maka di layar akan mauncul
+	sbb:
+	</P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="gambar4.png"></P
+></DIV
+><P
+>&#13;	Sesudah SCAN untuk sbbm sudah dibuat, kita lanjutkan membuat SCAN(scab)
+	dan SCAN(sdvs) dengan cara yang sama.
+	</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x355.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x373.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Mengenal Perintah EDIT</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c290.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Mengenal Perintah SUBFILE</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,218 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>IMAGE</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Tutorial Ksystem V2016.09.20"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Daftar Perintah Program Ksystem"
+HREF="c173.html"><LINK
+REL="PREVIOUS"
+TITLE="Daftar Perintah Program Ksystem"
+HREF="c173.html"><LINK
+REL="NEXT"
+TITLE="FIELD"
+HREF="x223.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Tutorial Ksystem V2016.09.20</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="c173.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 15. Daftar Perintah Program Ksystem</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x223.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN219"
+>15.2. IMAGE</A
+></H1
+><P
+>&#13;	Perintah ini menghasilkan tampilan program untuk berhubungan
+	dengan pemakai program. Program Ksystem menyediakan tampilan
+	sebesar 100 karakter ke kanan dan 24 baris ke bawah. Baris ke
+	25, 26 dan 27 untuk menampilkan pesan dan tidak boleh dipakai
+	oleh IMAGE. Program Ksystem membagi IMAGE ke dalam IMAGE(master)
+	untuk tampilan master. IMAGE(trans) untuk tampilan detail1  dan
+	juga IMAGE(trans2) untuk tampilan detail dari detail1. 
+	Setiap field yang ingin ditampilkan ditulis sebagai garis-garis 
+	bawah dan diterangkan di bagian FIELD.
+	</P
+><PRE
+CLASS="programlisting"
+>&#13;IMAGE(master/trans/trans2) {pilihan} {pilihan} ...
+   Fungsi: Menampilkan satu tampilan di layar
+   Cara memakai:   
+      IMAGE(master)
+      /--------------------------\
+      |	   Nama: __________      |
+      \--------------------------/
+   Pilihan:
+      NO_CLS 
+              	Layar tidak usah dibersihkan sebelum menampilkan IMAGE ini.
+	      	Atribut ini HARUS diletakkan sebelum CLR_LINES, CLR_BLOCK, 
+	      	CLR_EXIT dan POP_UP!!!
+
+      LSTFLD_ADVANCE 
+              	Bila kursor sudah ada di field terakhir, kembali
+	      	ke awal atau turun ke detail untuk tipe aplikasi yang mempunyai 
+	      	detail.
+
+      FRSFLD_BACKUP 
+              	Bila kursor ada di field pertama, kembali ke belakang.
+
+      CLR_LINES=jumlah baris 
+              	Hapus sebanyak jumlah baris dari BASE_ROW IMAGE ini sebelum 
+	      	IMAGE ini ditampilkan.
+
+      CLR_BLOCK  
+       		Blok layar sebesar dibutuhkan IMAGE yang akan ditampilkan 
+	 	dibersihkan dulu sebelum IMAGE ini ditampilkan.
+
+      CLR_EXIT 
+      		Blok layar sebesar dibutuhkan IMAGE akan dihapus pada saat
+	 	keluar dari IMAGE ini.
+
+      POP_UP 
+      		digunakan hanya untuk keperluan SCAN.
+
+      BASE_ROW={baris pertama} 
+      		Baris pertama dari IMAGE ini.
+
+      BASE_COLUMN={kolom pertama} 
+      		Kolom pertama dari IMAGE ini.
+
+      COVER_MASTER 
+      		khusus untuk trans bila IMAGE trans menutupi sebagian
+	     	dari IMAGE master
+
+      COVER_TRANS 
+      		khusus untuk trans2 bila IMAGE trans2 menutupi sebagian
+		dari IMAGE trans
+
+      IMG_BOX_COLOR1=nilai_merah,nilai_hijau,nilai_biru
+      		mis. {IMG_BOX_COLOR1=123,211,123}
+		warna ini akan merupakan warna pada kotak pertama di master.
+
+      IMG_BOX_COLOR2=nilai_merah,nilai_hijau,nilai_biru
+		warna ini akan merupakan warna pada kotak kedua di master.
+
+      IMG_BOX_COLOR3=nilai_merah,nilai_hijau,nilai_biru
+
+      IMG_BOX_COLOR4=nilai_merah,nilai_hijau,nilai_biru
+	</PRE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="c173.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x223.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Daftar Perintah Program Ksystem</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c173.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>FIELD</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

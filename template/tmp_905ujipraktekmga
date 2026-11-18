@@ -1,0 +1,64 @@
+LOCAL
+PGM_FIELDS
+lkatgadai30     STRING  21
+lIPHONE         STRING  21
+lSAMSUNG        STRING  21
+
+IMAGE(tmptranst)
+/------------------------------------\
+|/----------------------------------\|
+||t.PilihKategori                   ||
+||t.Kategori 	: _________________ ||
+||t.Merk	: ______	    ||
+||                              ___ ||
+|\----------------------------------/|
+\------------------------------------/
+
+IMAGE(tmptrans)
+
+FIELD(tmptranst)
+tkdjwbstr1  	ALLCAPS		INPUTRI 1	/* NOBUK */
+tkdjwbstr2 	ALLCAPS	        INPUTRI 2	/* Tanngal */
+lenter          NOCHANGE        INPUTRI 3
+
+CALCS()
+cAPPLE          tkdjwbstr2 == "APPLE"
+cSAMSUNG        tkdjwbstr2 == "SAMSUNG"
+cANDROID        tkdjwbstr2 != "APPLE" && tkdjwbstr2 != "SAMSUNG"
+
+DEFAULTS(tmptranst)
+lkatgadai30     INIT            KATGADAI30
+lIPHONE         INIT            IPHONE
+lSAMSUNG        INIT            SAMSUNG
+
+EDITS(tmptranst)
+e.ValidateKat   tkdjwbstr1  VALIDATE tbddatkodidx mtbdKat stbd {Pgv_dttabel} {Pgv_barang} {Plkatgadai30}
+e.ValidateMerk  tkdjwbstr2  VALIDATE tbddatkodidx mtbdSin stbd {Pgv_dttabel} {Pgv_barang} {Ptkdjwbstr1}
+
+MAP(mtbdKat)
+tbdkode         tkdjwbstr1         REPLACE
+
+MAP(mtbdSin)
+tbdkode         tkdjwbstr2         REPLACE
+
+MAP(mkatsoal)
+lIPHONE         tkdrek       REPLACE_IF cAPPLE
+lSAMSUNG        tkdrek       REPLACE_IF cSAMSUNG
+cBLANKS         tkdrek       DO_CALC_IF cANDROID
+
+HOOKS(tmptranst)
+AFTER_INPUT    cur_keybd=EN     DO_MAP mkatsoal
+
+SUBFILE(tmptrans)
+SFL_LINES(1)
+SFL_COND   cujimgapraktek
+SFL_TITLE(tmptranst)
+SFL_TARGET
+tkddatbukll   lUJIMGA tlmnobuk tlmdari
+
+SFL_MAP
+        lUJIMGA         tkddata    REPLACE
+        gv_CLSD         tkdsts     REPLACE
+        tlmnobuk        tkdnobuk   REPLACE
+        tlmdari         tkdnoll    REPLACE      
+        lKATEGORI       tkdsisstr  REPLACE       

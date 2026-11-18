@@ -1,0 +1,185 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>POSTING</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Tutorial Ksystem V2016.09.20"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Daftar Perintah Program Ksystem"
+HREF="c173.html"><LINK
+REL="PREVIOUS"
+TITLE="SPCALCS"
+HREF="x275.html"><LINK
+REL="NEXT"
+TITLE="RTREE"
+HREF="x283.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Tutorial Ksystem V2016.09.20</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x275.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 15. Daftar Perintah Program Ksystem</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x283.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN279"
+>15.17. POSTING</A
+></H1
+><P
+>&#13;   Perintah ini mempunyai fungsi untuk mengubah database. Fungsi ini
+   akan memanggil SPCALCS. SPCALCS sendiri hanya berfungsi
+   untuk menjalankan sekumpulan DBCALCS dan DO_LIB fungsiAp.
+	</P
+><PRE
+CLASS="programlisting"
+>&#13;   Cara memakai:
+   POSTING(master/trans/trans2)
+      PST_ADDCMD  sp??add     /* QUERY_TYPE, sebelum add */
+      PST_UPDCMD  sp??add     /* QUERY_TYPE, sebelum upd */
+      PST_DELCMD  sp??add     /* QUERY_TYPE, sebelum del */
+      PST_SUB_ADDCMD  sp??sub     /* QUERY_TYPE, substitusi add, gunakan adds */
+      PST_SUB_UPDCMD  sp??sub     /* QUERY_TYPE, substitusi upd, gunakan upds */
+   
+      PST_COMMAND     sp???       /* APPLICATION_TYPE */
+      PST_AFT_COMMAND sp???       /* APPLICATION_TYPE */
+      PST_COND        namaCalcs /* QUERY &#38; APPLICATION,kondisi untuk posting*/
+      PST_END_COND    namaCalcs /* APPLICATION_TYPE, kondisi untuk selesai 
+				     posting pada saat menelusuri detail */
+      PST_DET_AFT     FIRST/LAST  /* POSTING detail hanya sesudah rekord
+				     pertama atau terakhir, khusus trans */
+      PST_CMD_EXE_TIME BEFORE_DETAIL/AFTER_DETAIL 
+			          /* Kapan posting dijalankan, sebelum detail
+				     atau sesudah, bila tidak ada baris ini,
+				     dianggap sebelum detail */
+      PST_UPD_DET_COND    namaCalcs
+				  /* QUERY_TYPE, mengubah semua detail dengan 
+				  ** melakukan SFL_MAP bila kondisi benar.
+				  ** Bila tidak ada PST_UPD_DET_COND
+				  ** dianggap selalu mengubah rekord
+				  ** rekord detail pada saat rekord 
+				  ** master diubah
+				  */
+   Kapan POSTING dilaksanakan?
+   Posting dilaksanakan pada saat menekan tombol END.
+   Untuk layar APP_TYPE, POSTING yang dijalankan selalu master, trans dan 
+   trans2. Untuk layar QUERY_TYPE, POSTING yang dijalankan sesuai dengan
+   Image yang sedang aktif, jadi mastera akan menjalankan POSTING(mastera)
+   dan trans2a akan menjalankan POSTING(trans2a).
+	</PRE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x275.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x283.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>SPCALCS</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c173.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>RTREE</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

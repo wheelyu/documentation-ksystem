@@ -1,0 +1,72 @@
+IMAGE(tmptranst)
+/------------------------------------------------------------------------------\
+|/----------------------------------------------------------------------------\|
+|| spasi                                                                      ||
+|| t.SudahMenjelaskan                                                         ||
+||                      t.SudahPaham            t.Keterangan                  ||
+|| ______________        ____                   ________________              ||
+|| spasi                                                                      ||
+||                      t.SudahPaham            t.Keterangan                  ||
+|| ______________        ____                   ________________              ||
+|| spasi                                                                      ||
+||                      t.SudahPaham            t.Keterangan                  ||
+|| spasi                                                                      ||
+|| ______________        ____                   ________________              ||
+|| spasi                                                                      ||
+||                      t.SudahPaham            t.Keterangan                  ||
+|| ______________        ____                   ________________              ||
+|\----------------------------------------------------------------------------/|
+\------------------------------------------------------------------------------/
+
+IMAGE(tmptrans)
+
+FIELD(tmptranst)
+lket1           TEXTAREA   PROTECT  INPUTRI     2
+spkkat          NOCHANGE            INPUTRI     3
+spkreview       TEXTAREA            INPUTRI     4
+lket2           TEXTAREA   PROTECT  INPUTRI     5
+spkkat2         NOCHANGE            INPUTRI     6
+spkreview2      TEXTAREA            INPUTRI     7
+lket3           TEXTAREA   PROTECT  INPUTRI     8
+spkkat3         NOCHANGE            INPUTRI     9
+spkreview3      TEXTAREA            INPUTRI     10
+lket4           TEXTAREA   PROTECT  INPUTRI     11
+spkkat4         NOCHANGE            INPUTRI     12
+spkreview4      TEXTAREA            INPUTRI     13
+
+DEFAULTS(tmptranst)
+spkkat          DFALT_SCAN_BLANKS   Y
+                                    T
+spkkat2         DFALT_SCAN_BLANKS   Y
+                                    T
+spkkat3         DFALT_SCAN_BLANKS   Y
+                                    T
+spkkat4         DFALT_SCAN_BLANKS   Y
+                                    T
+
+EDITS(tmptranst)
+e.Mandatory     spkkat      MANDATORY
+e.Mandatory     spkreview   MANDATORY_IF csdhserti3
+e.Mandatory     spkkat2     MANDATORY
+e.Mandatory     spkreview2  MANDATORY_IF csdhserti3a
+e.Mandatory     spkkat3     MANDATORY
+e.Mandatory     spkreview3  MANDATORY_IF csdhserti3b
+e.Mandatory     spkkat4     MANDATORY
+e.Mandatory     spkreview4  MANDATORY_IF csdhserti3c
+
+HOOKS(tmptranst)
+BEFORE_INPUT    cur_field=spkreview    DO_SKIP_IF  cblmserti3
+BEFORE_INPUT    cur_field=spkreview2    DO_SKIP_IF  cblmserti3a
+BEFORE_INPUT    cur_field=spkreview3    DO_SKIP_IF  cblmserti3b
+BEFORE_INPUT    cur_field=spkreview4    DO_SKIP_IF  cblmserti3c
+
+CALCS()
+cdetkonfsdm     tlmsts=="RINP" && tlmtype2=="KONF_SDM"
+
+SUBFILE(tmptrans)
+SFL_TITLE(tmptranst)
+SFL_COND cdetkonfsdm
+
+SFL_LINES(1)        /* Jml record yang kelihatan di layar */
+SFL_TARGET
+spkdatbuktyp   tlmdata tlmnobuk lKONFSDM

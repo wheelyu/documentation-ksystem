@@ -1,0 +1,184 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Struktur Direktori Ksystem</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Tutorial Ksystem V2016.09.20"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="Program -Program yang Terdapat di Dalam Bahasa Ksystem."
+HREF="c16.html"><LINK
+REL="NEXT"
+TITLE="Struktur Program dan Data Program Akuntansi Ksystem"
+HREF="c49.html"></HEAD
+><BODY
+CLASS="chapter"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Tutorial Ksystem V2016.09.20</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="c16.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="c49.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="chapter"
+><H1
+><A
+NAME="AEN35"
+></A
+>Chapter 4. Struktur Direktori Ksystem</H1
+><P
+> 
+    Pengaturan direktori atau folder dalam Ksystem.
+    </P
+><P
+></P
+><OL
+TYPE="1"
+><LI
+><P
+>&#13;		Screen standar ada di prg. Kalau kita di windows itu
+		berarti ada di c:\ksystem\prg dan kalau kita di Linux
+		itu ada di /home/ksystem/prg. Mis. prg/scr201.
+	</P
+></LI
+><LI
+><P
+>&#13;		Screen khusus perusahaan tertentu ada di prt{Kode_perusahaan}
+		Jadi kalau kode perusahaan adalah 0567 (selalu 4 digit), maka
+		program tambahan (penyesuaian) untuk perusahaan ada di prt0567.
+		Mis. prt0567/sct201. Kalau di Windows berarti di 
+		c:\ksystem\prt0567\sct201 sedang di Linux akan berada
+		di /home/ksystem/prt0567/sct201. Program single user
+		dapat juga diubah tanpa batasan apapun. Nomor pelanggan
+		untuk program single user harus antara 9000 s/d 9999.
+	</P
+></LI
+><LI
+><P
+>&#13;		Hasil kspar dari screen baku akan berada di frm. Mis.
+		kspar prg/scr201 akan membentuk file frm/scr201
+	</P
+></LI
+><LI
+><P
+>&#13;		Hasil kspar dari screen tambahan akan berada di 
+		frm{kode_perusahaan}. Mis.  kspar prt0567/sct201 akan 
+		membentuk file frm0567/sct201.frm
+	</P
+></LI
+><LI
+><P
+>&#13;		Untuk setiap screen di prg mis. scr201, maka ada file
+		key/scr201.key yang menjaga agar prg/scr201 tidak bisa
+		diubah.
+	</P
+></LI
+></OL
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="c16.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="c49.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Program -Program yang Terdapat di Dalam Bahasa Ksystem.</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Struktur Program dan Data Program Akuntansi Ksystem</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

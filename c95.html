@@ -1,0 +1,257 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>File - File Utama dan Field - Field Utamanya dalam Program Akuntansi Ksystem</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Tutorial Ksystem V2016.09.20"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="Fasilitas Tambahan yang Ada di Program Ksystem."
+HREF="c59.html"><LINK
+REL="NEXT"
+TITLE="Database File, Rekord, Field dan Index"
+HREF="c99.html"></HEAD
+><BODY
+CLASS="chapter"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Tutorial Ksystem V2016.09.20</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="c59.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="c99.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="chapter"
+><H1
+><A
+NAME="AEN95"
+></A
+>Chapter 7. File - File Utama dan Field - Field Utamanya dalam Program Akuntansi Ksystem</H1
+><P
+>&#13;    Semua file database di Ksystem terdiri dari 3 huruf (mis. ppm, pmb, bbm, pcm, brg). Setiap field
+    dari file dimulai dengan nama file yang bersangkutan, misalnya file bbm (buku besar) akan 
+    mempunyai field field sepert bbmno (no bbm), bbmket yang semuanya diawali dengan bbm.
+    File file dalam Ksystem dibagi menjadi 2 kelompok besar yaitu file file yang menyimpan informasi
+    penting seperti barang, piutang, hutang, kas/bank, buku besar dan file file lain yang menjadi
+    file transaksi yang berfungsi untuk menerima inputan dari user. 
+    File file yang memuat informasi adalah file buku besar (bbm), jurnal (jrn) dan semua file pembantu
+    buku besar di antaranya adalah barang (brd), piutang (ppm), hutang (pmb), 
+    piutang giro//hutang giro (pcm), sewa di bayar di muka (acm). Berikut adalah daftar file penting dalam ksystem:
+    </P
+><PRE
+CLASS="programlisting"
+>&#13;bbm
+File yang menyimpan data no.rekening buku besar. Dari data ini dapat dikeluarkan laporan neraca dan rugi laba.
+	bbmno      : No rekening buku besar, mis. 100.01
+	bbmket     : Keterangan rekening buku besar, mis. Kas Kecil
+	bbmsdawlbl : Saldo awal bulan
+	bbmsdakhbl : Saldo akhir bulan
+brd
+File yang menyimpan informasi barang FIFO/LIFO.  Data ini berasal dari semua transaksi barang masuk, dan saldonya akan dikurangi pada saat menjalankan semua transaksi keluar barang.
+	brdbrg   : kode barang
+	brdlok   : kode lokasi barang
+	brdsts   : status barang (OPEN : kalau masih ada barang , CLSD : kalau sudah tidak ada)
+	brdtgl   : Tanggal masuk barang
+	brdnobbm : Kode rekening persediaan
+	brdnofak : nomor bukti barang masuk
+	brdhrg   : Harga satuan barang masuk
+	brdjmu   : Jumlah unit masuk
+ppm
+File yang menyimpan data penjualan &#38; data piutang baik piutang dagang, piutang lain, maupun piutang karyawan.
+	ppmtype   : tipe dari ppm
+	ppmsts    : status dari ppm (OPEN : data belum diposting, INPG : data sudah diposting tetapi belum lunas, CLSD : data sudah lunas )
+	ppmnofak  : nomor faktur / bukti piutang
+	ppmplg    : kode pelanggan / kode karyawan / kode hutang lain
+	ppmtglfak : tanggal faktur / bukti dibuat
+	ppmtgljtp : tanggal jatuh tempo piutang
+	ppmhpp    : total harga pokok barang
+	ppmsisa   : sisa piutang
+	ppmtothrg : total kotor penjualan
+	ppmtotfak : total bersih penjualan
+ppd
+File yang menyimpan semua informasi aktivitas barang. Jadi file ini akan menjadi detail dari semua transaksi yang berhubungan dengan barang. Misal penjualan, pembelian, retur, dll.
+	ppdsts    : OPEN (data belum diposting), CLSD (data sudah diposting)
+	ppdnofak  : nomor bukti transaksi
+	ppdtglfak : tanggal faktur
+	ppdsat    : kode satuan barang
+	ppdtmp2   : jumlah barang sesuai satuan baik satuan besar atay satuan kecil. Misal: 2 (ppdsat = dozen)
+	ppdtmp    : jumlah baran dalam satuan kecil. Jadi jika ppdtmp = 2 dan ppdsat = dozen, maka isi ppdtmp = 24
+	ppdlok    : kode lokasi barang masuk atau saat barang dikeluarkan
+	ppdplg    : kode pelanggan
+	ppdbrg    : kode barang
+pmb
+File yang menyimpan semua informasi hutang / pembelian, yaitu : hutang dagang, hutang lain, dan hutang komisi.
+	pmbtype   : tipe dari pmb (misal : F untuk faktur ; R untuk retur )
+	pmbtk     : tipe dari pembelian ( T = Tunai ; K = Kredit )
+	pmbsts    : status pembelian (OPEN:pembelian belum diposting, INPG:pembelian sudah diposting tapi belum lunas, CLSD:pembelian sudah lunas)
+	pmbnofak  : Nomor faktur
+	pmbtglfak : tanggal faktur
+	pmbnobbm  : nomor rekening hutang
+	pmbsisa   : total sisa hutang
+pbc
+File ini menyimpan bukti pembayaran hutang ke suplier
+	pbctype   : type suplier (DN : Dalam Negeri, LN : Luar Negeri)
+	pbcsts    : OPEN (data belum diposting), CLSD (data sudah diposting)
+	pbcscr    : asal screen di mana data diisi
+	pbcnoprc  : nomor bukti pembayaran hutang
+	pbctgl    : tanggal pembayaran hutang
+	pbcsup    : kode suplier
+	pbctotfak : total pembayaran hutang
+	pbctotcek : total pembayaran tunai/bank/cek
+pbd
+File ini menyimpan informasi pembayaran per faktur. Jadi data pbd ini terbentuk pada saat anda memilih nomor faktur yang akan dibayar hutangnya
+	pbdnobuk  : nomor bukti bayar hutang = pbcnoprc
+        pbdsts    : OPEN (belum diposting), CLSD (sudah diposting)
+        pbdscr    : nomor screen di mana data diisi
+        pbdtglbyr : tanggal bayar hutang = pbctgl
+        pbdtglfak : tanggal faktur = pmbtglfak
+        pbdtgljtp : tanggal jatuh tempo faktur = pmbtgljtp
+        pbdjml    : jumlah pembayaran hutang
+        pbdnobbm  : nomor rekening hutang
+        pbdsup    : kode suplier
+pjc
+File ini menyimpan bukti penerimaan piutang dari pelanggan
+	pjctype   : type transaksi ( PJ = Penjualan, PB = Pembelian, RJ = Retur Jual, RB = Retur Beli )
+	pjcscr    : nomor screen di mana data diisi
+	pjcnoprc  : nomor bukti terima piutang
+	pjctgl    : tanggal terima piutang
+	pjcsts    : OPEN (data belum diposting), CLSD (data sudah diposting)
+	pjcplg    : kode pelanggan
+	pjctotfak : total terima piutang
+	pjctotcek : total terima tunai/cek/bank
+pjd
+File yang menyimpan informasi penerimaan piutang per faktur. Jadi data pjd ini akan terbentuk pada saat anda memilih nomor faktur yang akan diterima piutangnya
+	pjdnobuk  : nomor bukti terima piutang = pjcnoprc
+	pjdsts    : OPEN (belum diposting), CLSD (sudah diposting)
+	pjdscr    : nomor screen di mana data diisi
+	pjdtglbyr : tanggal terima piutang = pjctgl
+	pjdtglfak : tanggal faktur = ppmtglfak
+	pjdtgljtp : tanggal jatuh tempo faktur = ppmtgljtp
+	pjdjml    : jumlah terima piutang
+	pjdnobbm  : nomor rekening piutang
+	pjdplg    : kode pelanggan
+pcm
+File yang menyimpan informasi penerimaan dan pengeluaran kas / bank / cek
+	pcmtype   : tipe dari pcm (misal: T(tunai), C(cek), M(Mutasi), K(Kredit Card))
+	pcmdk     : terisi D apabila penerimaan kas/bank/cek, terisi K bila pengeluaran kas/bank/cek  
+	pcmnocek  : nomor cek / giro
+	pcmnoprc  : nomor bukti transaksi
+	pcmnobbm  : nomor rekening kas/bank
+	pcmnobbm2 : nomor rekening piutang giro/hutang giro bila pcmtype = C(cek)
+	pcmsts    : status pcm (OPEN:data belum diposting, INPG:data sudah diposting tetapi cek belum dicairkan, CLSD:data sudah lunas)
+	pcmtotal  : total Kas/Bank/Cek yang dikeluarkan / diterima
+jrn
+File yang menyimpan data jurnal yang terjadi.
+	jrntrn    : No.transaksi jurnal, yaitu no urut otomatis dari komputer untuk setiap jurnal yang terjadi
+	jrntgl    : Tanggal dibuatnya jurnal. Tgl ini terisi dengan tanggal komputer sekarang.
+	jrntgltrn : Tanggal bukti / faktur
+	jrnnobbm  : No.rekening buku besar
+	jrntype   : terisi D jika Debet, terisi K jika Kredit
+</PRE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="c59.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="c99.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Fasilitas Tambahan yang Ada di Program Ksystem.</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Database File, Rekord, Field dan Index</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,236 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Cara install Scanner Sidik Jari Futronic FS80 atau FS88</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Tutorial Ksystem V2016.09.20"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="Konsep Empat Buffer"
+HREF="c136.html"><LINK
+REL="NEXT"
+TITLE="Daftar Perintah Program Ksystem"
+HREF="c173.html"></HEAD
+><BODY
+CLASS="chapter"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Tutorial Ksystem V2016.09.20</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="c136.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="c173.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="chapter"
+><H1
+><A
+NAME="AEN144"
+></A
+>Chapter 14. Cara install Scanner Sidik Jari Futronic FS80 atau FS88</H1
+><P
+>&#13;    Program Ksystem menyediakan fasilitas scanner sidik jari yang canggih.
+    Semua data sidik jari baik yang di lokasi pusat maupun yang ada di 
+    cabang cabang akan disimpan secara otomatis di komputer server. Dengan
+    cara ini, bila ada kerusakan alat sidik jari, alat tinggal diganti saja
+    tanpa harus mendaftarkan ulang orang yang ada di cabang tsb. Juga bila
+    ada karyawan yang harus berkunjung dari satu cabang ke cabang lain, 
+    karyawan tsb. dapat dengan mudah absen di cabang yang dikunjungi tanpa
+    harus mendaftar lagi atau membawa kartu tambahan lain.
+    </P
+><P
+>&#13;    Program untuk membaca sidik jari ada di dalam file ksfinger.tgz yang
+    tersedia pada saat download program ksystem.sh atau kslinux.tgz.
+    Cara Memasang ksfinger adalah sbb:
+    </P
+><P
+>&#13;	Ksfinger diinstall di setiap komputer yang ada scanner sidik jarinya.
+	Program ksfinger menggunakan port 8080, kalau ada masalah dengan
+   	pembatasan port, pembatasan (firewall) dinonaktifkan dulu. Ksfinger
+	hanya berjalan di komputer Linux.
+    </P
+><P
+>&#13;    <P
+></P
+><OL
+TYPE="1"
+><LI
+><P
+>&#13;	Login sebagai root
+	</P
+></LI
+><LI
+><P
+>&#13;	cp /home/ksystem/ksfinger.tgz .
+	</P
+></LI
+><LI
+><P
+>&#13;	tar xvfz ksfinger.tgz
+	</P
+></LI
+></OL
+>
+    </P
+><P
+>&#13;	Cara menjalankan secara manual
+    <P
+></P
+><OL
+TYPE="1"
+><LI
+><P
+>&#13;	Login sebagai root
+	</P
+></LI
+><LI
+><P
+>&#13;	Ketik ./ksfinger
+	</P
+></LI
+></OL
+>
+    </P
+><P
+>&#13;    Cara menjalankan secara otomatis
+    <P
+></P
+><OL
+TYPE="1"
+><LI
+><P
+>&#13;	login sebagai root
+	</P
+></LI
+><LI
+><P
+>&#13;	<PRE
+CLASS="programlisting"
+>&#13;	vi /etc/rc.local
+	Di bawah baris terakhir tambahkan sbb:
+	cd /root
+	./ksfinger &#38;
+	</PRE
+>
+	</P
+></LI
+><LI
+><P
+>&#13;	/etc/rc.local ini akan dijalankan otomatis pada saat komputer hidup.
+	</P
+></LI
+></OL
+>
+    </P
+><P
+>&#13;    Untuk mencoba sidik jari, pasang scanner sidik jari di komputer dan
+    jalankan run -sj atau ksrun -sj keumudian login sebagai root. 
+    Secara otomatis anda akan dibawa ke scr933 untuk pendaftaran sidik jari.
+    Selamat mencoba.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="c136.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="c173.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Konsep Empat Buffer</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Daftar Perintah Program Ksystem</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,76 @@
+LOCAL
+PGM_FIELDS
+lkat    STRING  21
+lmerk   STRING  21
+
+DBCALCS(djointldjwb1)
+        DBC_COMMAND     JOIN
+        DBC_TARGET      tldstsbrgukr   lUJIMGA gv_CLSD tlmnobuk tlmdari tldsat
+
+IMAGE(tmptranst)
+/-------------------------------------------\
+|/-----------------------------------------\|
+||                       ________ ________ ||
+||t.Soal                                   ||
+||t.PilKomponen  : _______________________ ||
+||t.Jawab	 : _______________________ ||
+||                                     ___ ||
+|\-----------------------------------------/|
+\-------------------------------------------/
+
+IMAGE(tmptrans)
+
+FIELD(tmptranst)
+lkat            PROTECT         INPUTRI 1
+lmerk           PROTECT         INPUTRI 2
+tldsat  	ALLCAPS		INPUTRI 3	/* NOBUK */
+tldket		TEXTAREA        INPUTRI 4	/* Tanggal */
+lenter          NOCHANGE        INPUTRI 5
+
+EDITS(tmptranst)
+e.Mandatory     tldsat  MANDATORY
+e.Mandatory     tldket  MANDATORY
+e.ValidateKat   tldsat  VALIDATE tbddatkodidx mtbdIndk stbd {Pgv_dttabel} {PlGADAITRAINING} {PlPRAKTEKMGA}
+
+MAP(mtbdIndk)
+tbdkode         tldsat  REPLACE
+tbdkode2        tldlok2 REPLACE    
+
+MAP(mdjointkd6d)
+tkdjwbstr1      lkat    REPLACE
+tkdjwbstr2      lmerk   REPLACE
+
+DBCALCS(djointkd6d)
+        DBC_COMMAND     JOIN
+        DBC_TARGET      tkddatbukll   lUJIMGA tlmnobuk tlmdari
+        DBC_MAP         mdjointkd6d
+
+CALCS()
+cbelumpilih     djointldjwb1 == 0
+cdjointkd6d     djointkd6d == 1
+
+MAP(mkatmerk)
+lkat            lkat          REPLACE_IF cdjointkd6d
+lmerk           lmerk         REPLACE
+
+HOOKS(tmptranst)
+BEFORE_INPUT    cur_field=tldsat       DO_MAP SHOW mkatmerk
+AFTER_INPUT     cur_field=tldsat       DO_MAP SHOW
+                IF cbelumpilih    mdum
+                ELSE HKCURSOR STAY
+                HKMSG t.IndikatorSudahDiPilih
+
+SUBFILE(tmptrans)
+SFL_LINES(1)
+SFL_COND   cujimgapraktek1
+SFL_TITLE(tmptranst)
+SFL_SELECT cjawabanpraktek
+SFL_TARGET
+tldstsbrgukr   lUJIMGA gv_CLSD tlmnobuk tlmdari
+
+SFL_MAP
+        lUJIMGA         tlddata    REPLACE
+        gv_CLSD         tldsts     REPLACE
+        tlmnobuk        tldbrg     REPLACE
+        tlmdari         tldukrwrn  REPLACE      
+        ljawaban        tldgrup    REPLACE       

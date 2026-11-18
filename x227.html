@@ -1,0 +1,246 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>EDIT</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Tutorial Ksystem V2016.09.20"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Daftar Perintah Program Ksystem"
+HREF="c173.html"><LINK
+REL="PREVIOUS"
+TITLE="FIELD"
+HREF="x223.html"><LINK
+REL="NEXT"
+TITLE="DEFAULT"
+HREF="x231.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Tutorial Ksystem V2016.09.20</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x223.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 15. Daftar Perintah Program Ksystem</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x231.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN227"
+>15.4. EDIT</A
+></H1
+><P
+>&#13;   	Perintah ini Memeriksa apakan isian dari field memenuhi persyaratan 
+	tertentu.
+	</P
+><PRE
+CLASS="programlisting"
+>&#13;EDIT(master/trans/trans)
+   Cara memakai:
+   Pesan          Nama field        Tipe EDITS     Informasi tambahan
+
+   Tipe EDITS dan informasi tambahan bila ada
+      MANDATORY 
+      	- Harus diisi
+
+      MANDATORY_IF {namaField} 
+      	- Harus diisi bila field terisi
+
+      MANDATORY_IF namaCalcs   
+      	- Harus diisi bila calcs memenuhi syarat. Perhatikan bahwa 
+	  untuk calcs tidak menggunakan kurung kurawal.
+
+      MAND_FILL 
+      	- Harus diisi sepenuh panjang field
+
+      MAND_PLUS 
+      	- Harus diisi lebih besar dari 0
+
+      MAND_ZERO_PLUS 
+      	- Harus diisi lebih besar atau sama dengan 0
+
+      TABLE 
+      	- Input hanya boleh sesuai dengan yang disediakan sesudah TABLE
+       	  contoh:
+    	  Status hanya boleh OPEN atau CLSD ppmsts TABLE OPEN CLSD
+
+      TABLE_RANGE 
+    	- Input hanya boleh antara 2 nilai awal dan akhir.
+
+      DUPKEY namaIndex {PnamaField/namaLocal} {SnamaField/namaLocal}..
+        - pesan akan ditampilkan bila isian field sudah ada di index
+
+      VALIDATE namaIndex namaMap/0 namaScan/0 {PnamaField/namaLocal} {SnamaField/namaLocal}..
+        - pesan akan ditampilkan bila isian field tidak ada di index
+	  contoh:
+	  Piutang yang status OPEN tidak ada ppmplg VALIDATE ppmplgstsidx mppm sppm {Slsts}
+
+      VALIDATE_IF namaCalc namaIndex namaMap/0 namaScan/0 {PnamaField/namaLocal}
+
+      VALIDATE_DUP namaIndex namaMap/0 namaScan/0 {PnamaField/namaLocal}
+
+      VALIDATE_DUP_BUF3 namaIndex namaMap/0 namaScan/0 {PnamaField/namaLocal}
+
+      VALIDATE_DUP_IF namaCalc namaIndex namaMap/0 namaScan/0 {PnamaField/namaLocal}
+
+      VALIDATE_DUP_DIR_IF calcsNamaDir namaCalc namaIndex namaMap/0 namaScan/0 {PnamaField/namaLocal}
+	VALIDATE dengan index boleh duplikat
+
+      VALIDATE_DIR calcsNamaDir namaIndex namaMap/0 namaScan/0 {PnamaField/namaLocal}
+
+      VALIDATE_DIR_IF calcsNamaDir calcsIf namaIndex namaMap/0 namaScan/0 {PnamaField/namaLocal}
+
+      VALIDATE_BUF3 namaIndex namaMap/0 namaScan/0 {PnamaField/namaLocal}
+
+      VALIDATE_BUF3_IF calcs_kondisi namaIndex namaMap/0 namaScan/0 {PnamaField/namaLocal}
+
+      VALIDATE_BUF3_DIR_IF calcsNamaDir calcsIf namaIndex namaMap/0 namaScan/0 {PnamaField/namaLocal}
+
+      VALIDATE_SCAN dbcalcs_tipe_SCANSCAN 
+      	- VALIDATE ini dipakai di EDITS bagian IMGROL dari SCAN untuk 
+	  menghitung total dari sekumpulan rekord. Untuk contoh lihat scr521.
+
+      VALIDATE_SHOW_IF
+	- Validate ini untuk menampilkan scan dengan menekan tombol atau alt-a.
+	  contoh: pesan pesan field_tombol VALIDATE_SHOW_IF c1 namaindex map 
+	  scan. Contoh pemakaian di scr111 detail untuk nenampilkan jurnal 
+	  lawan.
+
+      SFLNOTSAME 
+        - Pesan akan ditampilkan bila field sudah ada di detail ini
+	  (khusus tipe aplikasi)
+	  contoh: Nama barang sudah ada ppdbrg SFLNOTSAME SFLNAME=trans SFLFIELD=ppdbrg
+
+      CHECKSFL 
+        - Perintah ini akan mengecek total field di detil harus sama
+          dengan field di master (master_field). Bila tidak sama, 
+	  maka untuk setiap rekord detail akan dijalankan dbcalcs. 
+	  Sesudah itu dicek lagi total field yang ada di detil 
+	  dengan master_field. Bila masih tidak sama, pesan program
+	  salah akan ditampilkan. EDIT ini diletakkan di image 
+	  dari master_field.
+	  contoh:
+	  Jumlah total tidak sama  master_field CHECKSFL SFLNAME=trans SFLFIELD=trans_field namaDbcalcs
+	  Jumlah total tidak sama  master_field CHECKSFL_IF nam_calcs SFLNAME=trans SFLFIELD=trans_field namaDbcalcs
+
+      VALIDATE_JOIN namaIndex namaMap/0 namaScan/0 {PnamaField/namaLocal}
+
+      VALIDATE_JOIN_IF namaIndex namaMap/0 namaScan/0 {PnamaField/namaLocal}
+
+      VALIDATE_JOIN_BUF3 namaIndex namaMap/0 namaScan/0 {PnamaField/namaLocal}
+
+      VALIDATE_JOIN_BUF3_IF namaIndex namaMap/0 namaScan/0 {PnamaField/namaLocal}
+	</PRE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x223.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x231.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>FIELD</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c173.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>DEFAULT</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

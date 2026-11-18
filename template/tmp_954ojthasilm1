@@ -1,0 +1,91 @@
+IMAGE(tmptranst)
+/---------------------------------------------\                
+|t.HasilOJTKO1                                |             
+|spasi                                        |
+|t.SkorSPV         : ______.__ __________     |
+|t.HasilSPV        : _________  __________    |
+|t.KeteranganSPV   : ____________________     |
+|spasi                                        |
+|t.SkorAM          : ______.__ __________     |
+|t.HasilAM         : _________  __________    |
+|t.KeteranganAM    : ____________________     |
+|                                    ____     |
+\---------------------------------------------/                   
+IMAGE(tmptrans)
+
+FIELD(tmptranst)
+tldjml  	PROTECT			INPUTRI 	1
+lketlulus       PROTECT                 INPUTRI         2
+tldnobbm        ALLCAPS                 INPUTRI         3  
+tldstr4         PROTECT                 INPUTRI         4 
+tldket          TEXTAREA                INPUTRI         5
+
+tldhrg          PROTECT			INPUTRI 	6
+lketlulus1      PROTECT			INPUTRI 	7
+tldnoll         ALLCAPS                 INPUTRI         8 
+tldstr5         ALLCAPS                 INPUTRI         9 
+tldket2         TEXTAREA                INPUTRI         10
+
+lenter          NOCHANGE                INPUTRI         11
+
+DEFAULT(tmptranst)
+/*PILIHAN SPV*/
+IF clebih35     tldnobbm         DFALT_SCAN      LULUS
+IF ckurang35    tldnobbm         DFALT_SCAN      TIDAK_LULUS
+
+/*PILIHAN AM*/
+IF clebih35NO   tldnoll        DFALT_SCAN      LULUS
+IF ckurang35NO  tldnoll        DFALT_SCAN      TIDAK_LULUS
+
+IF clebih35YES   tldnoll        DFALT_SCAN        LULUS
+                                                  TIDAK_LULUS
+
+EDITS(tmptranst)
+e.Mandatory     tldnobbm        MANDATORY_IF cSPVGADAI
+e.Mandatory     tldket          MANDATORY_IF cSPVGADAI
+e.Mandatory     tldnoll         MANDATORY_IF cAM
+e.Mandatory     tldket2         MANDATORY_IF cAM
+
+MAP(mketlulusM1)
+cLULUS          lketlulus       DO_CALC
+cTDK_LULUS      lketlulus       DO_CALC_IF ckurang35
+cLULUS          lketlulus1      DO_CALC
+cTDK_LULUS      lketlulus1      DO_CALC_IF ckurang35a
+
+MAP(mketlulusM1a)
+cLULUS          lketlulus       DO_CALC
+cTDK_LULUS      lketlulus       DO_CALC_IF ckurang35
+cLULUS          lketlulus1      DO_CALC
+cTDK_LULUS      lketlulus1      DO_CALC_IF ckurang35a
+
+HOOKS(tmptranst)
+BEFORE_INPUT  cur_field=tldnobbm   DO_SKIP_IF cAM
+BEFORE_INPUT  cur_field=tldket     DO_SKIP_IF cAM
+BEFORE_INPUT  cur_field=tldnoll    DO_SKIP_IF cSPVGADAI
+BEFORE_INPUT  cur_field=tldket2    DO_SKIP_IF cSPVGADAI
+
+BEFORE_INPUT  cur_field=tldnobbm   DO_MAP SHOW mketlulusM1
+BEFORE_INPUT  cur_field=tldnoll    DO_MAP SHOW mketlulusM1a
+
+AFTER_INPUT     cur_field=tldket      DO_MAP SHOW mpanjangchar1
+AFTER_INPUT     cur_field=tldket2     DO_MAP SHOW mpanjangchar1
+
+AFTER_INPUT     cur_field=tldket      DO_MAP SHOW
+                IF cmin50charSPV mdum
+                ELSE HKCURSOR STAY
+                HKMSG t.Minimal50Karakter
+
+AFTER_INPUT     cur_field=tldket2      DO_MAP SHOW
+                IF cmin50charAM mdum
+                ELSE HKCURSOR STAY
+                HKMSG t.Minimal50Karakter
+
+AFTER_INPUT   cur_keybd=EN         DO_MAP SHOW misipenilai
+
+
+SUBFILE(tmptrans)
+        SFL_LINES(1)
+        SFL_TITLE(tmptranst)
+        SFL_TARGET
+        tldstsbrgukr   lHSLOJTMGA gv_CLSD tlmnobuk lOJTPICM121          
+

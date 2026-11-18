@@ -1,0 +1,270 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Membuat Program Kas Keluar</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Tutorial Ksystem V2016.09.20"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="END_SCREEN"
+HREF="x287.html"><LINK
+REL="NEXT"
+TITLE="
+      Mengenal Perintah SCREEN, IMAGE, FIELD dan END_SCREEN.
+      "
+HREF="x297.html"></HEAD
+><BODY
+CLASS="chapter"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Tutorial Ksystem V2016.09.20</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x287.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x297.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="chapter"
+><H1
+><A
+NAME="AEN290"
+></A
+>Chapter 16. Membuat Program Kas Keluar</H1
+><P
+>&#13;    Pada bab ini kita akan membuat program pengeluaran kas yang sama
+    dengan scr201 dengan pembuatan secara bertahap sehingga kita bisa
+    membahasnya selangkah demi selangkah. Marilah kita mulai dengan data kosong
+    dengan menghapus semua data dan index dengan perintah rm ???.dat ???.idx di linux atau
+    del ???.dat ???.idx di Windows. Sesudah itu kita jalankan ksrun dan pilih 
+    "Data Awal Tutorial Lengkap" kemudian pilih perdagangan umum. Dengan pilihan ini, maka
+    data data awal untuk latihan seperti data rekening buku besar, persedian barang, data cabang,
+    divisi sudah disediakan sehingga memudahkan kita untuk belajar membuat program.
+    </P
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN293"
+>16.1. Mengenal editor vi</A
+></H1
+><P
+>&#13;      Untuk memudahkan pemrograman Ksystem, anda sebaiknya menggunakan editor vi yang tersedia
+      baik di Linux maupun di Windows. Bila anda menggunakan Windows dan belum  
+      memepunyai program vi untuk windows, silakan download program gvim61.exe 
+      di bagian Download www.ksystem.info, kemudian install program gvim.exe
+      ini. Ringkasan perintah vi adalah sbb:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;                   Tombol - Tombol dalam Editor vi :
+		   ---------------------------------
+CARA MASUK MODE EDIT
+  i     - menyisipkan pada posisi kursor
+  a     - menambah setelah cursor
+
+CARA KELUAR DARI MODE EDIT
+  Esc	- keluar dari mode edit
+  
+CARA MENYIMPAN FILE KE HARDDISK
+  :w
+
+CARA MENYIMPAN FILE KE HARDDISK DAN KELUAR DARI VI
+  :wq
+
+CARA MEMBACA ISI FILE LAIN
+  :r &#60;namafile&#62;
+
+TOMBOL PENGGERAK :
+  j      - turun 1 baris
+  k      - naik 1 baris
+  h      - ke kiri 1 karakter
+  l      - ke kanan 1 karakter
+  b      - ke kiri 1 kata
+  w      - ke kanan 1 kata
+  1G     - menuju ke awal berkas (baris 1)
+  G      - menuju ke akhir berkas (baris terakhir)
+  $      - menuju akhir baris
+  ^      - menuju karakter pertama dalam satu baris
+  0	 - menuju awal baris
+  H	 - menuju awal halaman
+  L	 - menuju akhir halaman
+  M	 - menuju tengah halaman
+  {      - menuju ke atas 1 paragraf
+  }      - menuju ke bawah 1 paragraf
+  [[	 - menuju ke baris pertama
+  ]]	 - menuju ke baris terakhir
+  ''	 - menuju ke tempat cursor terakhir
+  Ctrl+f - turun 1 halaman
+  Ctrl+b - naik  1 halaman
+  Ctrl+u - naik  1/2 layar
+  Ctrl+d - turun 1/2 layar
+  Ctrl+y - naik  1 baris, cursor tetap ditempat
+  Ctrl+e - turun 1 baris, cursor tetap ditempat
+  Ctrl+p - cursor naik  1 baris 
+  Ctrl+n - cursor turun 1 baris 
+  Ctrl+m - cursor turun 1 baris, langsung ke awal baris
+  Enter  - cursor turun 1 baris, langsung ke awal baris
+
+
+TOMBOL PENGHAPUS :
+
+  x      - menghapus 1 karakter
+  dd     - menghapus 1 baris dan disimpan di dalam buffer
+  &#60;n&#62;dd  - menghapus &#60;n&#62; baris dan disimpan di dalam buffer
+  dw     - menghapus 1 kata
+  &#60;n&#62;dw  - menghapus &#60;n&#62; kata
+  D      - menghapus dari posisi cursor sampai akhir baris
+
+
+TOMBOL EDIT LAINNYA:
+  I     - menyisipi di awal baris
+  A     - menambah setelah akhir baris
+  r     - mengubah 1 karakter posisi cursor
+  R     - mengubah text, sampai diakhiri tombol Esc
+  O     - membuka baris di atas cursor
+  o     - membuka baris dibawah cursor
+  cw	- mengubah 1 kata
+  cc	- mengubah 1 baris
+  s	- mengubah 1 huruf
+  S	- mengubah 1 baris
+  J	- menggabung dengan baris dibawahnya
+  &#60;n&#62;s	- mengubah &#60;n&#62; huruf
+  m&#60;x&#62;  - mark, untuk memberi tanda suatu text dengan karakter sembarang
+	  dan untuk kembali ke text yang diberi tanda menggunakan '&#60;x&#62;
+  ~	- mengganti huruf kecil menjadi besar / sebaliknya
+
+
+TOMBOL COPY :
+
+  &#60;n&#62;Y   - untuk menyimpan &#60;n&#62; baris ke dalam buffer
+  p      - untuk mencetak isi dari buffer
+
+
+TOMBOL LAIN - LAIN :
+
+  Ctrl - Z	: Keluar tanpa menyimpan
+  ZZ		: Keluar dan menyimpan
+  : (titik dua), diikuti dengan 
+
+     w[!] [&#60;namafile&#62;]  - untuk menyimpan berkas
+     r &#60;namafile&#62;       - untuk membaca berkas lain dan disisipkan pada posisi
+ 			  cursor 
+     q[!]               - untuk keluar dari vi kembali ke prompt Unix
+     &#60;n&#62;                - menuju ke baris yang ke &#60;n&#62;
+     e[!] &#60;&#62;amafile&#62;    - untuk membaca berkas baru
+
+  Ctrl+g    - untuk melihat status dari vi
+  Ctrl+l    - menyegarkan layar
+  u         - untuk membatalkan perintah yang terakhir
+  / (slash) - untuk mencari text setelah cursor
+  ?         - untuk mencari text sebelum cursor
+  . (titik) - untuk mengulangi perintah yang terakhir
+      </PRE
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x287.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x297.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>END_SCREEN</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Mengenal Perintah SCREEN, IMAGE, FIELD dan END_SCREEN.</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

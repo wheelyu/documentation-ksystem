@@ -1,0 +1,60 @@
+IMAGE(tmptranst)
+/---------------------------------------------------------------------------------------------\
+|t.PANELSDM                                                                                   |
+|t.TglPanel _______________                                                                   |
+|/---------t-------------t--------------------t-----------t-------------t--------------------\|
+||t.Tipe   |t.Nip        |t.Nama              |t.KonfHadir|t.NipDelegasi|t.Nama              ||
+|\---------.-------------.--------------------.-----------.-------------.--------------------/|
+\---------------------------------------------------------------------------------------------/
+
+FIELD(tmptranst)
+ltglpanl    PROTECT {DD-MM-YYYY}        INPUTRI 1
+
+IMAGE(tmptrans)
+!|_________|______________|___________________|____________|______________|___________________|
+
+FIELD(tmptrans)
+tldsat      PROTECT        INPUTRI         1
+tldplg      PROTECT                INPUTRI         2
+lnamapan      PROTECT        INPUTRI         3
+tldgrup     NOCHANGE         INPUTRI         4
+tldstr1     ALLCAPS                INPUTRI         5
+lnamadel      PROTECT        INPUTRI         5
+
+
+DEFAULT(tmptrans)
+tldgrup     DFALT_SCAN_BLANKS   Y
+                                T
+
+EDITS(tmptrans)
+t.ValidatePsi   tldplg  VALIDATE psikodidx mpsilistpanl 0
+
+CALCS()
+cbisahadir      tldgrup!=BLANKS && tldgrup=="Y"
+
+MAP(mpsilistpanl)
+psikode     tldplg      REPLACE
+psinama     lnamapan    REPLACE
+
+HOOKS(tmptrans)
+BEFORE_INPUT    cur_field=tldstr1   DO_SKIP_IF cbisahadir
+AFTER_INPUT     cur_field=tldgrup   DO_MAP SHOW mpnlhadir
+
+MAP(mpnlhadir)
+cBLANKS         tldstr1     DO_CALC_IF cbisahadir
+tldplg          tldstr1     REPLACE_IF cbisahadir
+
+SUBFILE(tmptrans)
+SFL_TITLE(tmptranst)
+SFL_COND cbukanPenPnl
+
+SFL_LINES(6)        /* Jml record yang kelihatan di layar */
+SFL_TARGET
+tldstsbrgukr   tlmdata gv_OPEN tlmnobuk lLISTPANEL
+
+SFL_MAP
+tlmdata     tlddata     REPLACE
+tlmnobuk    tldnobuk    REPLACE
+tlmnobuk    tldbrg      REPLACE
+gv_OPEN     tldsts      REPLACE
+lLISTPANEL   tldukrwrn   REPLACE

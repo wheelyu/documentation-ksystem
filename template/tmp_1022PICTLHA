@@ -1,0 +1,60 @@
+IMAGE(tmptranst)
+/----t-----------------t-------------t--------------t----------t----------------t---------t---------t---------t-----------\
+|t.No|t.NobukPenugasan |t.NobukICQKKP|t.NobukTemuan |t.TLjtTemu|t.NobukTLHA     |t.Pic    |t.PIC1   |t.PIC2   |t.TgtSlesai|
+\----.-----------------.-------------.--------------.----------.----------------.---------.---------.---------.-----------/
+
+IMAGE(tmptrans)
+|____|_________________|_____________|______________|__________|________________|_________|_________|_________|___________|
+
+
+
+FIELDS(tmptrans)
+tkdnourt            PROTECT                             INPUTRI 1
+tkdnobuk            PROTECT                             INPUTRI 1
+tkdsisstr           PROTECT                             INPUTRI 2
+tkdnoll             NOCHANGE                            INPUTRI 3
+tkdjenis            NOCHANGE                            INPUTRI 3
+lnobuktlha          PROTECT                             INPUTRI 3
+tkdjwbstr1          ALLCAPS                             INPUTRI 4
+tkdjwbstr2          ALLCAPS                             INPUTRI 5
+tkdstr1             ALLCAPS                             INPUTRI 6
+tkdtgl              ALLCAPS NOLIMIT {DD-MM-YY}          INPUTRI 7
+
+
+DEFAULTS(tmptrans)
+tkdnobuk        INIT_ADD        {ctlmnobuk}
+tkddata         INIT_ADD        {lPICTLHA}
+tkdjenis        DFALT_SCAN          BLANKS
+                                    SOP
+                                    SISTEM
+                                    SANKSI
+                                    PROSES
+
+EDITS(tmptrans)
+e.Mandatory         tkdnoll       MANDATORY
+e.Mandatory         tkdjenis      MANDATORY
+e.Mandatory         tkdjwbstr1    MANDATORY
+e.Mandatory         tkdtgl        MANDATORY
+/*e.ValidateFFind     tkdsisstr     VALIDATE tldstsbrgukr mtldkkp stldkkp  {PlPLANCOE11} {Pgv_INPG} {PlPLANCOE} {Stldsat} {Stldtglfak} */
+e.ValidateKKP       tkdnoll       VALIDATE svidatkodtyp msviffind ssviffind {PlFACTFIND} {SlFACTFIND} {Sgv_INPG} 
+e.Validatepic       tkdjwbstr1    VALIDATE psistscabkod mpsipic  spsi {Pgv_INPG} {Ppsicab}
+e.Validatepic1      tkdjwbstr2    VALIDATE psistscabkod mpsipic1 spsi {Pgv_INPG} {Ppsicab}
+e.Validatepic2      tkdstr1       VALIDATE psistscabkod mpsipic2 spsi {Pgv_INPG} {Ppsicab}
+
+HOOKS(tmptrans)
+BEFORE_INPUT    cur_field=tkdsisstr       DO_MAP SHOW mtkdurut
+AFTER_INPUT     cur_field=tkdjenis        DO_MAP SHOW mnipproses
+BEFORE_INPUT    cur_field=tkdjwbstr2      DO_SKIP_IF cproses
+BEFORE_INPUT    cur_field=tkdstr1         DO_SKIP_IF cproses
+
+SUBFILE(tmptrans)
+SFL_LINES(5)
+SFL_TITLE(tmptranst)
+SFL_SORT_BY_FIELD tkdnourt
+SFL_TARGET
+        tkddatbukll   lPICTLHA tlmnobuk
+
+SFL_MAP
+lPICTLHA       tkddata        REPLACE
+tlmnobuk       tkdnobuk       REPLACE
+gv_OPEN        tkdsts          REPLACE

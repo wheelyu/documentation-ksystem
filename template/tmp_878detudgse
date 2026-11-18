@@ -1,0 +1,133 @@
+IMAGE(tmptranst)
+/-------------------------------------------\
+  /---------------------------------------\
+    i.NamaPsrt : ________________________
+    i.NoHp     : ________________________
+  \---------------------------------------/
+ t.Bukti Blast WA
+  /--s.UPLOAD-----------------------------\
+  |                                       |
+  |                                       |
+  |                                       |
+  |                                       |
+  |                                       |
+  \---------------------------------------/
+|| i.BuktiBlastWaSsui : ________________ ||
+|| i.NipAcc           : ________________ ||
+ t.Bukti Follow Up Call
+  /--s.UPLOAD2----------------------------\
+  |                                       |
+  |                                       |
+  |                                       |
+  |                                       |
+  |                                       |
+  \---------------------------------------/
+|| i.KonsMinat        : ________________ ||
+|| i.BuktiFUCallSsui  : ________________ ||
+|| i.NipAcc           : ________________ ||
+|| i.Enter           : __________        ||
+\-------------------------------------------/
+IMAGE(tmptrans)
+
+FIELD(tmptranst)
+tldkat      PROTECT     INPUTRI 1
+tldsat      PROTECT     INPUTRI 1
+tlddvs      ALLCAPS     INPUTRI 2 /* bukti blast wa sesuai*/
+tldukrwrn   PROTECT     INPUTRI 3 /* nip acc blast*/
+tldtydis    ALLCAPS     INPUTRI 3 /* kons minat */
+tldcab      ALLCAPS     INPUTRI 4 /* bukti fall sesuai */
+tldnobbm    PROTECT     INPUTRI 5 /* nip acc fu call*/
+lenter      ALLCAPS     INPUTRI 6
+CALCS()
+cBLASTWA "BLASTWA" + FLD_TO_STRING(tldnourt)
+cTELFON  "TELFON" + FLD_TO_STRING(tldnourt)
+MAP(mupdtlda1)
+cBLASTWA             tldstr4       		DO_CALC
+gv_int1                 tldjmlren       REPLACE
+
+MAP(mupdtlda2)
+cTELFON             tldstr5       		DO_CALC
+gv_int1                 tldjmlpos       REPLACE
+
+MAP(mmapmaptlddet)
+tlddvs  laccblast REPLACE
+tldcab  laccfucall REPLACE
+tldtydis ltldtydis      REPLACE
+CALCS()
+chm2 (tkmtgl1 + 2 == tkmtgl && tkmplg != g_usrkode) || tkmplg == g_usrkode
+chm1 (tkmtgl1 + 1 == tkmtgl && tkmplg != g_usrkode )|| tkmplg == g_usrkode
+
+chm2nip (tkmtgl1 + 2 == tkmtgl && tkmplg != g_usrkode)
+chm1nip (tkmtgl1 + 1 == tkmtgl && tkmplg != g_usrkode )
+cupdminatT tldtydis == "T"
+cbisaIsiDet tkmtgl >= tkmtgl1 + 1 && tldstr1 == "Y"
+cuplfoto (tkmtgl1 + 1 == tkmtgl || tkmtgl1 + 2 == tkmtgl)
+
+cbisaUdet (tkmplg == g_usrkode) || (djoinamtatasan12 == 1 && lamtstr1 == g_usrkode) || g_grpnam == "RI"
+MAP(mupdtlddet)
+laccblast tlddvs REPLACE
+laccfucall tldcab   REPLACE
+ltldtydis  tldtydis     REPLACE
+g_usrkode tldukrwrn REPLACE_IF chm1nip 
+g_usrkode tldnobbm REPLACE_IF chm2nip
+lT      tldstr1 REPLACE_IF cupdminatT
+
+DBCALCS(dupdtlda1)
+        DBC_COMMAND     UPDATE
+        DBC_TARGET      tldprmidx   tldprm
+        DBC_MAP         mupdtlda1
+
+DBCALCS(dupdtlda2)
+        DBC_COMMAND     UPDATE
+        DBC_TARGET      tldprmidx   tldprm
+        DBC_MAP         mupdtlda2
+
+DEFAULTS(tmptranst)
+tlddvs         DFALT_LIST      ACC TACC
+tldcab         DFALT_LIST      ACC TACC
+tldtydis       DFALT_LIST      Y T
+EDITS(tmptranst)
+e.Mandatory             tlddvs          MANDATORY_IF chm2nip
+
+e.wajibIsiKonsMinat             tldtydis          MANDATORY_IF chm2nip
+HOOKS(tmptranst)
+BEFORE_INPUT    cur_field=tldcab        DO_SKIP_IF chm1 /* fu call harus isi h-1 */
+BEFORE_INPUT    cur_field=tlddvs        DO_SKIP_IF cudgseT
+BEFORE_INPUT    cur_field=tlddvs        DO_SKIP_IF chm2 /* bukti blast isi h-2*/
+BEFORE_INPUT    cur_field=tldcab        DO_SKIP_IF cudgseT
+BEFORE_INPUT    cur_field=tldukrwrn     DO_SKIP_IF cudgseT
+BEFORE_INPUT    cur_field=tldnobbm      DO_SKIP_IF cudgseT
+
+BEFORE_INPUT    cur_field=tldtydis      DO_SKIP_IF csamadengan2
+BEFORE_INPUT    cur_field=tldtydis      DO_SKIP_IF cats1lyr
+SUBFILE(tmptrans)
+SFL_LINES(1)
+SFL_TITLE(tmptranst)
+SFL_UPLFLD  tldnobuk tldstr4
+SFL_UPLFLD2 tldnobuk tldstr5 
+
+SFL_UPLFLD_DBCALCS  dupdtlda1
+SFL_UPLFLD2_DBCALCS  dupdtlda2
+SFL_UPL_DIRFLD tkmcab
+
+SFL_UPL_COND    cuplfoto
+SFL_UPL_DELCOND c0
+SFL_COND cbisaIsiDet
+SFL_TARGET
+        tldotoidx   tldoto
+
+
+SPCALCS(sptmptrans)
+        DO_LIB                 ap_dbclc(DNAME dupdtldudgse2det,DCOMMAND MAPMAP, DMAP mmapmaptlddet);
+        DO_LIB                  ap_dbclc(DNAME dupdtldudgsedet,DCOMMAND UPDATE, DTARGET tldprmidx tldprm, DMAP mupdtlddet);
+        DO_LIB_IF catasan1layer     ap_dbclc(DNAME dupdabkudgse2det, DCOMMAND UPDATE_RANGE, DTARGET abkdatbukidx lKUNCIABSEN tkmnobuk, DMAP mupdabkudgse1);
+        DO_LIB_IF catasan1layer     ap_dbclc(DNAME dupdtkm1gse2det,DCOMMAND ADD,DFILE abk, DMAP maddabk878udgseH);
+        DO_LIB_IF catasan1layer     ap_dbclc(DNAME dupdtkm1gse2det2,DCOMMAND ADD,DFILE abk, DMAP maddabkatasan1);
+        DO_LIB_IF catasan1layer	    ap_dbclc(DNAME dupdmaster2bdet, DCOMMAND UPDATE, DTARGET tkmbukidx tkmnobuk, DMAP mupdtkmudgse1);
+POSTING(tmptrans)
+        PST_UPDCMD      sptmptrans
+
+PERMIT(tmptrans)
+	PMT_ADD_COND    c0
+        PMT_UPDALL_COND cbisaUdet
+	PMT_DEL_COND    c0

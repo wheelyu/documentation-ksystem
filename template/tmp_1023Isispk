@@ -1,0 +1,67 @@
+IMAGE(tmptranst)
+/----------------------------------------------------------------\
+|/--------------------------------------------------------------\|
+|| t.NoBuk            : ________________________________        ||
+|| t.NobukIsiSPK      : ________________________________        ||
+|| t.NoUrt            : ________________________________        ||
+|| t.Status           : __________                              ||
+|| t.Jenis            : ________________________________        ||
+|| t.Keterangan       : ________________________________        ||
+|| t.TanggalStart     : ___________________                     ||
+|| t.TanggalEnd       : ___________________                     ||
+|| t.TanggalEndAct    : ___________________                     ||
+|\--------------------------------------------------------------/|
+|/--------------------------------------------------------------\|
+||t.UplDOC                                                      ||
+|\--------------------------------------------------------------/|
+|/----------------DOCUPLOAD-------------------------------------\|
+||                                                              ||
+||                                                              ||
+|\--------------------------------------------------------------/|
+\----------------------------------------------------------------/
+
+
+IMAGE(tmptrans)
+
+FIELDS(tmptranst)
+tldnobuk        PROTECT                             INPUTRI 1
+tldsat          PROTECT                             INPUTRI 1
+tldnourt        PROTECT                             INPUTRI 2
+tldsts          PROTECT                             INPUTRI 2
+tldlok          NOCHANGE                            INPUTRI 3
+tldket          TEXTAREA                            INPUTRI 4
+tldtglfak       ALLCAPS  NOLIMIT {DD-MM-YY}         INPUTRI 5
+tldtgl2         ALLCAPS  NOLIMIT {DD-MM-YY}         INPUTRI 6
+tldtgl3         PROTECT  NOLIMIT {DD-MM-YY}         INPUTRI 7
+
+EDITS(tmptranst)
+e.Mandatory             tldlok          MANDATORY
+e.Mandatory             tldlok          MANDATORY
+e.Mandatory             tldket          MANDATORY
+e.Mandatory             tldtglfak       MANDATORY
+e.Mandatory             tldtgl2         MANDATORY
+
+e.Validatejenis         tldlok          VALIDATE_IF csop        tbtdatkodtyp mtbtjenis stbt {Pgv_dttabel} {Plaudit21} {PlALURTLHA} {PlALURTLHASOP} {Pgv_dttabel21}
+e.Validatejenis         tldlok          VALIDATE_IF csistem     tbtdatkodtyp mtbtjenis stbt {Pgv_dttabel} {Plaudit21} {PlALURTLHA} {PlALURTLHASISTEM} {Pgv_dttabel21}
+e.Validatejenis         tldlok          VALIDATE_IF csanksi     tbtdatkodtyp mtbtjenis stbt {Pgv_dttabel} {Plaudit21} {PlALURTLHA} {PlALURTLHASANKSI} {Pgv_dttabel21}
+
+HOOKS(tmptranst)
+BEFORE_INPUT    cur_field=tldlok        DO_MAP SHOW mtldurut
+
+SUBFILE(tmptrans)
+SFL_LINES(1)
+SFL_TITLE(tmptranst)
+SFL_UPL_DIRFLD tlmdata
+SFL_DOCUPLFLD tldoto
+SFL_DOCUPLFLD_DBCALCS   dupddoctldisispk
+SFL_SORT_BY_FIELD tldnourt
+SFL_SELECT csesuaijenis1
+SFL_TARGET
+        tldbukbrglok   tlmnobuk tlmnobuk 
+
+SFL_MAP
+tlmdata         tlddata        REPLACE
+gv_OPEN         tldsts         REPLACE
+tlmnobuk        tldnobuk       REPLACE
+tlmnobuk        tldbrg         REPLACE
+lISISPK         tldukrwrn      REPLACE

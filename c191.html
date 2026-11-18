@@ -1,0 +1,227 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Video Contoh Membuat Program Dengan Bahasa K-System.</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Langkah2 Untuk Membuat Program Dengan Bahasa K-System (K-Language)"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="END_SCREEN"
+HREF="x188.html"><LINK
+REL="NEXT"
+TITLE="Program 2"
+HREF="x207.html"></HEAD
+><BODY
+CLASS="chapter"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Langkah2 Untuk Membuat Program Dengan Bahasa K-System (K-Language)</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x188.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x207.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="chapter"
+><H1
+><A
+NAME="AEN191"
+></A
+>Chapter 7. Video Contoh Membuat Program Dengan Bahasa K-System.</H1
+><P
+>&#13;    <P
+></P
+><OL
+TYPE="1"
+><LI
+><P
+>Program 1 </P
+></LI
+><LI
+><P
+>Program 2 </P
+></LI
+><LI
+><P
+>Program 3 </P
+></LI
+><LI
+><P
+>Program 4 </P
+></LI
+></OL
+>
+</P
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN203"
+>7.1. Program 1, SCREEN, IMAGE dan FIELD</A
+></H1
+><P
+>&#13;	<PRE
+CLASS="programlisting"
+>&#13;	Dalam Program 1 kita akan belajar membuat program untuk pelanggan "UD.MAJU JAYA" 
+	dengan nomer pelanggan Ksystem 9001. 
+	Program 1 ini akan berisi:
+	- Membuat direktori prt9001 	
+	- Membuat Program Menu di prt9001 dengan nomer sct2900 dan judul "t.BelajarProgram"
+	  vi prt9001/sct2900
+
+	  SCREEN 2900 MENU_TYPE t.BelajarProgram
+	  END_SCREEN
+
+	- Menjalankan perintah kspar yang berfungsi mengubah program yang kita buat 
+	  misal prt9001/sct2900 menjadi program yang bisa dibaca oleh komputer yang di 
+	  simpan di frm9001/sct2900.frm. Jadi setiap kali kita mengubah program, maka harus
+	  menjalankan perintah kspar ini. Supaya perubahan terbaru bisa dibaca di komputer.
+	- Menjalankan perintah ksgen -x9001. 
+	  ksgen ini berfungsi untuk menggabungkan semua scr*.frm yang ada di direktori frm dan 
+	  semua sct*.frm yang ada di direktori frm9001 supaya bisa menjadi program yang bisa 
+	  dijalankan di browser. Perintah ksgen atau ksgen -x???? ini hanya dijalankan sekali saja, 
+	  saat ada tambahan sct baru. jika hanya mengubah sct yang sudah ada tidak perlu menjalankan 
+	  perintah ksgen.
+	- Menjalankan program ksystem di browser. Dan sekarang perhatikan sudah ada menu 2900 dengan 
+	  judul "??t.BelajarProgram??"
+
+	  1. Sekarang kita akan membuat file sct2901 di prt9001
+	     dengean perintah vi prt9001/sct2901
+	     Masukkan sbb:
+
+	  SCREEN 2901 QUERY_TYPE Program 1
+	  SCR_FILE bkm
+
+	  IMAGE(master)
+	  /-----------------------------------------------------\
+	  |                                                     |
+	  |  No.Bukti: ____________________                     |
+	  |  Total   : __________.__                            |
+	  |                                                     |
+	  /-----------------------------------------------------\
+
+	  FIELD(master)
+	    bkmnobuk	ALLCAPS		NONE	1
+	    bkmtotal	NONE		NONE	2
+
+	  END_SCREEN
+
+
+	  2. kspar prt9001/sct2901
+	  	Perintah ini akan membuat frm9001/sct2901.frm
+
+	  3. ksgen -x9001
+	  	Perintah ini membuat scrdef9001.var yang berisi layar baru 2901
+
+
+	</PRE
+>
+	</P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x188.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x207.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>END_SCREEN</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Program 2</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

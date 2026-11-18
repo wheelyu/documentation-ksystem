@@ -1,0 +1,333 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Membuat Program Penjualan</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Tutorial Ksystem V2016.09.20"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="
+Membuat Laporan
+"
+HREF="x472.html"><LINK
+REL="NEXT"
+TITLE="Membuat File Detail"
+HREF="x491.html"></HEAD
+><BODY
+CLASS="chapter"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Tutorial Ksystem V2016.09.20</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x472.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x491.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="chapter"
+><H1
+><A
+NAME="AEN478"
+></A
+>Chapter 18. Membuat Program Penjualan</H1
+><P
+>&#13;Pada bab ini kita akan membuat program penjualan. Cara membuatnya sama seperti pada bab - bab sebelumnya. Program penjualan ini akan kita masukkan ke layar 571. Untuk itu pada editor vi ketikkan vi prt9000/sct571. Setelah masuk ke layar editor, langkah selanjutnya adalah sebagai berikut.</P
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN481"
+>18.1. Membuat File Master</A
+></H1
+><P
+>&#13;Seperti pada bab - bab sebelumnya kita akan membuat file master terlebih dahulu. Program penjualan ini menggunakan file ppm sebagai file master. Untuk memulainya ketikkan perintah di bawah ini.</P
+><PRE
+CLASS="programlisting"
+>&#13;SCREEN 571 QUERY_TYPE Input Penjualan
+SCR_FILE ppm
+
+LOCAL
+PGM_FIELDS
+ltomdet_d	STRING		20
+ltomdet_2d	STRING		20
+lnamasales	STRING		20
+lkettotal	STRING		16
+lSL		STRING		3
+
+IMAGE(master) {BASE_ROW=2} {FRSFLD_BACKUP} {LSTFLD_ADVANCE} {IMG_BOX_COLOR1=166,214,240} {IMG_BOX_COLOR2=227,215,247} {IMG_BOX_COLOR3=250,228,205} {IMG_BOX_COLOR4=239,255,151}
+/------SCT571-------------------------------Penjualan----------------------------------------------\
+| /--------------------\ /---------------------------------------------\ /-----------------------\ |
+| |Tanggal : ________  | |No.Faktur : _______________  ______________  | |Bruto : _______________| |
+| |Type Byr: __        | |Pelanggan : ________   _____________________ | |Disc 1: _______________| |
+| |Cabang  : ________  | |Salesman  : ________   _____________________ | |Disc 2: _______________| |
+| |Divisi  : ________  | |Status    : _____      User: _______________ | |PPN   : _______________| |
+| \--------------------/ \---------------------------------------------/ \-----------------------/ |
+|  ____________ _____________                                                                      |
+|                                                   ____ _ _ _  ________                           |
+|                                                                                                  |
+|                                                                                                  |
+|                                                                                                  |
+|                                                                                                  |
+|                                                                                                  |
+|                                                                                                  |
+|                                                                                                  |
+| /----------------------------------------------------------------------------------------------\ |
+| | _________________ __________________________________________________________________________ | |
+| |                                                                                              | |
+| |                                                                                              | |
+| \----------------------------------------------------------------------------------------------/ |
+\--------------------------------------------------------------------------------------------------/
+
+FIELD(master)
+   ppmtglfak      NONE {DD-MM-YY}           INPUTRI     1  /* Tgl Faktur */
+   ppmnofak       ALLCAPS                   INPUTRI     9  /* No. Faktur */
+   ppmnopjk       PROTECT                   INPUTRI     10 /* No. Pajak  */
+   ppmtothrg      PROTECT                   NONE        20 /* Bruto   */
+
+   ppmtype4       NOCHANGE                  INPUTRI     3  /* Tunai OR Ptg */
+   ppmplg         ALLCAPS SCROLL            INPUTRI     11 /* pelanggan */
+   ppmbeli        ALLCAPS SCROLL            INPUTRI     12 /* nama plg */
+   ppmtotdis      PROTECT                   INPUTRI     21 /* Disc 1 Rupiah */
+
+   ppmcab         ALLCAPS                   INPUTRI     4  /* Divisi */
+   ppmsales       ALLCAPS SCROLL            INPUTRI     13 /* pelanggan */
+   lnamasales     PROTECT                   NONE        14 /* Tgl JTP */
+   ppmtbh1        PROTECT                   INPUTRI     22 /* Diskon 2 Rupiah*/
+
+   ppmdvs         ALLCAPS                   INPUTRI     5  /* Divisi */
+   ppmsts         PROTECT  ALLCAPS          INPUTRI     5  /* status */
+   ppmcrtusr      PROTECT                   NONE        16
+   ppmtotppn      PROTECT                   NONE        23 /* tot ppn */
+
+   ltomdet_d      TOMBOL                    INPUTRI     30 /* Tombol Detil d*/
+   ltomdet_2d     TOMBOL                    INPUTRI     31 /* Tombol Detil 2d */
+
+   ppmscr         PROTECT UNSEEN QPROTECT   INPUTRI     39 /* Dolar yg Diterima*/
+   ppmtype2       PROTECT UNSEEN QPROTECT   NONE        40 /* Type F */
+   ppmtype        PROTECT UNSEEN QPROTECT   NONE        41 /* Type F */
+   ppmsubtran     PROTECT UNSEEN QPROTECT   NONE        42 /* penj. sales */
+   ppmbyr         PROTECT QPROTECT UNSEEN   NONE        43 /* Netto */
+
+   lkettotal      PROTECT                   BIG         44 /* Disc 1 Rupiah */
+   ppmtotfak      PROTECT                   BIG         45 /* Netto */
+
+DEFAULTS(master)
+lkettotal	INIT		NETTO
+ppmsts		INIT		OPEN
+ppmtype4	DFALT_SCAN	P "Penjualan Kredit"
+				T "Penjualan Tunai"
+ltomdet_d	INIT		1d. Isi Barang
+ltomdet_2d	INIT		2d. Isi Kas/Bank
+ppmscr		INIT_QUERY	{g_scrnumstr}
+lSL		INIT		SL
+
+MAP(mplg)
+plgkode         ppmplg          REPLACE
+plgnama         ppmbeli         REPLACE
+plglok          ppmlok          REPLACE
+
+MAP(mkym)
+kymkode         ppmsales        REPLACE
+kymnama         lnamasales      REPLACE
+
+EDITS(master)
+Tombol d tidak                  ltomdet_d       SHOW_SFL trans
+Tombol 2d tidak                 ltomdet_2d      SHOW_SFL transa
+Kode Pelanggan Harus Diisi      ppmplg          MANDATORY
+Kode Salesman Harus Diisi       ppmsales        MANDATORY
+Kode Pelanggan Ini Tidak Ada    ppmplg          VALIDATE plgtypkodidx mplg splg {PlSL}
+Kode Salesman Tidak Ada         ppmsales        VALIDATE kymtypkodidx mkym skym {PlSL}
+
+/**************************************************************************/
+IMAGE(kymhead) {LSTFLD_ADVANCE} {FRSFLD_BACKUP}  {POP_UP} {BASE_ROW=7} {BASE_COLUMN=20}
+/-------------Daftar Salesman---------------------\
+|  Kode           Keterangan                      |
+|-------------------------------------------------|
+
+
+
+
+
+
+
+
+
+|-------------------------------------------------|
+|      Tekan ESC untuk keluar                     |
+\-------------------------------------------------/
+
+IMAGE(kymroll) {POP_UP} {LSTFLD_ADVANCE} {FRSFLD_BACKUP} {BASE_ROW=10} {BASE_COLUMN=20}
+  ______________  _______________________________
+
+FIELD(kymroll)
+/* Nama Field    Input Attribute  Output Attribute  Input Order   */
+   kymkode               NOCHANGE SCROLL          NONE              1
+   kymnama               PROTECT SCROLL           NONE              2
+
+SCAN(skym) {IMAGE_OUT=kymhead} {IMAGE_ROL=kymroll} {IMAGE_INP=kymroll} {SELECT_BAR} {ROLL_LINES=8}
+
+/**************************************************************************/
+IMAGE(plghead) {LSTFLD_ADVANCE} {FRSFLD_BACKUP}  {POP_UP} {BASE_ROW=7} {BASE_COLUMN=20}
+/-------------------Daftar Pelanggan----------------------------\
+|  Kode           Keterangan        Alamat          Kota        |
+|---------------------------------------------------------------|
+
+
+
+
+
+
+
+
+
+|---------------------------------------------------------------|
+|      Tekan ESC untuk keluar                                   |
+\---------------------------------------------------------------/
+
+IMAGE(plgroll) {POP_UP} {LSTFLD_ADVANCE} {FRSFLD_BACKUP} {BASE_ROW=10} {BASE_COLUMN=20}
+  __________  ___________________ _____________ _____________
+
+FIELD(plgroll)
+/* Nama Field    Input Attribute  Output Attribute  Input Order   */
+   plgkode               NOCHANGE SCROLL          NONE              1
+   plgnama               PROTECT SCROLL           NONE              2
+   plgalamat             NOCHANGE SCROLL          NONE              3
+   plgkota               NOCHANGE SCROLL          NONE              4
+
+SCAN(splg) {IMAGE_OUT=plghead} {IMAGE_ROL=plgroll} {IMAGE_INP=plgroll} {SELECT_BAR} {ROLL_LINES=8}
+
+END_SCREEN
+</PRE
+><P
+>&#13;Dengan menuliskan perintah - perintah di atas kita telah membuat file master yang sederhana seperti gambar di bawah ini. Tambahkan perintah HOOKS, EDITS, DEFAULTS, dan SCAN sesuai yang anda inginkan.</P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="gambar8.png"></P
+></DIV
+><P
+>&#13;Sebelum kita melanjutkan langkah berikutnya yaitu membuat file detail, ada baiknya bila kita mengenal terlebih dahulu field - field ppm yang digunakan di layar 571 ini. </P
+><PRE
+CLASS="programlisting"
+>&#13;Nama File : ppm
+Berfungsi sebagai file yang menyimpan informasi penjualan dan semua piutang. Baik piutang dagang, piutang karyawan, maupun piutang lain.
+ppmtglfak       : Tanggal faktur / bukti dibuat
+ppmnofak        : Nomor faktur / bukti piutang
+ppmplg          : Kode pelanggan / kode karyawan / kode hutang lain
+ppmsts          : OPEN (data belum diposting)
+		  INPG (data sudah diposting dan belum lunas)
+		  CLSD (data sudah diposting dan sudah lunas)
+ppmtotfak       : Total bersih penjualan
+ppmtothrg       : Total kotor penjualan
+ppmhpp          : Total harga pokok barang
+ppmtotdis       : Total diskon
+</PRE
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x472.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x491.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Membuat Laporan</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Membuat File Detail</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

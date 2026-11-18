@@ -1,0 +1,257 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>&#13;Membuat Laporan
+</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Tutorial Ksystem V2016.09.20"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="
+Membuat Program Penerimaan Piutang Pelanggan
+"
+HREF="c569.html"><LINK
+REL="PREVIOUS"
+TITLE="
+Membuat Program Posting
+"
+HREF="x597.html"><LINK
+REL="NEXT"
+TITLE="
+Alur Pengecekan Data
+"
+HREF="c614.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Tutorial Ksystem V2016.09.20</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x597.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 20. Membuat Program Penerimaan Piutang Pelanggan</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="c614.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN608"
+>20.4. Membuat Laporan</A
+></H1
+><P
+>&#13;Seperti yang telah kita ketahui bahwa program laporan rts ini tidak bisa digabungkan dengan layar QUERY_TYPE, sehingga kita akan masukkan program rts ini ke layar sct671.rts. Sebelum kita masuk ke layar 671.rts, kita harus kembali ke layar sct671 terlebih dahulu dan menuliskan perintah RTREE seperti berikut di layar 671 di atas perintah END_SCREEN.</P
+><PRE
+CLASS="programlisting"
+>&#13;IMAGE(report) {LSTFLD_ADVANCE} {BASE_ROW=2}
+SCT671                 MENCETAK BUKTI PENERIMAAN               @DATE
++
+
+                No. Bukti Penerimaan  : __________
+
+                Status                : ____
+
+                Device      : _
+
+                                                                               +
+FIELD(report)
+/* Symbol Name   Input Atribute  Output Atribute  Input Order  Special */
+    pjcnoprc        PROTECT            INPUTRI          1
+    pjcsts          PROTECT            INPUTRI          2
+    r_dev           NUMERIC            INPUTRI          3
+
+DEFAULTS(report)
+   r_dev DFALT_LIST 6 0 1 2 3
+
+DEFAULTS(qrts)
+pjcnoprc		INIT_QUERY	{pjcnoprc}
+
+RTREE(report)
+USES_SCRIPT(scr671.rts)
+RT_DEFAULTS	qrts
+</PRE
+><P
+>&#13;Setelah menuliskan perintah di atas marilah kita segera masuk ke layar 671.rts dan ketikkan perintah di bawah ini untuk membuat format laporan penerimaan piutang.
+</P
+><PRE
+CLASS="programlisting"
+>&#13;START
+
+VIRTUAL
+vterbilang	STRING		100	HURUF(pjctotcek)
+SEARCH
+FILE "pjc.dat" ALL
+FILE "pjd.dat" DTN "pjc.dat" BY_FIELD pjcnoprc	USING_KEY pjdbukfakidx
+FILE "pcm.dat" DTN "pjc.dat" BY_FIELD pjcnoprc	USING_KEY pcmnoprcidx
+
+CONTROL
+   1 pjcnoprc
+   2 pjdnofak
+
+SORT USING_KEY
+  NO_MOD        pjcnoprc
+  NO_MOD        pjdnofak
+
+ACCUMULATOR
+atotal		SUM		pjdjml
+
+DISPLAY
+     DEVICE             r_dev
+     PAGE_LENGTH        66
+     THOUSAND_SEPARATOR PERIOD
+     DECIMAL_POINT      COMMA
+     SCREEN_LINES       24
+     SETFONT0           15
+     SETFONT1           18
+
+IMAGE
+REPORT_HDR
++
++@xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+g_persh
+CONTROL_HDR(1)
++                                              /-------------------------------\
++BUKTI PENERIMAAN BAYAR PIUTANG                | No.Bukti  :@xxxxxxxxxxxxxx    |
+                                                             pjcnoprc
++/---------------------------------------------.-------------------------------|
++| Terima Dari    : @xxxxxxxxxxxxxxxxxxxxxx ( @xxxxxxxxxx )                    |
+ plgnama   pjcplg
++|                                                                             |
++|--------------t----------t----------t--------------t-------------------------|
++|  NO.FAKTUR   |TGL FAKTUR| TGL JTP  |   JUMLAH     |       KETERANGAN        |
++|--------------|----------|----------|--------------|-------------------------|
+BODY
++|@xxxxxxxxxxxxx|@xxxxxxxxx|@xxxxxxxxx|@9,99999999.00|@xxxxxxxxxxxxxxxxxxxxxxxx|
+pjdnofak        pjdtglfak pjdtgljtp pjdjml   pjdket
+CONTROL_FTR(1)
++|-----------.------------------------|--------------|-------------------------|
++|           ** T O T A L             |@9,99999999.00|                         |
+                                  atotal
++|------------------------------------.--------------.-------------------------|
++| Terbilang: @wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww|
+         vterbilang
++\-----------------------------------------------------------------------------/
++
++                                                          PENERIMA,
++
++
++
++                                                    ( ................. )
++@
+SETFONT1 ""
+PAGE_FTR
++
++
++
+EXIT
+</PRE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x597.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="c614.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Membuat Program Posting</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c569.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Alur Pengecekan Data</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,112 @@
+IMAGE(tmptranst)
+/----------------------------------------------\
+|t.InpJadwalPanel                         	   |
+|/--------------------------------------------\|
+||t.TglPanel    :________________	  		  ||
+||t.TrnArea     :________  ________________	  ||
+||t.KonfHadir   : __                          ||
+||t.Panelis1    :________  ________________	  ||
+||t.KonfHadir   : __                          ||
+||t.Panelis2    :________  ________________	  ||
+||t.KonfHadir   : __                          ||
+||t.SdmRev      :________  ________________	  ||
+||t.KonfHadir   : __ _                        ||
+|\--------------------------------------------/|
+\----------------------------------------------/
+
+IMAGE(tmptrans)
+
+FIELDS(tmptranst)
+tldtglfak 	ALLCAPS NOLIMIT	{DD-MM-YY}     INPUTRI         1
+tldplg      PROTECT         INPUTRI         2
+lnamatrn    PROTECT         INPUTRI         2
+tldstr1     NOCHANGE        INPUTRI         3
+tlddvs      PROTECT         INPUTRI         4
+lnmpanel1   PROTECT         INPUTRI         4
+tldstr2     NOCHANGE        INPUTRI         5
+tldcab      PROTECT         INPUTRI         6
+lnmpanel2   PROTECT         INPUTRI         6
+tldstr3     NOCHANGE        INPUTRI         7
+tldkat      PROTECT         INPUTRI         6
+lnamasdm    PROTECT         INPUTRI         6
+tldstr4     NOCHANGE        INPUTRI         7
+lenter      NOCHANGE        INPUTRI         8
+
+CALCS()
+chittglsdm		DO_LIB ap_jlhkr(ltipe1,ltglawlsdm,tldtglfak,&llamasdm);
+/*ctglblhinp      llamasdm>=75 && llamasdm<=90 || g_usrkode=="2492032"*/
+cdetinpjwl      tlmtype2=="INP_PANL" || tlmtype2=="INP_JWL" || tlmtype2=="KONF_JWL"
+cbkninpjwl      tlmtype2!="INP_JWL"
+cbknkonfjwl1     tlmtype2!="KONF_JWL" || (g_usrkode!=tldplg || (g_usrkode==tldplg && ((tldstr2!="Y" || tldstr3!="Y" || tldstr4!="Y") && lSYSTIME<lJAM16)))
+cbknkonfjwl2     tlmtype2!="KONF_JWL" || (g_usrkode!=tlddvs && g_usrkode!="2492032")
+cbknkonfjwl3     tlmtype2!="KONF_JWL" || (g_usrkode!=tldcab && g_usrkode!="2492032")
+cbknkonfjwl4     tlmtype2!="KONF_JWL" || (g_usrkode!=tldkat && g_usrkode!="2492032")      
+ctglawlm4       DO_LIB ap_tambl(ltglawlbln,l4,&ltglawlm4);
+ctgl3m4         DO_LIB ap_jtpkr(ltipe1,ltglawlm4,l3,&ltgl3m4);
+ctgl7m4         DO_LIB ap_jtpkr(ltipe1,ltglawlm4,l7,&ltgl7m4);
+ctglpanlsdm     (tldtglfak>=ltgl3m4 && tldtglfak<=ltgl7m4)
+
+MAP(mhittglsdm)
+chittglsdm		llamasdm	DO_CALC
+ctglawlbln      ltglawlbln      DO_CALC
+ctglawlm4       ltglawlm4       DO_CALC
+ctgl3m4         ltgl3m4         DO_CALC
+ctgl7m4         ltgl7m4         DO_CALC
+
+
+DEFAULT(tmptranst)
+tldstr1         DFALT_SCAN_BLANKS   Y
+tldstr2         DFALT_SCAN_BLANKS   Y
+tldstr3         DFALT_SCAN_BLANKS   Y
+tldstr4         DFALT_SCAN_BLANKS   Y
+
+EDITS(tmptranst)
+t.ValidatePsi   tldplg  VALIDATE psikodidx mpsitrn 0
+t.ValidatePsi   tlddvs  VALIDATE psikodidx mpsipanl1 0
+t.ValidatePsi   tldcab  VALIDATE psikodidx mpsipanl2 0
+
+MAP(mpsitrn)
+psikode     tldplg      REPLACE
+psinama     lnamatrn    REPLACE
+
+MAP(mpsipanl1)
+psikode     tlddvs      REPLACE
+psinama     lnmpanel1    REPLACE
+
+MAP(mpsipanl2)
+psikode     tldcab      REPLACE
+psinama     lnmpanel2    REPLACE
+
+
+
+HOOKS(tmptranst)
+BEFORE_INPUT     cur_field=tldtglfak     DO_SKIP_IF cbkninpjwl
+BEFORE_INPUT     cur_field=tldstr1       DO_SKIP_IF cbknkonfjwl1
+BEFORE_INPUT     cur_field=tldstr2       DO_SKIP_IF cbknkonfjwl2
+BEFORE_INPUT     cur_field=tldstr3       DO_SKIP_IF cbknkonfjwl3
+BEFORE_INPUT     cur_field=tldstr4       DO_SKIP_IF cbknkonfjwl4
+
+BEFORE_INPUT	cur_field=tldtglfak	DO_MAP SHOW mhittglsdm
+/*AFTER_INPUT	cur_field=tldtglfak	DO_MAP SHOW 
+        IF ctglblhinp mdum
+        ELSE HKCURSOR STAY
+        HKMSG HANYA BOLEH H+75 SAMPAI H+90 SDM MASUK*/
+AFTER_INPUT	cur_field=tldtglfak	DO_MAP SHOW 
+        IF ctglpanlsdm mdum
+        ELSE HKCURSOR STAY
+        HKMSG HANYA BOLEH H+3 - H+7 M4
+
+
+SUBFILE(tmptrans)
+SFL_LINES(1)
+SFL_TITLE(tmptranst)
+SFL_COND cdetinpjwl
+SFL_TARGET
+tldstsbrgukr   tlmdata gv_OPEN tlmnobuk lJWLPANSDM
+
+SFL_MAP
+tlmdata     tlddata     REPLACE
+tlmnobuk    tldnobuk    REPLACE
+tlmnobuk    tldbrg      REPLACE
+gv_OPEN     tldsts      REPLACE
+lJWLPANSDM  tldukrwrn   REPLACE

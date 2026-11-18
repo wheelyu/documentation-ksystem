@@ -1,0 +1,244 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>&#13;Membuat Laporan
+</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Tutorial Ksystem V2016.09.20"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="
+Membuat Program Pembayaran Hutang
+"
+HREF="c522.html"><LINK
+REL="PREVIOUS"
+TITLE="
+Membuat Program Posting
+"
+HREF="x551.html"><LINK
+REL="NEXT"
+TITLE="
+Membuat Program Penerimaan Piutang Pelanggan
+"
+HREF="c569.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Tutorial Ksystem V2016.09.20</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x551.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 19. Membuat Program Pembayaran Hutang</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="c569.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN562"
+>19.4. Membuat Laporan</A
+></H1
+><P
+>&#13;Sama dengan program posting APP_TYPE, program laporan rts ini jg tidak bisa digabungkan dengan layar QUERY_TYPE sehingga kita harus membuatnya di layar lain. Langkah pertama yang harus kita lakukan adalah ketikkan perintah berikut di layar 471 di atas perintah END_SCREEN.</P
+><PRE
+CLASS="programlisting"
+>&#13;IMAGE(report) {LSTFLD_ADVANCE} {BASE_ROW=2}
+SCR471                 MENCETAK BUKTI PEMBAYARAN               @DATE
++
+
+                No. Bukti Pembayaran  : __________
+
+                Status                : ____
+
+                Device                : _
+
+                                                                               +
+FIELD(report)
+/* Symbol Name   Input Atribute  Output Atribute  Input Order  Special */
+    pbcnoprc        PROTECT            INPUTRI          1
+    pbcsts          PROTECT            INPUTRI          2
+    r_dev           NOCHANGE           INPUTRI          3
+
+DEFAULTS(qrts)
+pbcnoprc		INIT_QUERY	{pbcnoprc}
+
+RTREE(report)
+USES_SCRIPT(scr471.rts)
+RT_DEFAULT qrts
+</PRE
+><P
+>&#13;Setelah mengetikkan perintah di atas langkah selanjutya adalah masuk ke layar 471.rts dengan mengetikkan perintah vi prt9000/sct471.rts pada layar editor vi. Setelah kita masuk ke layar 471.rts, ketikkan perintah berikut ini untuk membuat format laporannya.</P
+><PRE
+CLASS="programlisting"
+>&#13;START
+
+SEARCH
+FILE "pbc.dat" ALL
+FILE "pbd.dat" DTN "pbc.dat" BY_FIELD pbcnoprc	USING_KEY pbdbukurtidx
+FILE "pcm.dat" DTN "pbc.dat" BY_FIELD pbcnoprc	USING_KEY pcmnoprcidx
+FILE "sup.dat" JTN "pbc.dat" BY_FIELD pbcsup	USING_KEY supkodidx
+
+CONTROL
+1 pbcnoprc
+
+SORT_USING_KET
+NO_MOOD		pbcnoprc
+
+ACCUMULATOR
+vtotal		SUM	pbdjml
+
+DISPLAY
+     DEVICE             r_dev
+     PAGE_LENGTH        66
+     THOUSAND_SEPARATOR PERIOD
+     DECIMAL_POINT      COMMA
+     SCREEN_LINES       24
+     SETFONT0           15
+     SETFONT1           18
+
+IMAGE
+REPORT_HDR
++
++@xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+g_persh
+CONTROL_HDR(1)
++                                              /-------------------------------\
++BUKTI PEMBAYARAN HUTANG                       | No.Bukti  :@xxxxxxxxxxxxxx    |
+                                                             pbcnoprc
++/---------------------------------------------.-------------------------------|
++| Dibayar Kepada : @xxxxxxxxxxxxxxxxxxxxxx ( @xxxxxxxxxx )                    |
+ supnama   pbcsup
++|                                                                             |
++|--------------t----------t----------t--------------t-------------------------|
++|  NO.FAKTUR   |TGL FAKTUR| TGL JTP  |   JUMLAH     |       KETERANGAN        |
++|--------------|----------|----------|--------------|-------------------------|
+BODY
++|@xxxxxxxxxxxxx|@xxxxxxxxx|@xxxxxxxxx|@9,99999999.00|@xxxxxxxxxxxxxxxxxxxxxxxx|
+pbdnofak        pbdtglfak pbdtgljtp pbdjml           pbdket
+CONTROL_FTR(1)
++|-----------.------------------------|--------------|-------------------------|
++|           ** T O T A L             |@9,99999999.00|                         |
+                                  atotal
++\------------------------------------.--------------.-------------------------/
++
++@
+SETFONT1 ""
+PAGE_FTR
++
++
++
+EXIT
+</PRE
+><P
+>&#13;Format laporan di atas dapat anda ubah sesuai dengan yang anda butuhkan.</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x551.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="c569.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Membuat Program Posting</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c522.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Membuat Program Penerimaan Piutang Pelanggan</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

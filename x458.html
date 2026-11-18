@@ -1,0 +1,394 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>&#13;Membuat Perintah Posting
+</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Tutorial Ksystem V2016.09.20"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="
+Membuat Program Pembelian
+"
+HREF="c428.html"><LINK
+REL="PREVIOUS"
+TITLE="
+Membuat File Detail
+"
+HREF="x442.html"><LINK
+REL="NEXT"
+TITLE="
+Membuat Laporan
+"
+HREF="x472.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Tutorial Ksystem V2016.09.20</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x442.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 17. Membuat Program Pembelian</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x472.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN458"
+>17.3. Membuat Perintah Posting</A
+></H1
+><P
+>&#13;Seperti yang sudah dijelaskan pada bab sebelumnya yaitu fungsi perintah Posting ini adalah untuk mengubah data saat kita mengkonfirmasi data ( saat kita menekan tombol G pada layar ksystem ). Karena perintah posting ini adalah posting untuk APP_TYPE maka tidak bisa digabungkan dengan layar QUERY_TYPE, oleh karena itu kita harus membuka layar baru. Misalnya kita gunakan layar 372 untuk layar 371. Sebelum masuk ke layar 372 pada bagian paling atas di layar 371 ketikkan perintah sebagai berikut :</P
+><PRE
+CLASS="programlisting"
+>&#13;SCREEN 371 QUERY_TYPE Input Pembelian
+SCR_FILE pmb
+SCR_NXT_POSTING 372
+SCR_NXT_MAP mnext
+
+MAP(mnext)
+pmbnofak    r_string7    REPLACE
+pmbfl1      r_string15   REPLACE
+pmbscr      r_string9    REPLACE
+pmbfl2      r_string10   REPLACE
+pmbtk       r_string11   REPLACE
+pmbtglfak   r_date1      REPLACE
+pmbtglfak   r_date2      REPLACE
+</PRE
+><P
+>&#13;Fungsi dari perintah SCR_NXT_MAP mnext adalah untuk mengcopykan data - data yang dibutuhkan di layar 371 ke dalam variabel global yang nantinya data tersebut akan dipakai di layar 372.</P
+><P
+>&#13;Setelah menuliskan perintah di atas maka marilah kita masuk ke layar 372 dengan mengetikkan perintah vi prt9000/sct372 pada editor vi. Setelah masuk ke layar editor 372 maka ketikkan perintah - perintah sebagai berikut.</P
+><PRE
+CLASS="programlisting"
+>&#13;SCREEN 372 APP_TYPE Posting Pembelian
+
+LOCAL
+PGM_FIELDS
+  lnofak1	STRING		15
+  lD		STRING		2
+  lBR		STRING		3
+
+IMAGE(master) {BASE_ROW=1} {FRSFLD_BACKUP} {LSTFLD_ADVANCE}
+SCT278                                                                @DATE
+/-----------------------Pelaksanaan Pembelian Barang---------------------------\
+|              No. Faktur   : ______________                                   |
+|                                                                              |
+|                                                                              |
+| No Faktur      Supplier    Kode Barang    Lokasi    Jml Unit    Tanggal  Sts |
+\------------------------------------------------------------------------------/
+
+FIELD(master)
+   lnofak1           ALLCAPS                   INPUTRI    8
+
+DEFAULTS(master)
+lnofak1		INIT		{r_string7}
+lD		INIT		D
+
+IMAGE(trans) {NO_CLS} {LSTFLD_ADVANCE} {FRSFLD_BACKUP} {BASE_ROW=12}
+ _____________ _________ ________________ _____ ________ ________ ____ _________ ___
+
+FIELD(trans)
+   ppdnofak          NOCHANGE SCROLL         NONE      1
+   ppdplg            NOCHANGE SCROLL  NONE      2
+   ppdbrg            PROTECT SCROLL          NONE      3
+   ppdlok            PROTECT SCROLL          NONE      4
+   pmbcab            PROTECT SCROLL          NONE      5
+   ppdtglfak         PROTECT {DD-MM-YY} NONE    6
+   pmbdvs            PROTECT SCROLL          NONE      7
+   ppdnobbm          PROTECT SCROLL          NONE      7
+   pmbsup            PROTECT SCROLL          NONE      7
+
+DEFAULTS(trans)
+  lBR         INIT    BR
+
+SUBFILE(trans)
+SFL_LINES(9)
+
+SFL_TARGET
+ppdfakbbmidx   lnofak1
+
+IMAGE(trans2) {NO_CLS} {LSTFLD_ADVANCE} {FRSFLD_BACKUP} {BASE_ROW=19}
+ _______________ _________ _________________.__ ___________ __________
+
+FIELD(trans2)
+   pcmnoprc          NOCHANGE         NONE      1
+   pcmplg            NOCHANGE SCROLL  NONE      2
+   pcmtotal          PROTECT          NONE      3
+   pcmnobbm          PROTECT          NONE      3
+   lbbmkas           PROTECT          NONE      3
+
+CALCS()
+cgantinomor     ppdnofak != lppdnofak
+cD              "D"
+cPB             "PB"
+cCLSD		"CLSD"
+cOPEN		"OPEN"
+
+SUBFILE(trans2)
+SFL_LINES(3)
+SFL_COND        cgantinomor
+SFL_TARGET
+pcmty3stsprc   lPB lOPEN ppdnofak
+
+/*--------------------daddbrd---------------------*/
+MAP(mbrd)
+   cOPEN                brdsts          DO_CALC
+   ppdscr               brdscr          REPLACE
+   ppdtglfak            brdtgl          REPLACE
+   g_tgltrn             brdtglpos       REPLACE
+   ppdplg               brdsup          REPLACE
+   g_usrno              brdcrtusr       REPLACE
+   ppdbrg               brdbrg          REPLACE
+   ppdlok               brdlok          REPLACE
+   ppdnourt             brdnourt        REPLACE
+   ppdsat               brdsat          REPLACE
+   ppdkdukr             brdkdukr        REPLACE
+   ppdsatbsr            brdjmlsat       REPLACE  /* Jumlah x satuan */
+
+   ppdtmp               brdjmu          REPLACE  /* Jumlah Satuan Kecil */
+   brdjmu               brdsisunt       REPLACE
+   brdjmu               brdsisuntprc    REPLACE
+   ppdhrg               brdhrg          REPLACE  /* hrg Dlm Satuan kecil */
+
+   ppdkat               brdkat          REPLACE
+   ppdnobbm             brdnobbm        REPLACE
+   pmbppnyt             brdppnyt        REPLACE
+   ppdnwo               brdket          REPLACE
+   ppdnofak             brdnofak        REPLACE
+
+DBCALCS(daddbrd)
+DBC_COMMAND             ADD
+DBC_FILE                brd
+DBC_MAP                 mbrd
+DBC_LAST_TARGET         brdnoidx        brdno
+DBC_LAST_LEN            14
+
+/*-------------------daddbrt--------------------*/
+MAP(maddbrt)
+ppdnofak       brtnofak         REPLACE
+brdbrg         brtbrg           REPLACE
+brdlok         brtlok           REPLACE
+brdkdukr       brtkdukr         REPLACE
+brdnourt       brtnourt         REPLACE
+brdsat         brtsat           REPLACE
+brdno          brtno            REPLACE
+brdtgl         brttgl           REPLACE
+brdtglpos      brttglpos        REPLACE
+brdjmu         brtjml           REPLACE
+brdhrg         brthrg           REPLACE
+brdscr         brtscr           REPLACE
+brdsup         brtplg           REPLACE
+brdnobbm       brtnobbm         REPLACE
+cD             brtdk            DO_CALC /* D */
+cPB            brttype          DO_CALC /* Pembelian*/
+
+DBCALCS(daddbrt)
+DBC_COMMAND             ADD
+DBC_FILE                brt
+DBC_MAP                 maddbrt
+DBC_LAST_TARGET         brttrnidx       brttrn
+DBC_LAST_LEN            14
+
+/*------------------dupdpmb-------------------*/
+CALCS()
+cpmbtkK                 pmbtk == "K"
+cpmbtkT                 pmbtk == "T"
+cyt24yT                 stsyt24 == "T"
+cyt24Y                  stsyt24 == "Y"
+
+MAP(mupdpmbd)
+   pmbtotfak            pmbsisa         REPLACE
+   pmbtotfak            pmbsisprc       REPLACE
+   pmbtothutas1         pmbsishutas1    REPLACE
+   pmbtothutas1         pmbsisprcas1    REPLACE
+   cOPEN                pmbstsret       DO_CALC
+   g_usrno              pmbxctusr       REPLACE
+   g_tgltrn             pmbpostgl       REPLACE
+   cINPG                pmbsts          DO_CALC_IF cpmbtkK
+   cCLSD                pmbsts          DO_CALC_IF cpmbtkT
+   cOPEN                pmbstsprc       DO_CALC_IF cpmbtkK
+   cCLSD                pmbstsprc       DO_CALC_IF cpmbtkT
+
+DBCALCS(dupdpmbd)
+        DBC_COMMAND     UPDATE
+        DBC_TARGET      pmbnofakidx              ltmpfak
+        DBC_MAP         mupdpmbd
+
+/*--------------------dupdppd--------------------*/
+MAP(mupdppd)
+   cCLSD                ppdsts             DO_CALC
+   lD                   ppddk              REPLACE
+
+DBCALCS(dupdppd)
+        DBC_COMMAND     UPDATE
+        DBC_TARGET      ppdprmidx              ppdprm
+        DBC_MAP         mupdppd
+
+/*-------------------dupdpcm--------------------*/
+MAP(mupdpcm)
+   cCLSD                pcmsts          DO_CALC
+
+DBCALCS(dupdpcm)
+        DBC_COMMAND     UPDATE
+        DBC_TARGET      pcmprmidx               pcmprm
+        DBC_MAP         mupdpcm
+
+/*-------------------dmapakhir-------------------*/
+MAP(mmapakhir)
+   ppdnofak             lppdnofak          REPLACE
+
+DBCALCS(dmapakhir)
+DBC_COMMAND MAPMAP
+DBC_MAP     mmapakhir
+
+SPCALCS(spcal1)
+        daddbrd <FONT
+COLOR="RED"
+>berfungsi untuk menambah file brd (file yang berisi detail barang)</FONT
+>
+        daddbrt <FONT
+COLOR="RED"
+>berfungsi untuk menambah file brt (file yang berisi aktivitas barang)</FONT
+>
+        dupdpmb <FONT
+COLOR="RED"
+>berfungsi untuk mengubah file pmb</FONT
+>
+        dupdppd <FONT
+COLOR="RED"
+>berfungsi untuk mengubah file ppd</FONT
+>
+
+SPCALCS(spcal2)
+        dupdpcm <FONT
+COLOR="RED"
+>berfungsi untuk mengubah file pcm</FONT
+>
+        dmapakhir <FONT
+COLOR="RED"
+>berfungsi untuk mengcopykan isi ppdnofak ke lppdnofak</FONT
+>
+
+POSTING(trans)
+        PST_COMMAND     spcal1
+
+POSTING(trans2)
+        PST_COMMAND     spcal2
+
+END_SCREEN
+</PRE
+><P
+>&#13;Setelah membuat perintah Posting langkah selanjutnya adalah membuat laporan dengan menggunakan perintah rts.</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x442.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x472.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Membuat File Detail</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c428.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Membuat Laporan</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,178 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Konsep Empat Buffer</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Tutorial Ksystem V2016.09.20"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="File sts"
+HREF="c133.html"><LINK
+REL="NEXT"
+TITLE="Cara install Scanner Sidik Jari Futronic FS80 atau FS88"
+HREF="c144.html"></HEAD
+><BODY
+CLASS="chapter"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Tutorial Ksystem V2016.09.20</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="c133.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="c144.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="chapter"
+><H1
+><A
+NAME="AEN136"
+></A
+>Chapter 13. Konsep Empat Buffer</H1
+><P
+>&#13;    Program Ksystem menggunakan konsep 4 buffer untuk setiap database file.
+    Ini maksudnya adalah pada saat program ksrun dijalankan, untuk setiap
+    file yang ada di dalam program mis. brg, ppm, pmb dan lainnya, akan
+    dibuatkan 4 rekord sementara (buffer) yang ada di dalam memori. Jadi untuk 
+    file brg ada 4 rekord buffer, file ppm 4 rekord buffer dstnya. Setiap
+    buffer ini berisi tempat untuk 1 rekord. Jadi untuk file brg, setiap ksrun
+    akan punya tempat untuk 4 rekord brg. 
+    </P
+><P
+>&#13;    Buffer 1 berisi data yang ditampilkan
+    di layar yang biasanya kita tampilkan di bagian FIELD. 
+    Buffer 1 dari file dipanggil dengan menggunakan nama field, mis. ppmnofak
+    </P
+><P
+>&#13;    Buffer 2 berisi data rekord yang terakhir dibaca dari harddisk. 
+    Pada saat ksrun membaca satu rekord dari harddisk, isian rekord
+    tsb. disimpan di buffer1 dan buffer2. Buffer1 diubah ubah oleh operator
+    sedang buffer2 tidak dapat diubah sehingga pada saat mengubah rekord
+    tsb. buffer2 berisi data terakhir yang dibaca dari harddisk.
+    Buffer 2 dari file dipanggil dengan menggunakan ~nama_field, mis. ~ppmnofak
+    </P
+><P
+>&#13;    Buffer 3 berfungsi untuk
+    menyimpan data pada saat kita menjalankan VALIDATE_BUF3 dan perintah 
+    perintah lain yang menggunakan BUF3. 
+    Buffer 3 dari file dipanggil dengan menggunakan #nama_field, mis. #ppmnofak
+    </P
+><P
+>&#13;    Buffer 4 berfungsi untuk menyimpan
+    isian field pada saat kursor program masuk ke field tsb supaya dapat
+    dicocokkan dengan isian field pada saat keluar.
+    Buffer 4 dari file dipanggil dengan menggunakan ^nama_field, mis. ^ppmnofak
+    <PRE
+CLASS="programlisting"
+>&#13;    Mis. 
+    CALCS()
+      cfieldUbah ppmnofak != ^ppmnofak
+    </PRE
+>
+
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="c133.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="c144.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>File sts</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Cara install Scanner Sidik Jari Futronic FS80 atau FS88</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

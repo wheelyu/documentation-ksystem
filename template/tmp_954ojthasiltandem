@@ -1,0 +1,53 @@
+IMAGE(tmptranst)
+/---------------------------------------------\                
+|t.HasilAkhirTandem                           |             
+|spasi                                        |
+|t.NilaiOJT        : ______.__ __________     |
+|t.NilaiPIC        : _________                |
+|t.Keterangan      : ____________________     |
+|                                    ____     |
+\---------------------------------------------/                   
+IMAGE(tmptrans)
+
+FIELD(tmptranst)
+tldjml  	PROTECT			INPUTRI 	1
+lketlulus       PROTECT                 INPUTRI         2
+tldnobbm        ALLCAPS                 INPUTRI         3  
+tldket          TEXTAREA                INPUTRI         4
+lenter          NOCHANGE                INPUTRI         5
+
+DEFAULT(tmptranst)
+IF clebih35     tldnobbm        DFALT_SCAN       LULUS
+IF ckurang35    tldnobbm        DFALT_SCAN       TIDAK_LULUS
+
+EDITS(tmptranst)
+e.Mandatory     tldnobbm        MANDATORY
+e.Mandatory     tldket          MANDATORY
+
+CALCS()
+/*SELESAI TANDEM HARI SABTU MULAI LAGI SENIN*/
+chriplus2       g_tgltrn+2
+cday30          g_tgltrn+31  
+cday60          g_tgltrn+61
+cday80          g_tgltrn+81
+cday110         g_tgltrn+111
+
+MAP(mketlulusTANDEM)
+cLULUS          lketlulus       DO_CALC
+cTDK_LULUS      lketlulus       DO_CALC_IF ckurang35
+chriplus2       tldtgl2         DO_CALC
+cday30          tldtgl3         DO_CALC
+cday60          tldtgl4         DO_CALC
+cday80          tldtgl5         DO_CALC
+cday110         tldtglfak       DO_CALC
+
+HOOKS(tmptranst)
+BEFORE_INPUT    cur_field=tldnobbm      DO_MAP SHOW mketlulusTANDEM
+AFTER_INPUT     cur_keybd=EN            DO_MAP SHOW mketlulusTANDEM
+
+SUBFILE(tmptrans)
+        SFL_LINES(1)
+        SFL_TITLE(tmptranst)
+        SFL_TARGET
+        tldstsbrgukr   lHSLOJTMGA gv_CLSD tlmnobuk lTANDEM21          
+

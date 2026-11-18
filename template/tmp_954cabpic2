@@ -1,0 +1,31 @@
+IMAGE(tmptranst)
+/---------------------------------------------\                
+|t.PenempatanCabPic2                          |             
+|spasi                                        |
+|t.CabRekomendDom  : _________                |
+|t.CabRekomendArea : _________                |
+|t.CabRekomendHEAD : _________                |
+|t.Keterangan      : ____________________     |
+|                                    ____     |
+\---------------------------------------------/                   
+IMAGE(tmptrans)
+
+FIELD(tmptranst)
+tldukrwrn	PROTECT			INPUTRI 	1
+tldkirim        PROTECT			INPUTRI 	1
+tldnobbm        ALLCAPS                 INPUTRI         2     
+tldket          TEXTAREA                INPUTRI         3
+lenter          NOCHANGE                INPUTRI         4
+
+EDITS(tmptranst)
+e.Mandatory     tldnobbm        MANDATORY
+e.Mandatory     tldket          MANDATORY
+e.ValidateCab   tldnobbm        VALIDATE caddatkodidx mcadgd scadLokgd {Pgv_cabbis} {Stlmdvs} {Slcadarea}
+
+SUBFILE(tmptrans)
+        SFL_LINES(1)
+        SFL_TITLE(tmptranst)
+        SFL_SELECT ccabpic2
+        SFL_TARGET
+        tldstsbrgukr   lCABPIC2MGA gv_CLSD            
+

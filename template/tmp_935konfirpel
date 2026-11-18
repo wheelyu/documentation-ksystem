@@ -1,0 +1,44 @@
+IMAGE(tmptranst)
+/-------------------------------------\
+|/-----------------------------------\|
+|| t.KonfirmasiPelaksana             ||
+|\-----------------------------------/|
+|/-----------------------------------\|
+||t.Tanggal    : ___________________ ||
+||t.JdlMeet    : ___________________ ||
+||t.MeetTerlak : ___________________ ||
+||t.Ket	       : ___________________ ||
+||               ________	     ||
+||spasi				     ||
+|\-----------------------------------/|
+\-------------------------------------/
+IMAGE(tmptrans)
+
+FIELDS(tmptranst)
+tkdtgl					PROTECT {DD-MM-YYYY}		INPUTRI 1
+tkdsisstr				PROTECT				INPUTRI 2
+tkdstr1					NOCHANGE			INPUTRI	3
+tkdket					TEXTAREA ALLCAPS		INPUTRI 4	
+lenter					ALLCAPS	   			INPUTRI 5
+
+DEFAULTS(tmptranst)
+lenter					INIT_LABEL			"Enter Disini"
+tkdstr1					DFALT_SCAN_BLANKS		YA
+									TIDAK
+EDITS(tmptranst)
+e.Wajib isi meeting terlaksana		tkdstr1		MANDATORY
+
+MAP(misikonfirpelak)
+tlmtgl		tkdtgl		REPLACE
+tlmdari		tkdsisstr	REPLACE
+
+HOOKS(tmptranst)
+BEFORE_INPUT 	cur_field=tkdstr1		DO_MAP SHOW misikonfirpelak
+
+SUBFILE(tmptrans)
+SFL_LINES(1)
+SFL_TITLE(tmptranst)
+SFL_TARGET	tkddatbukll lKONPELAK tlmnobuk
+SFL_MAP
+tlmnobuk	tkdnobuk	REPLACE
+lKONPELAK	tkddata		REPLACE

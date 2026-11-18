@@ -1,0 +1,84 @@
+/****************************************************************************/
+IMAGE(tbehead) 
+/-----------------------------------------------------------------------\
+| Kode2      Kode       Keterangan1       Keterangan2                   |
+|-----------------------------------------------------------------------|
+|                                                                       |
+|                                                                       |
+|                                                                       |
+|                                                                       |
+|                                                                       |
+|                                                                       |
+|                                                                       |
+|                                                                       |
+|                                                                       |
+|-----------------------------------------------------------------------|
+|      Tekan ESC untuk keluar                                           |
+\-----------------------------------------------------------------------/
+
+IMAGE(tberoll) 
+  ___________  _____________  _________________  ______________________
+
+FIELD(tberoll)
+   tbetbtkode		 NOCHANGE SCROLL	  NONE		    1
+   tbekode               NOCHANGE SCROLL          NONE              2  
+   tbeket                PROTECT SCROLL           NONE              3  
+   tbekettype            PROTECT SCROLL           NONE              4  
+
+SCAN(stbe) {IMAGE_OUT=tbehead} {IMAGE_ROL=tberoll} {IMAGE_INP=tberoll} {SELECT_BAR} {ROLL_LINES=8} 
+
+IMAGE(tbeheadon)
+/-------------Daftar Motor------------------------------------\
+|         Keterangan
+|-------------------------------------------------------------|
+|                                                             |
+|                                                             |
+|                                                             |
+|                                                             |
+|                                                             |
+|                                                             |
+|                                                             |
+|                                                             |
+|                                                             |
+|-------------------------------------------------------------|
+|      Tekan ESC untuk keluar                                 |
+\-------------------------------------------------------------/
+
+IMAGE(tberollon)
+   __________________________________________________________
+
+FIELD(tberollon)
+/* tbekode		PROTECT		NONE 1 */
+tbeket		PROTECT		NONE 2
+
+SCAN(stbeon) {IMAGE_OUT=tbeheadon} {IMAGE_ROL=tberollon} {IMAGE_INP=tberollon} {SELECT_BAR} {ROLL_LINES=16}
+
+IMAGE(tbeheadperusahaan) 
+/------------------------------------------------------------------------\
+|  Kode                 Kota                  Jalan                      |
+|------------------------------------------------------------------------|
+|                                                                        |
+|                                                                        |
+|                                                                        |
+|                                                                        |
+|                                                                        |
+|                                                                        |
+|                                                                        |
+|                                                                        |
+|                                                                        |
+|------------------------------------------------------------------------|
+|      Tekan ESC untuk keluar                                            |
+\------------------------------------------------------------------------/
+
+IMAGE(tberollperusahaan) 
+  _____________  _____________________ _________________________________
+
+FIELD(tberollperusahaan)
+   tbekode               NOCHANGE SCROLL          NONE              1  
+   tbeusrcrt             PROTECT SCROLL           NONE              2  
+   tbekettype            PROTECT SCROLL           NONE              2  
+
+CALCS()
+ckotasama	tbeusrcrt == spkkat8
+
+SCAN(stbeperusahaan) {IMAGE_OUT=tbeheadperusahaan} {IMAGE_ROL=tberollperusahaan} {IMAGE_INP=tberollperusahaan} {SELECT_BAR} {ROLL_LINES=10} {SCAN_SELECT=ckotasama}

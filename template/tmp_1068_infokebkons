@@ -1,0 +1,68 @@
+IMAGE(tmptranst)
+/----------------------------------------------\
+|t.KebKons	:______ ___________ t.Kunj  t.1|
+|t.KebKons	:______ ___________ t.Kunj  t.2|
+|t.KebKons	:______ ___________ t.Kunj  t.3|
+\----------------------------------------------/
+/---------------------------------------------------\
+|t.Nip           :__________                        |
+|t.Nama          :_______________________________   |
+|t.HasilValidasi :__________                        |
+|t.Analisa       :_______________________________   |
+|						____|
+\---------------------------------------------------/
+IMAGE(tmptrans)
+
+FIELD(tmptranst)
+lkunkenkon1	PROTECT         INPUTRI	1
+lkebkonaot1	PROTECT         INPUTRI	2
+lkunkenkon2	PROTECT         INPUTRI	3
+lkebkonaot2	PROTECT         INPUTRI	4
+lkunkenkon3	PROTECT         INPUTRI	5
+lkebkonaot3	PROTECT         INPUTRI	6
+
+ketkode         PROTECT         INPUTRI 7
+lnama           PROTECT         INPUTRI 8
+ketstr1         NOCHANGE        INPUTRI 9
+ketisi      TEXTAREA ALLCAPS    INPUTRI 10
+lenter		NOCHANGE	INPUTRI	11
+
+DEFAULTS(tmptranst)
+ketkode         INIT    {g_usrkode}
+ketstr1         DFALT_SCAN_BLANKS       SAMA
+                                        TIDAK
+
+EDITS(tmptranst)
+t.Validate      ketkode VALIDATE psikodidx mpikisi4
+
+MAP(mpikisi4)
+cBLANKS		lkunkenkon1	DO_CALC
+cBLANKS         lkunkenkon2     DO_CALC
+cBLANKS         lkunkenkon3     DO_CALC
+cBLANKS		lkebkonaot1	DO_CALC
+cBLANKS         lkebkonaot2     DO_CALC
+cBLANKS         lkebkonaot3     DO_CALC
+
+psinama         lnama           REPLACE
+
+lkunkenkon1	lkunkenkon1	REPLACE_IF cjoinspkmaster
+lkunkenkon2     lkunkenkon2     REPLACE_IF cjoinspkmaster
+lkunkenkon3     lkunkenkon3     REPLACE_IF cjoinspkmaster
+lkebkonaot1	lkebkonaot1	REPLACE_IF cjoinspkmaster
+lkebkonaot2     lkebkonaot2     REPLACE_IF cjoinspkmaster
+lkebkonaot3     lkebkonaot3     REPLACE_IF cjoinspkmaster
+
+SUBFILE(tmptrans)
+SFL_LINES(1)
+SFL_TITLE(tmptranst)
+SFL_SHOW_NEXT
+SFL_TARGET
+ ketdatbuktgl   lVERFKTFID tlmnobuk lKBKSFKTFID
+SFL_MAP
+lVERFKTFID      ketdata         REPLACE
+tlmnobuk        ketnobuk        REPLACE
+lKBKSFKTFID     kettype         REPLACE
+
+
+
+

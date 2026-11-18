@@ -1,0 +1,289 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>&#13;Membuat File Detail
+</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Tutorial Ksystem V2016.09.20"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="
+Membuat Program Pembayaran Hutang
+"
+HREF="c522.html"><LINK
+REL="PREVIOUS"
+TITLE="
+Membuat Program Pembayaran Hutang
+"
+HREF="c522.html"><LINK
+REL="NEXT"
+TITLE="
+Membuat Program Posting
+"
+HREF="x551.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Tutorial Ksystem V2016.09.20</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="c522.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 19. Membuat Program Pembayaran Hutang</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x551.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN535"
+>19.2. Membuat File Detail</A
+></H1
+><P
+>&#13;Pada program pembayaran hutang ini kita akan menggunakan pbd sebagai file detail trans dan pcm sebagai file detail transa. Seperti biasa kita akan membuat file detail dengan perintah SUB_FILE. Untuk itu marilah ketikkan perintah berikut di atas perintah END_SCREEN.</P
+><PRE
+CLASS="programlisting"
+>&#13;/*------------------------------SUBFILE INFORMATION (trans)------------------------------*/
+IMAGE(transt) {NO_CLS} {LSTFLD_ADVANCE} {FRSFLD_BACKUP} {BASE_ROW=9}
+|--t--t-------------t----t---t--------t--------t------t----------t--------------t------------|-----|
+|FL|Ty|  No.Faktur  |Cab |Div|Tgl.Fak |Tgl.Jtp | Rek  |Byr Asing |  Bayar Rp    | Byr Riil Rp| Ket |
+|--|--|-------------|----|---|--------|--------|------|----------|--------------|------------|-----|
+
+
+
+
+
+
+
+\--.--.-------------.----.---.--------.--------.------.----------.--------------.------------.-----/
+IMAGE(trans) {NO_CLS} {LSTFLD_ADVANCE} {FRSFLD_BACKUP} {BASE_ROW=13}
+|_ |__|_____________|___ |___|________|________|______|_______.__|______________|____________|_____|
+
+FIELD(trans)
+   pbdyt             NOCHANGE                   INPUTRI         1
+   pbdtype           NOCHANGE                   INPUTRI         2
+   pbdnofak          ALLCAPS SCROLL             INPUTRI         3
+   pbdcab            ALLCAPS SCROLL             INPUTRI         4
+   pbddvs            ALLCAPS SCROLL             INPUTRI         5
+   pbdtglfak         NONE NOLIMIT {DD-MM-YY}    INPUTRI         6
+   pbdtgljtp         NONE NOLIMIT {DD-MM-YY}    INPUTRI         7
+   pbdnobbm          ALLCAPS SCROLL             INPUTRI         8
+   pbdjmlasg         NUMERIC                    INPUTRI         9
+   pbdjml            NUMERIC                    INPUTRI         10
+   pbdsisa           NUMERIC                    INPUTRI         11
+   pbdket            ALLCAPS SCROLL             INPUTRI         12
+
+DEFAULTS(trans)
+pbdsts		INIT		OPEN
+
+SUBFILE(trans)
+SFL_LINES(7)
+SFL_TITLE(transt)
+SFL_TARGET
+pbdbukurtidx   pbcnoprc
+
+SFL_MAP
+pbcnoprc        pbdnobuk
+pbctgl          pbdtglbyr
+pbcsup          pbdsup
+pbcscr          pbdscr
+</PRE
+><P
+>&#13;Dengan mengetikkan perintah di atas kita telah menghubungkan file master pbc dan file detail trans pbd seperti yang terlihat dari gambar di bawah ini. Tambahkan perintah HOOK, MAP, EDIT, DEFAULT, dan SCAN sesuai yang anda inginkan.</P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="gambar12.png"></P
+></DIV
+><P
+>&#13;Setelah itu kita akan menghubungkan file detail transa pcm dengan file master pbc. Caranya sama yaitu dengan menggunakan perintah SUBFILE. Oleh karena itu marilah ketikkan perintah di bawah ini di atas perintah END_SCREEN.</P
+><PRE
+CLASS="programlisting"
+>&#13;/*------------------------------ SUBFILE INFORMATION ------------------------------*/
+IMAGE(transat) {NO_CLS} {LSTFLD_ADVANCE} {FRSFLD_BACKUP} {BASE_ROW=9}
+/----t---t-------------t----------t----------t--------t----------------t----t------- t-------------\
+|Type|S/O|  Nomor Cek  | Kas/Bank |Nama Bank |Tgl Jtp |   Nilai        |Mt.U|  Kurs  | Nilai Asing |
+|----|---|-------------|----------|----------|--------|----------------|----|--------|-------------/
+
+
+
+
+
+
+
+
+\----.---.-------------.----------.----------.--------.----------------.----.--------.-------------/
+
+IMAGE(transa) {NO_CLS} {LSTFLD_ADVANCE} {FRSFLD_BACKUP} {BASE_ROW=12} {COVER_MASTER}
+| _  | _ |_____________|__________|__________|________|_____________.__|____|_____.__|__________.__|
+
+
+FIELD(transa)
+   pcmtype       NOCHANGE ALLCAPS               INPUTRI         1
+   pcmtype2      NOCHANGE                       INPUTRI         2
+   pcmnocek      ALLCAPS SCROLL                 INPUTRI         4
+   pcmnobbm      ALLCAPS                        INPUTRI         5
+   pcmbank       ALLCAPS SCROLL                 INPUTRI         6
+   pcmtgljtp     NONE NOLIMIT {DD-MM-YY}        INPUTRI         7
+   pcmtotal      NUMERIC                        INPUTRI         8
+   pcmkd1        ALLCAPS                        INPUTRI         10  /* Mata Uang */
+   pcmdf7        NUMERIC                        INPUTRI         11 /* Kurs */
+   pcmdf6        NUMERIC                        INPUTRI         12 /* Ttl Dlm Mt Asing */
+
+DEFAULTS(transa)
+pcmtype		DFALT_SCAN		T "Tunai"
+					C "Cek"
+					M "Mutasi"
+					U "Uang Muka/Titipan"
+pcmsts		INIT			OPEN
+
+SUBFILE(transa)
+SFL_LINES(8)
+SFL_TITLE(transat)
+
+SFL_TARGET
+pcmty3prcidx   pbctype  pbcnoprc
+
+SFL_MAP
+     pbcnoprc           pcmnoprc
+     pbcsup             pcmplg
+     pbctgl             pcmtgl
+     pbctype            pcmtype3
+     pbcdvs             pcmdvs
+     pbccab             pcmcab
+     pbcscr             pcmscr
+</PRE
+><P
+>&#13;Dengan demikian kita telah membuat file detail transa yang sederhana seperti yang terlihat dari gambar di bawah ini. Tambahkan perintah EDIT, HOOKS, SCAN, DEFAULT sesuai yang anda inginkan.</P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="gambar13.png"></P
+></DIV
+><P
+>&#13;Sebelum kita lanjutkan dengan membuat program POSTING, alangkah baiknya bila kita mengenal terlebih dahulu field - field pbd yang digunakan. Untuk file pcm tidak dibahas lagi karena sudah dibahas di bab sebelumnya.</P
+><PRE
+CLASS="programlisting"
+>&#13;nama file	: pbd
+fungsi		: menyimpan informasi pembayaran per faktur. Jadi data ini terbentuk saat anda memilih nomor faktur yang dibayar hutangnya.
+pbdsts		: OPEN (data belum diposting)
+		  CLSD (data sudah diposting)
+pbdnofak	: nomor faktur yang akan dibayar hutangnya
+pbdtglbyr	: tanggal bayar hutang
+pbdtglfak	: tanggal faktur
+pbdtype		: type faktur
+pbdsup		: kode suplier
+pbdtgljtp	: tanggal jatuh tempo faktur
+</PRE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="c522.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x551.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Membuat Program Pembayaran Hutang</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c522.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Membuat Program Posting</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

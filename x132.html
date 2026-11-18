@@ -1,0 +1,215 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>DEFAULT</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Langkah2 Untuk Membuat Program Dengan Bahasa K-System (K-Language)"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Tipe Program &#38; 19 Perintah Bahasa K-System"
+HREF="c57.html"><LINK
+REL="PREVIOUS"
+TITLE="EDIT"
+HREF="x128.html"><LINK
+REL="NEXT"
+TITLE="PERMIT"
+HREF="x136.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Langkah2 Untuk Membuat Program Dengan Bahasa K-System (K-Language)</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x128.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 6. Tipe Program &#38; 19 Perintah Bahasa K-System</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x136.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN132"
+>6.5. DEFAULT</A
+></H1
+><P
+>&#13;	Perintah ini memberi nilai awal pada field tertentu saat menambah,mengubah dan mencari data.
+	</P
+><PRE
+CLASS="programlisting"
+>&#13;DEFAULT(master/trans/trans2)
+   Cara memakai:
+   NamaField   nilai  atau
+   IF namaCalcs NamaField nilai
+
+   Daftar tipe-nilai
+   INIT Nilai  
+   	- default ditampilkan pada saat penambahan rekord
+
+   INIT_ADD 
+   	- Sama dengan INIT
+
+   INIT_UPDATE
+   	- Perintah ini dijalankan pada saat menekan tombol 'u' (ubah).
+
+   INIT_QUERY  nilai 
+   	- tampil pada saat pencarian data (query)
+
+   INIT_QUERY_F11 nilai 
+   	- nilai harus string dengan dibatasi oleh tanda petik
+	  pada awal dan akhirnya. Perintah ini digunakan khusus
+	  pada saat pencarian data dan digunakan untuk membuat kondisi
+	  tambahan sesuai kebutuhan.
+	  mis. "usrnam != "root" &#38;&#38;usrnam != "abcd""
+	  Nama field tidak boleh berdiri sendiri dalam string
+	  misalnya contoh dibawah ini salah
+	  usrnam INIT_QUERYF11 "usrnam  != "root" &#38;&#38; usrnam != "abcd""
+	  spasi di kedua sisi, tidak boleh
+
+   DUP_DFALT 
+   	- Nilai pada pengisian sebelumnya ditampilkan bila menekan TAB
+
+   DUP_INIT 
+   	- Nilai pada pengisian sebelumnya ditampilkan pada penambahan rekord
+
+   DFALT_LIST 
+   	- Nilai yang ditentukan sesudah DFALT_LIST saja yang dapat
+          muncul dengan menekan tombol spasi. (Atribut Input harus NOCHANGE)
+          contoh:
+	  ppmsts   DFALT_LIST   OPEN CLSD BLANKS
+
+   DFALT_SCAN 
+   	- Seperti DFALT_LIST tapi muncul seperti scan
+          Contoh:
+	  ppmsts DFALT_SCAN  OPEN "Masih belum diproses"
+			     CLSD "Sudah diproses"
+			     BLANKS "Semua"
+
+   DFALT_SCAN_BLANK 
+   	- Seperti DFLAT_SCAN tapi nilai awal blank dulu
+
+   Daftar Nilai
+      SYSDATE - hari ini
+      Tanggal tertentu dengan format DDMMYY contoh: 230492
+      SYSTIME - jam sekarang
+      {namaField/namaLocal/namaCalcs} - Nilai dari field/local/calcs
+      string-konstan  atau "string-konstan"
+   
+      Catatan:
+      1. Nilai INIT tidak boleh nama field, batasi dengan {}
+	 mis. lstr1 INIT brgkode, harus diubah menjadi
+
+	 DEFAULTS(master)
+	 lstr1   INIT {brgkode}
+
+	</PRE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x128.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x136.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>EDIT</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c57.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>PERMIT</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

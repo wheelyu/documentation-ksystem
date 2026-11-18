@@ -1,0 +1,27 @@
+Install Ksweb :
+1. Download ksystem (parsegen dan ksystemwt) terbaru dari ksystem.co
+2. extrak parsegen, tar xvfz parsegenxxxxxx.tgz
+3. kopikan ksystemxxxxxx.wt menjadi ksystem.wt
+4. rm -rf frm frmxxxx
+5. kspar -n all
+6. kspar -n -x0500 (sesuai dengan sentinel masing masing)
+7. ksgen
+8. ksgen -x0500
+9. runwt
+10. selesai
+
+Install Program :
+1. Download program di ksystem.co
+2. extrak program, tar xvfz PrgWebxxxxxx.tgz
+3. ksh bash
+4. sh bukasql ks_std ks_ksstdxxxxxx
+5. ketik exit kemudian enter
+6. ksh bin/ksubhsql nama_database
+7. mysql -uroot -proot nama_database < ubhsql.txt
+8. kspar -n all
+9. kspar -n -x0500
+10. ksgen 
+11. ksgen -x0500
+12. runwt
+13. selesai
+

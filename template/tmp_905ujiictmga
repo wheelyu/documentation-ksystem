@@ -1,0 +1,65 @@
+IMAGE(tmptranst)
+/----------------------------------------------------------------------------------------------\
+| /---\ /--s.UPLOAD--------------------------------------------\/-----------------------------\|
+| |___| |                                                      ||_______                      ||
+| \---/ |                                                      ||i.Jawab                      ||
+|       |                                                      ||_____________________________||
+|       |                                                      ||_____________________________||
+|       |                                                      ||_____________________________||
+|       |                                                      ||_____________________________||
+|       |                                                      ||_____________________________||
+|       |                                                      ||_____________________________||
+|       |                                                      ||spasi                        ||
+|       |                                                      ||t.Nilai1100                  ||
+|       |                                                      ||_______                      ||
+|       |                                                      ||spasi                        ||
+|       |                                                      ||spasi                        ||
+|       |                                                      ||_______                      ||
+|       |                                                      ||spasi                        ||
+|       \------------------------------------------------------/\-----------------------------/|
+\----------------------------------------------------------------------------------------------/
+IMAGE(tmptrans)
+
+FIELD(tmptranst)
+ketnourt        PROTECT         INPUTRI 1
+kettype         PROTECT         INPUTRI 2
+ketisi          TEXTAREA        INPUTRI 3
+ketisi2         TEXTAREA        INPUTRI 4
+ketstr1         TEXTAREA        INPUTRI 5
+ketstr2         TEXTAREA        INPUTRI 6
+ketstr3         TEXTAREA        INPUTRI 7
+ketstr4         TEXTAREA        INPUTRI 8
+ketdf1          DIGITS  	INPUTRI 9
+lenter          NOCHANGE        INPUTRI 10
+
+DEFAULTS(tmptranst)
+lenter          INIT            ENTER
+
+EDITS(tmptranst)
+t.IsiJawaban    ketisi          MANDATORY
+t.IsiNilai      ketdf1          MANDATORY_IF cRCLS
+
+HOOKS(tmptranst)
+BEFORE_INPUT    cur_field=ketisi         DO_SKIP_IF cbknuser
+BEFORE_INPUT    cur_field=ketisi2        DO_SKIP_IF cbknuser
+BEFORE_INPUT    cur_field=ketstr1        DO_SKIP_IF cbknuser
+BEFORE_INPUT    cur_field=ketstr2        DO_SKIP_IF cbknuser
+BEFORE_INPUT    cur_field=ketstr3        DO_SKIP_IF cbknuser
+BEFORE_INPUT    cur_field=ketstr4        DO_SKIP_IF cbknuser
+BEFORE_INPUT    cur_field=ketdf1         DO_SKIP_IF cbknpenilai
+
+AFTER_INPUT     cur_field=ketdf1         DO_MAP SHOW
+                IF cskalanilai1     mdum
+                ELSE HKCURSOR STAY
+                HKMSG t.Skala0sampai100
+
+SUBFILE(tmptrans)
+SFL_LINES(1)
+SFL_TITLE(tmptranst)
+SFL_SORT_BY_FIELD ketnourt
+SFL_UPLFLD      ketnama
+SFL_UPL_DIRFLD tlmtype2
+SFL_UPLREADONLY
+SFL_COND        ctestmgaICT
+SFL_TARGET
+ketdatbukkod   lUJIMGA tlmnobuk tlmdari

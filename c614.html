@@ -1,0 +1,161 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>&#13;Alur Pengecekan Data
+</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Tutorial Ksystem V2016.09.20"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="
+Membuat Laporan
+"
+HREF="x608.html"></HEAD
+><BODY
+CLASS="chapter"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Tutorial Ksystem V2016.09.20</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x608.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+>&nbsp;</TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="chapter"
+><H1
+><A
+NAME="AEN614"
+></A
+>Chapter 21. 
+Alur Pengecekan Data
+</H1
+><P
+>&#13;Pada bab terakhir ini kita akan mempelajari alur pengecekan data yang ada di Ksystem ini. Tiap file saling berkaitan dan akan dijelaskan di bawah ini. Kita bisa melihatnya di layar 111. Jika pada field Yt.Rinci suatu nomor rekening terisi Y maka nomor rekening tersebut memiliki buku pembantu, jika terisi T berarti nomor rekening tersebut tidak mempunyai buku pembantu.</P
+><PRE
+CLASS="programlisting"
+>&#13;* Pengecekan Untuk Hutang Dagang / Hutang Lain
+  File bbm yang field bbmno typenya Hutang Dagang / Hutang Lain akan melakukan pengecekan file pmb 
+  yang pmbsts isinya "INPG" dan pmbnobbm isinya sama dengan bbmno.
+  Setelah menemukan record yang dicari maka akan dicocokkan nilai bbmsdakhbl dengan total pmbsisa 
+  yang ditemukan dan nilainya harus sama.
+* Pengecekan Untuk Piutang Dagang / Piutang Lain / Piutang Karyawan
+  File bbm yang field bbmno typenya Piutang Dagang / Piutang Lain / Piutang Karyawan  akan melakukan  
+  pengecekan ke file ppm yang ppmsts isinya "INPG" dan ppmnobbm isinya sama dengan bbmno. 
+  Setelah menemukan record yang dicari maka akan dicocokkan bbmsdakhbl dengan total ppmsisa 
+  yang ditemukan dan nilai keduanya harus sama.
+* Pengecekan Untuk Piutang Giro
+  File bbm yang field bbmno typenya Piutang Giro akan melakukan  pengecekan ke file pcm yang 
+  pcmsts = INPG, pcmdk = D, pcmnobbm = bbmno. pcmdk = D  artinya  adalah mencari ke file pcm yang 
+  typenya Debit. Karena Piutang Giro merupakan Harta Lancar maka jika bertambah  akan selalu masuk ke debit. 
+  Jika record yang dicari sudah ketemu maka akan dibandingkan nilai bbmsdakhbl dengan pcmtotal dan nilai 
+  kedua field tersebut harus sama.  
+* Pengecekan Untuk Hutang Giro
+  File bbm yang field bbmno typenya Hutang Giro akan melakukan pengecekan ke file pcm yang pcmsts = INPG, 
+  pcmdk = K, pcmnobbm = bbmno. Karena Hutang Giro merupakan Hutang Lancar maka field pcmdk nya isinya 
+  K (Kredit). Jika record yang dicari sudah ketemu maka akan dibandingkan nilai bbmsdakhbl dengan 
+  pcmtotal dan nilai dari kedua field tersebut harus sama.
+* Pengecekan Untuk Bon Sementara
+  File bbm yang field bbmno typenya Bon Sementara akan melakukan pengecekan ke file bkk yang bkksts = 
+  INPG &#38; bkknobbm = bbmno. Setelah menemukan record yang dicari
+  maka nilai bbmsdakhbl akan dicocokkan dengan total nilai dari bkktotal dan nilai dari kedua field 
+  tersebut harus sama.
+</PRE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x608.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>&nbsp;</TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Membuat Laporan</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>&nbsp;</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

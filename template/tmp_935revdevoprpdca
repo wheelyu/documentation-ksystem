@@ -1,0 +1,132 @@
+
+IMAGE(tmptranst)
+/----------------------------------------------\
+|/--------------------------------------------\|
+|| t.RevDevOprPDCA                            ||
+|\--------------------------------------------/|
+|/--------------------------------------------\|
+||t.NoBuk               : ___________________ ||
+||t.TanggalReview       : ___________________ ||
+||t.JdlRev              : ___________________ ||
+||t.Ketreview           : ___________________ ||
+||t.RevLaksana          : ___________________ ||
+||spasi				              ||
+||t.Reschedule          : ___________________ ||
+|\--------------------------------------------/|
+|spasi                                         |
+|/--------------------------------------------\|
+||                           t.StsUpl    ____ ||
+|\--------------------------------------------/|
+ /---------------- DOCUPLOAD -----------------\
+ |                                            |
+ |                                            |
+ |                                            |
+ |                                            |
+ |                                            |
+ \--------------------------------------------/
+|spasi                                         |
+|/--------------------------------------------\|
+||spasi                                       ||
+||t.Ket                 : ___________________ ||
+||t.PerluDtIT           : ___________________ ||
+||                        ________            ||
+|\--------------------------------------------/|
+\----------------------------------------------/
+
+IMAGE(tmptrans)
+
+FIELDS(tmptranst)
+spknobuk                                PROTECT                         INPUTRI 1       /*Nobuk*/
+spktglft                                PROTECT {DD-MM-YYYY}            INPUTRI 2       /*Tanggal Review*/
+spktgg                                  NONE                            INPUTRI 3       /*Judul Review*/
+spkreview                               TEXTAREA                        INPUTRI 4       /*Ket Review*/
+spktgg2                                 NOCHANGE                        INPUTRI 5       /*Review Dilaksanakan*/
+spktglft2                               ALLCAPS {DD-MM-YYYY}            INPUTRI 6       /*Tgl Reschedule*/
+spkhasil                                PROTECT                         INPUTRI 7       /*Tanda Upload*/
+spkreview2                              TEXTAREA                        INPUTRI 8       /*Keterangan*/
+spktgg3                                 NOCHANGE                        INPUTRI 9       /*Perlu Data Dari IT*/
+lenter                                  NOCHANGE                        INPUTRI 10      /*Enter*/
+
+CALCS()
+cbisauplrev                             spktgg2 == "YA" && spktglft2 == 0  
+cbisauplrevx                            spktgg2 != "YA" && spktglft2 != 0 
+ctidakterlaksana                        spktgg2 == "TIDAK"
+cterlaksana                             spktgg2 == "YA"
+cmundurhmin11                           (tlmtgl - spktglft2) == 11 || spktgg2 == "YA"
+cadatglresch                            spktglft2 != 0
+ckuncirevbhnmeet                        abktype == "RBHNMEET"
+cundurrev                               tlmtgl - 11
+
+DEFAULTS(tmptranst)
+lenter                                  INIT_LABEL                      "Enter Disini"
+spktgg2                                 DFALT_SCAN_BLANKS               YA
+                                                                        TIDAK
+
+spktgg3                                 DFALT_SCAN_BLANKS               YA
+                                                                        TIDAK
+EDITS(tmptranst)
+e.Wajib isi Reschedule                  spktglft2                       MANDATORY_IF ctidakterlaksana
+e.Wajib isi tanggal review              spktglft                        MANDATORY
+e.Wajib isi judul review                spktgg                          MANDATORY
+e.Wajib isi keterangan review           spkreview                       MANDATORY
+e.Wajib isi review dilakasanakan        spktgg2                         MANDATORY
+e.Wajib isi keterangan                  spkreview2                      MANDATORY
+e.Wajib isi perlu data IT?              spktgg3                         MANDATORY_IF cterlaksana
+
+
+MAP(misirevdevoprpdca)
+tlmnobuk        spknobuk        REPLACE
+g_tgltrn        spktglft        REPLACE
+
+MAP(misiterlaksana)
+cBLANKS         spktglft2       DO_CALC_IF cterlaksana
+cundurrev       spktglft2       DO_CALC_IF ctidakterlaksana
+
+HOOKS(tmptranst)
+BEFORE_INPUT                    cur_field=spktgg                DO_MAP SHOW misirevdevoprpdca  
+AFTER_INPUT                     cur_field=spktgg2               DO_MAP SHOW misiterlaksana
+
+BEFORE_INPUT                    cur_field=spktgg3               DO_SKIP_IF ctidakterlaksana
+
+
+AFTER_INPUT                     cur_field=spktglft2             DO_MAP SHOW
+                                IF cmundurhmin11                mdum
+                                ELSE HKCURSOR STAY
+                                HKMSG Hanya Bisa Mundur ke H-11 dari Tanggal Meeting
+
+BEFORE_INPUT                    cur_field=spktglft2             DO_SKIP_IF cterlaksana 
+
+MAP(mupdtandaupload)
+lOK             spkhasil        REPLACE
+g_tgltrn        spktglft3       REPLACE
+DBCALCS(dupdrevdevopr)
+        DBC_COMMAND             UPDATE
+        DBC_TARGET              spkprmidx spkprm
+        DBC_MAP                 mupdtandaupload
+
+SUBFILE(tmptrans)
+SFL_LINES(1)
+SFL_TITLE(tmptranst)
+SFL_SHOW_NEXT
+SFL_UPL_DIRFLD          tlmtgl
+SFL_DOCUPLFLD           spknobuk spkdata
+SFL_DOCUPLFLD_DBCALCS   dupdrevdevopr   /*tanda upload*/
+SFL_UPL_COND 		cbisauplrev
+SFL_UPL_COND_MSG IF	cbisauplrevx Review Dilaksanakan Harus YA dan Tgl Reschedule Kosong 
+SFL_DOCUPL_DELCOND      cpdca
+SFL_TARGET	spkdatbuktyp    lREVDEVOPR tlmnobuk
+
+SFL_MAP
+lREVDEVOPR      spkdata
+
+MAP(mundurkuncihmin12)
+spktglft2               abktgl          REPLACE_IF ckuncirevbhnmeet
+gt_RINP                 abksts          REPLACE_IF ckuncirevbhnmeet
+
+
+SPCALCS(spaddrevdevoprpdca)
+DO_LIB_IF cadatglresch          ap_dbclc(DNAME dundurkuncihmin12,DCOMMAND UPDATE_RANGE,DTARGET abkdatbukidx lKUNCIABSEN tlmnobuk,DMAP mundurkuncihmin12);
+
+POSTING(tmptrans)
+PST_ADDCMD      spaddrevdevoprpdca
+PST_UPDCMD      spaddrevdevoprpdca

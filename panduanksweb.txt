@@ -1,0 +1,6 @@
+Q : Bagaimana cara merubah icon yang ada di browser ksweb
+A : Buat gambar 160pixel x 60pixel, kemudian copy kan ke ksresources/images/ksystem-logo.png
+
+Q : Bagaimana cara merubah icon ksweb untuk tampil di home screen hp
+A : Copykan logo yang baru ke ksresources/images/ic_launcher-web.png
+

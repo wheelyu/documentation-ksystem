@@ -1,0 +1,204 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>&#13;	Mengenal Perintah DEFAULT 
+	</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Tutorial Ksystem V2016.09.20"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Membuat Program Kas Keluar"
+HREF="c290.html"><LINK
+REL="PREVIOUS"
+TITLE="
+      Mengenal Perintah SCREEN, IMAGE, FIELD dan END_SCREEN.
+      "
+HREF="x297.html"><LINK
+REL="NEXT"
+TITLE="
+	Mengenal Perintah HOOKS, CALCS dan MAP
+	"
+HREF="x346.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Tutorial Ksystem V2016.09.20</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x297.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 16. Membuat Program Kas Keluar</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x346.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN337"
+>16.3. Mengenal Perintah DEFAULT</A
+></H1
+><P
+>&#13;	Perintah DEFAULT mengeset informasi awal
+	dari field, bisa dilakukan pada saat menambah, ubah atau
+	pada saat pencarian (QUERY). Perintah INIT adalah sama dengan INIT_ADD yaitu 
+	pemberian nilai pada saat kita menekan tombol 't'.
+	Tambahkan program di bawah ini di atas perintah END_SCREEN. 
+	Kemudian lakukan kspar prt9000/sct271 lagi. INIT_UPDATE untuk pada saat kita
+	mengubah data dengan menekan tombol 'u' sedang DFALT_SCAN akan memberikan kita
+	pilihan yang dapat dipilih untuk field tertentu. Cobalah ketik program di bawah
+	ini di atas END_SCREEN.
+	</P
+><PRE
+CLASS="programlisting"
+>&#13;/*---------------------------DEFAULT MASTER----------------------------*/
+DEFAULTS(master)
+  bkksts     INIT             	OPEN 
+  bkktype2   INIT_QUERY       	KK
+  bkktype DFALT_SCAN  PU "Keluar Kas Untuk Biaya Umum"
+				  HL "Membayar Hutang Lain"
+				  PL "Keluar Kas Untuk Piutang Lain"
+				  PP "Keluar Kas Untuk Piutang Pegawai"
+				  HC "Membayar Hutang Komisi"
+
+  bkkstsexp  	DFALT_SCAN      BI  "Untuk Biaya Umum"
+				BAT "Untuk Biaya Aktiva Tetap"
+				BPO "Untuk Biaya Penggantian Obat"
+
+  bkkkb         DFALT_SCAN      KS  "Keluar KAS"
+			  	BK  "Keluar BANK"
+
+  bkktgl     	INIT             	{g_tgltrn}
+
+  bkktype2   	INIT             	KK
+  bkkcrtusr  	INIT	      		{g_usrkode}
+  bkkupdusr  	INIT_UPDATE      	{g_usrno}
+  
+</PRE
+><P
+>&#13;	Sesudah berhasil kspar prt9000/sct27, jalankan ksrun -x9000 lagi, masuk ke 
+	sct271 dan coba tekan tombol 't' untuk menambah rekord. Field
+	akan berada di field No.Bukti. Tekan enter untuk memindahkan field
+	ke field Jenis. Kita lihat field ini secara otomatis sudah terisi
+	dengan PU. Untuk mengubah nilai default ini, tekan spasi, maka di
+	layar akan muncul pilihan sbb:
+    	</P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="gambar3.png"></P
+></DIV
+><P
+>&#13;    	Pelajari perintah DEFAULT ini dengan membaca daftar perintah di 
+    	bab awal.
+	</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x297.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x346.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Mengenal Perintah SCREEN, IMAGE, FIELD dan END_SCREEN.</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c290.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Mengenal Perintah HOOKS, CALCS dan MAP</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

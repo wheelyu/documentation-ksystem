@@ -1,0 +1,198 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>PERMIT</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Langkah2 Untuk Membuat Program Dengan Bahasa K-System (K-Language)"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Tipe Program &#38; 19 Perintah Bahasa K-System"
+HREF="c57.html"><LINK
+REL="PREVIOUS"
+TITLE="DEFAULT"
+HREF="x132.html"><LINK
+REL="NEXT"
+TITLE="HELP"
+HREF="x140.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Langkah2 Untuk Membuat Program Dengan Bahasa K-System (K-Language)</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x132.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 6. Tipe Program &#38; 19 Perintah Bahasa K-System</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x140.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN136"
+>6.6. PERMIT</A
+></H1
+><P
+>&#13;   	PERMIT berfungsi untuk memberi ijin pada operator untuk dapat menambah, menghapus atau mengubah 
+	data saat program QUERY sesuai kondisi yang ditentukan.
+	</P
+><PRE
+CLASS="programlisting"
+>&#13;PERMIT(master/trans/trans2)
+
+   Cara Memakai:
+
+   PERMIT(master/trans/trans2)
+	PMT_ADD_COND    namaCalcs  
+		kondisi untuk bisa menambah rekord
+
+	PMT_ADD_FLDS  namaFields     
+		field field yang bisa ditambah
+
+	PMT_ADD_FLDS_NOT  namaFields 
+		field field yang tidak bisa ditambah
+
+	PMT_UPDALL_COND namaCalcs      
+		kondisi u/ bisa pengubahan semua field. 
+
+	PMT_UPDFLD_COND  namaCalcs   
+		kondisi untuk bisa mengubah rekord, sesuai field2 yang ada di PMT_UPD_FLDS, atau
+		kecuali field2 yang ada di PMT_UPDFLDS_NOT
+
+	PMT_UPD_FLDS  namaFields     
+		field field yang bisa diubah
+
+	PMT_UPDFLDS_NOT  namaFields&#62; 
+		field field yang tidak bisa diubah
+
+	PMT_DEL_COND    namaCalcs      
+		kondisi untuk tidak menghapus
+
+	PMT_DET_COND    namaCalcs
+		kondisi untuk tidak ke detail
+
+	PMT_IGNDET_COND namaCalcs      
+		boleh hapus walau ada detail
+
+
+	PMT_EXIT_COND  namaCalcs       
+		Kondisi u/ bisa keluar dari layar atau naik ke master,
+		rekord kosong boleh keluar
+
+	PMT_EXIT_MOV_COND namaCalcs    
+		Kondisi untuk bisa melakukan add, next dan prev walau tidak
+		bisa keluar 
+
+	PMT_EXIT_MSG   pesan anda disini  
+		Pesan yang ditampilkan bila berusa- ha keluar tapi tidak boleh
+	</PRE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x132.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x140.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>DEFAULT</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c57.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>HELP</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

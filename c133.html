@@ -1,0 +1,273 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>File sts</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Tutorial Ksystem V2016.09.20"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="Variabel - Variabel Global di Ksystem"
+HREF="c129.html"><LINK
+REL="NEXT"
+TITLE="Konsep Empat Buffer"
+HREF="c136.html"></HEAD
+><BODY
+CLASS="chapter"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Tutorial Ksystem V2016.09.20</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="c129.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="c136.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="chapter"
+><H1
+><A
+NAME="AEN133"
+></A
+>Chapter 12. File sts</H1
+><PRE
+CLASS="programlisting"
+>&#13;   - stsytdo, jenis perusahaan
+   		1-&#62;distributor
+                2-&#62;supermarket,
+		3-&#62;bpr,
+		4-&#62;Motor/Leasing
+		5-&#62;Apotik
+		6-&#62;Pabrik
+		7-&#62;Transportasi
+   - stsnokk =&#62; yt Nomor faktur otomatis 
+   - stspersh =&#62; Nama perusahaan
+   - ststrntoday =&#62; Y atau T, Y berarti g_tgltrn harus = SYSDATE yang
+                    artinya kita tidak boleh mengisi mundur transaksi
+		    tanggal kemarin.
+   - stsyt1 =&#62; "yt dgn Uang Asing "
+   - stsyt2 =&#62; "yt No.Penjualan "
+   - stsyt3 =&#62; "Type Bulat untuk Supermarket di scr2883"
+   - stsyt4 == "yt No.Jurnal "
+   - stsyt5 == "yt NO.PO "
+   - stsyt6 == "yt No.Retur Beli "
+   - stsyt7 == "yt Bayar Hutang "
+   - stsyt8 == "yt Bayar Piutang "
+   - stsyt9 == "yt Nt.Deb/Kredit Piutang"
+   - stsyt10 == "yt Nt.Deb/Kredit Hutang"
+   - stsyt11 == "yt Transaksi Barang"
+
+   - stsyt12 ==  "Rakit Barang dari banyak ada % HPP jadi"
+   - stsyt13 == "yt Byr Angsuran Pokok &#38; Bunga atau tidak scr2886"
+   - stsyt14 == "Type Pembelian D/C/K scr2882 "
+
+   - stsyt15 == "Khusus Kontraktor ada ABB Y/T"
+   - stsyt16 == "yt Tanggal Bisa Mundur / Maju"
+   - stsyt17 == "No.otomatis untuk Order Produksi"
+   - stsyt18 == "yt Harga Terima barang = harga PO"
+   - stsyt19 == "yt banyak Cabang Komputer Online"
+   - stsyt20 == "barang boleh sama dlm 1 invoice Y/T"
+   - stsyt21 == 	 /*"yt untuk Type Barang 1 2 3 --&#62; lihat scr914"*/
+   - stsyt22 == "yt untuk Ada Daftar Harga / Kusus Kredit "
+   - stsyt23 == "yt untuk System Barang O (Fifo otomatis) M (Fifo Manual) R(rata) L(Lifo)"
+   - stsyt24 == "yt Biaya Impor Dibebankan ke Barang"
+   - stsyt25 == "yt Untuk PO   "
+   - stsyt26 == "yt Untuk Pesanan "
+   - stsyt27 == "yt Untuk No.Survei harus diisi(Kusus kredit)"
+   - stsyt28 == "yt ada sub cabang atau tidak scr914"
+   - stsyt29 == "yt diskon penjualan ada banyak atau hanya 1"
+   - stsyt30 == "yt ukuran barang otomatis,menambah master 2882"
+   - stsyt31 == "yt Untuk Otomatis No.Kontrak Proyek"
+   - stsyt32 == "yt Untuk Pembulatan harga detil-scr525"
+   - stsyt33 == "Sabtu masuk atau libur scr1117"
+   - stsyt34 == "yt Untuk Pembeliaan bisa lebih dari PO"
+   - stsyt35 == "yt jumlah PO bisa lebih Dari max. "
+   - stsyt36 == "Disc jual detil ada jurnal pot scr2883"
+   - stsyt37 == "Pembelian lewat QC / Quality Control"
+   - stsyt38 == "program hanya sbg kirim data saja"
+   - stsyt39 == "yt salesman harus diisi dalam penjualan"
+   - stsyt40 == "1 jika libur minggu saja, 2 jika libur sabtu &#38; minggu"
+   - stsyt41 == 
+   - stsyt42 == "yt Untuk Cek Perlu No.AC tidak"
+   - stsyt43 == "yt mutasi antar gudang ke banyak lokasi"
+   - stsyt44 == "yt untuk area faktur harus diisi"
+   - stsyt45 == "Harga barang per fifo beda,jadi brg sama fifo beda, hrg jual bisa beda"
+   - stsyt46 == "No.Faktur Harus Isi Pada Saat Ret Jual"
+   - stsyt47 == "Nota Harus Isi Barang atau tidak scr611"
+   - stsyt48 == 
+   - stsyt49 == "Mutasi/Koreksi Harga bisa 0 "
+   - stsyt50 == "Y/T ada permohonan faktur"
+   - stsyt51 == 
+   - stsyt52 == "YT Otomatis di Retur "
+   - stsyt53 == "Mutasi gudang sbg Produksi"
+   - stsyt54 == 
+   - stsyt55 == "YT pusat bisa transfer ke Cabang "
+   - stsyt56 == "Harga Jual/Beli bisa 0"
+   - stsyt57 == 
+   - stsyt58 == "Jml uraian otomatis dari hasil uraian"
+   - stsyt59 == "Pembulatan penjualan master adalah total harga/netto*/"
+   - stsyt60 == 
+   - stsyt61 == 
+   - stsyt62 == "Adm Kredit sebagai piutang / Angsuran"
+   - stsyt63 == "Pesanan Otomatis Y/T"
+   - stsyt64 == "1 Surat Jalan Banyak Pesanan/SPK"
+   - stsyt65 == 
+   - stsyt66 == 
+   - stsyt67 == "TGL jtp dihitung dari Tgl Faktur / Tgl SJL"
+   - stsyt68 == 
+   - stsyt69 == "Packing List Menambah Barang/Jurnal"
+   - stsyt70 == "PO Hanya berlaku sekali terima "
+   - stsyt71 == "Price List Jual otomatis Dari pembelian"
+   - stsyt72 == 
+   - stsyt73 == "Divisi PO Hrs sama dengan Faktur"
+   - stsyt74 == 
+   - stsyt75 == "YT Jual Kredit 1721 untuk Cabang Otomatis"
+   - stsyt76 == "Nilai Kurs boleh Tdk harus diubah di master" 
+   - stsyt77 == "U/Pabrik ada jurnal selisih dengan hrg standart"
+   - stsyt78 == "Y/T Jml Jual lebih kecil atau sama dengan Jumlah Pesan"
+   - stsyt79 == "Gaji berdasarkan golongan / gabungan gol + type"
+   - stsyt80 == "Gaji mengisi total atau manual gaji Pokok,UM dll "
+   - stsyt81 == 
+   - stsyt82 == 
+   - stsyt83 == 
+   - stsyt84 == "HPP BBN Sudah di tentukan/Pasti"
+   - stsyt85 == "Departemen karyawan harus diisi"
+   - stsyt86 == 
+   - stsyt87 == "Pabrik Menggunakan SPK Y/T"
+   - stsyt88 == "Proses di mesin/lokasi "
+   - stsyt89 == 
+   - stsyt90 == "Kode Barang SuperMarket Otomatis Khusus SPM/DS"
+   - stsyt91 == 
+   - stsyt92 == 
+   - stsyt93 == 
+   - stsyt94 == 
+   - stsyt95 == 
+   - stsyt96 == "Pabrik Menggunakan Satuan Apa" 
+   - stsytppn== 
+   - stsint1 == 
+   - stsint2 == "untuk menentukan panjang no.faktur"
+   - stspst110 == "yt Asuransi Y atau T "
+   - stsdf2    == "Pembulatan Kembalian POS scr2883a"
+   - stsdf3    == "Max diskon Klinik "
+   - stsdf4    == "Utk % pajak Bunga Tabungan scr2888"
+
+***
+   - ststglkkh   = tanggal terakhir proses mata uang untuk tour
+   - ststglprjgl = tanggal peremajaan Buku besar
+   - ststglprjss = Tanggal akhir peremajaan
+   - stsprjinv   = Tanggal Awal peremajaan
+   - stsprjpb    = Tanggal Proses Neraca
+   - stsprjpj    = Tanggal Proses Peremajaan akhir tahun
+   - stsprjpr    = Tanggal Transver Cabang Ke Pusat
+   - stsprjkas   = tanggal proses BPR 
+   - ststglat    = Tanggal Proses BPR 2
+   - stsprjpiudg = Tanggal Proses Tgl penggajian scr869
+   - ststglproses= Tanggal Terakhir Proses
+   - stssysdate  = Tanggal Komputer Sekarang
+   - stsprjhd    = tgl proses bpr scr1261
+   - stsprjpiupr = Tgl proses bpr scr1263
+    </PRE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="c129.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="c136.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Variabel - Variabel Global di Ksystem</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Konsep Empat Buffer</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

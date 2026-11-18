@@ -1,0 +1,85 @@
+1.PKMASUK HMC
+	select count(*)
+        from cad
+        left join btm on btmdata = 'BUKUTAMU' and btmlokjual = cadkdcab and btmtgl = {ltgl2h1}
+        where caddata = 'TGTMKTHMC' and cadkode = {lthbl} and cadtype = 'TGTMKTHMC' and btmdvsjl = 'H1' 
+		and btmsts in ('CLSD','724','721','720','716','631','611','727','3502','714','712',
+			       'INPG','713','719','711','TACC','715') and btmflag1 <> 'TACP'
+
+2.PK MASUK M2W
+	select count(*)
+        from cad
+        left join btm on btmdata = 'BUKUTAMU' and btmlokjual = cadkdcab and btmtgl = {ltgl2h1}
+        where caddata = 'TGTMKTM2W' and cadkode = {lthbl} and cadtype = 'TGTMKTM2W' and btmdvsjl = 'M2W'
+                and btmsts in ('CLSD','724','721','720','716','631','611','727','3502','714','712',
+                               'INPG','713','719','711','TACC','715') and btmflag1 <> 'TACP'
+
+3. PK JAWAB M2W
+	select count(distinct(btmnobuk)) 
+	from cad 
+	left join btm on btmdata ='BUKUTAMU' and btmlokjual = cadkdcab and btmsts in ('CLSD','724','721','720',
+		'716','631','727','3502','714','712','INPG','713','719','711','TACC','715') 
+		and btmdvsjl = 'M2W' and btmtgl = {ltgl2} 
+	left join akt as akt631 on akt631.aktkode = btmnobuk and akt631.aktdata = 'HISTORISDM' 
+		and akt631.akttype = '631' and akt631.aktprm in (select min(akt631a.aktprm) 
+			from akt as akt631a 
+			where akt631a.aktkode = btmnobuk and akt631a.aktdata = 'HISTORISDM' 
+				and akt631a.akttype = '631') 
+	left join akt as akt714 on akt714.aktkode = btmnobuk and akt714.aktdata = 'HISTORISDM' 
+		and akt714.akttype = '714' 
+		and akt714.aktprm in (select max(akt714a.aktprm) 
+			from akt as akt714a 
+			where akt714a.aktkode = btmnobuk and akt714a.aktdata = 'HISTORISDM' 
+				and akt714a.akttype = '714') 
+        where caddata = 'TGTMKTM2W' and cadkode = '2403' and cadtype = 'TGTMKTM2W' and cadkdcab = {cadkdcab} 
+		and btmnobuk <> '' and akt714.aktkode is null;	
+
+
+
+4. PK JAWAB HMC
+	select count(distinct(btmnobuk))        
+        from cad  
+        left join btm on btmdata ='BUKUTAMU' and btmlokjual = cadkdcab and btmsts in ('CLSD','724','721','720',
+                '716','631','727','3502','714','712','INPG','713','719','711','TACC','715') 
+                and btmdvsjl = 'H1' and btmtgl = {ltgl2} 
+        left join akt as akt631 on akt631.aktkode = btmnobuk and akt631.aktdata = 'HISTORISDM' 
+                and akt631.akttype = '631' and akt631.aktprm in (select min(akt631a.aktprm) 
+                        from akt as akt631a 
+                        where akt631a.aktkode = btmnobuk and akt631a.aktdata = 'HISTORISDM' 
+                                and akt631a.akttype = '631')
+        left join akt as akt714 on akt714.aktkode = btmnobuk and akt714.aktdata = 'HISTORISDM'
+                and akt714.akttype = '714'      
+                and akt714.aktprm in (select max(akt714a.aktprm) 
+                        from akt as akt714a 
+                        where akt714a.aktkode = btmnobuk and akt714a.aktdata = 'HISTORISDM'  
+                                and akt714a.akttype = '714')  
+        where caddata = 'TGTMKTHMC' and cadkode = '2403' and cadtype = 'TGTMKTHMC' and cadkdcab = {cadkdcab} 
+                and btmnobuk <> '' and akt714.aktkode is null;	
+
+
+5.PK ACC HMC
+	select count(distinct(btmnobuk))
+        from cad
+        left join btm on btmdata = 'BUKUTAMU' and btmlokjual = cadkdcab and btmtgl = {ltgl2} and btmdvsjl = 'HMC'         left join akt on aktkode = btmnobuk and aktdata = 'HISTORISDM' and akttype = '714'
+	where  caddata = 'TGTMKTHMC' and cadkode = {lthbl} and cadtype = 'TGTMKTHMC' 
+		and btmsts in ('CLSD','724','721','720','716','631','727','3502','714','712','INPG','713',
+		'719','711','TACC','715') and aktscr = '714' and (left(btmflag1,3) = 'ACC' or btmflag1 = 'BRKS')
+
+
+6.PK ACC M2W
+	select count(distinct(btmnobuk))
+        from cad
+        left join btm on btmdata = 'BUKUTAMU' and btmlokjual = cadkdcab and btmtgl = {ltgl2} and btmdvsjl = 'M2W'         left join akt on aktkode = btmnobuk and aktdata = 'HISTORISDM' and akttype = '714'
+	where  caddata = 'TGTMKTM2W' and cadkode = {lthbl} and cadtype = 'TGTMKTM2W' 
+		and btmsts in ('CLSD','724','721','720','716','631','727','3502','714','712','INPG','713',
+		'719','711','TACC','715') and aktscr = '714' and (left(btmflag1,3) = 'ACC' or btmflag1 = 'BRKS')
+
+
+8. PK MASUK < JAM 16:00
+	select count(distinct(btmnobuk)) 
+        from cad 
+        left join btm on btmdata ='BUKUTAMU' and btmlokjual = cadkdcab and btmdvsjl = 'M2W' and btmtgl = {ltgl2} 
+        left join akt as aktall on aktall.aktkode = btmnobuk and aktall.aktdata = 'HISTORISDM' and aktall.akttype = {tbtkode2} and aktall.aktprm in (select max(aktallx.aktprm) from akt as aktallx where aktallx.aktkode = btmnobuk and aktallx.aktdata = 'HISTORISDM' and aktallx.akttype = {tbtkode2} )                       
+	where caddata = 'TGTMKTM2W' and cadkode = {lthbl} and cadtype = 'TGTMKTM2W' and btmnobuk <> '' and aktall.aktjam < '16:00:00' and (btmsts in ('CLSD','724','721','720','716','631','611','727','3502','714','712','INPG','713','719','711','TACC','715') and btmflag1 <> 'TACP')
+
+

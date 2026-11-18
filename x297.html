@@ -1,0 +1,411 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>&#13;      Mengenal Perintah SCREEN, IMAGE, FIELD dan END_SCREEN.
+      </TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Tutorial Ksystem V2016.09.20"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Membuat Program Kas Keluar"
+HREF="c290.html"><LINK
+REL="PREVIOUS"
+TITLE="Membuat Program Kas Keluar"
+HREF="c290.html"><LINK
+REL="NEXT"
+TITLE="
+	Mengenal Perintah DEFAULT 
+	"
+HREF="x337.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Tutorial Ksystem V2016.09.20</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="c290.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 16. Membuat Program Kas Keluar</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x337.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN297"
+>16.2. Mengenal Perintah SCREEN, IMAGE, FIELD dan END_SCREEN.</A
+></H1
+><P
+>&#13;      Mari kita membuat tampilan Master Pengeluaran Kas dengan
+      menggunakan 4 perintah di atas. Perintah SCREEN selalu mengawali
+      setiap program Ksystem. IMAGE menggambar tampilan yang akan muncul di layar, 
+      FIELD menjelaskan field field yang ada di tampilan dan END_SCREEN selalu mengakhiri
+      setiap program Ksystem. Untuk keterangan lebih detail bisa dilihat
+      di keterangan setiap perintah di bab pertama.
+      </P
+><P
+></P
+><OL
+TYPE="1"
+><LI
+><P
+>&#13;      	Login dengan user ksystem di Linux, masuk ke terminal dengan pilihan
+	Application-&#62;System Tools, Terminal. Untuk Windows buka terminal
+	DOS dan cd \ksystem
+	</P
+></LI
+><LI
+><P
+>&#13;      	mkdir prt9000
+	</P
+></LI
+><LI
+><P
+>&#13;      	vi prt9000/sct271
+	</P
+></LI
+></OL
+><P
+>&#13;      Untuk membantu mempercepat pengetikan program, gunakan template yang sudah disediakan
+      di direktori kerangka. 
+      Ketik :r kerangka/master 
+      kemudian sesuaikan sehingga sesuai dengan tampilan di bawah sbb:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;SCREEN 271 QUERY_TYPE Program Kas Keluar
+SCR_FILE bkk
+
+IMAGE(master) 
+/--SCT271------------------------------Pengeluaran KAS/BANK/GIRO-----------------------------------\
+| /-------------------------\ /------------------------\ /---------------------------------------\ |
+| |No.Bukti: ______________ | |Tanggal : ________      | |Rek.: __   ___________   _____________ | |
+| |Jenis   : __   Type:___  | |Penerima: ____________  | |Nama: ________________________________ | |
+| |Cab/Div : ____  /_______ | |Status  : ____ __ _____ | |Ket.: ________________________________ | |
+| \-------------------------/ \------------------------/ \---------------------------------------/ |
+|                                                                                        ___ ____  |
+|                                                                                                  |
+|                                                                                                  |
+|                                                                                                  |
+|                                                                                                  |
+|                                                                                                  |
+|                                                                                                  |
+|                                                                                                  |
+|                                                                                                  |
+|                                                                                                  |
+|                                                                                                  |
+| /------------TOTAL BIAYA------------------------t--------------------TOTAL KAS-----------------\ |
+| | __________________________________________.__ | _________________________________________.__ | |
+| |                                               |                                              | |
+| |                                               |                                              | |
+| \-----------------------------------------------.----------------------------------------------/ |
+\--------------------------------------------------------------------------------------------------/
+
+FIELD(master)
+   bkknum        ALLCAPS                     INPUTRI    1 /* Nomor Bukti */
+   bkktgl        NONE {DD-MM-YY}             INPUTRI    7 /* Tanggal */
+
+   bkkkb         ALLCAPS NOCHANGE            INPUTRI    11  /* Nomor Bukti */
+   bkknobbm 	 ALLCAPS                     INPUTRI    12
+   bbmket        PROTECT                     INPUTRI    13 /* Total Biaya */
+
+   bkktype       ALLCAPS NOCHANGE            INPUTRI    2
+   bkkstsexp     ALLCAPS NOCHANGE            INPUTRI    3
+   bkkkode 	 ALLCAPS                     INPUTRI    8 /* Kode Penerima*/
+   bkknama       ALLCAPS SCROLL              INPUTRI    14 /* Nama Penerima */
+
+
+   bkkcab        ALLCAPS SCROLL       	     INPUTRI    4 
+   bkkdvs        ALLCAPS SCROLL              INPUTRI    5 
+   bkksts        PROTECT ALLCAPS             INPUTRI    9  /* Status */
+   bkkstsapr     PROTECT ALLCAPS             INPUTRI    10  /* Status */
+   bkktdkapr     PROTECT ALLCAPS             INPUTRI    11  /* Status */
+   bkkket        ALLCAPS SCROLL              INPUTRI    15 /* Total Biaya */
+
+   bkktype2       PROTECT QPROTECT UNSEEN   INPUTRI     19 /* Status */
+   bkkscr         PROTECT QPROTECT          INPUTRI     20 /* Status */
+
+
+   bkktotal      NUMERIC                     BIG    21 /* Total Biaya */
+   bkkjmlmut     NUMERIC                     BIG    22 /* Total Biaya */
+
+END_SCREEN
+</PRE
+><P
+>&#13;
+Program Ksystem menyediakan tempat di layar sebesar 100 karakter ke kanan dan 24 baris ke bawah.
+Dalam IMAGE, sebuah field diwakili dengan garis bawah sepanjang yang diinginkan, jadi 
+pada tampilan
+</P
+><PRE
+CLASS="programlisting"
+>&#13;| |No.Bukti: ______________ | |Tanggal : ________      | |Rek.: __   ___________   _____________ | |
+</PRE
+><P
+>&#13;ada 5 field yang ditampilkan. Nama dari field field ini ditulis di bagian FIELD dengan
+urutan dari kiri ke kanan baru ke baris bawahnya. Maka dengan melihat bagian FIELD 
+</P
+><PRE
+CLASS="programlisting"
+>&#13;FIELD(master)
+   bkknum        ALLCAPS                     INPUTRI    1 /* Nomor Bukti */
+   bkktgl        NONE {DD-MM-YY}             INPUTRI    7 /* Tanggal */
+
+   bkkkb         ALLCAPS NOCHANGE            INPUTRI    11  /* Kas/Bank*/
+   bkknobbm 	 ALLCAPS                     INPUTRI    12
+   bbbmket       PROTECT                     INPUTRI    13 /* Total Biaya */
+</PRE
+><P
+>&#13;kita lihat bahwa field pertama adalah bkknum, disusul oleh bkktgl, bkkkb, bkknobbm dan bbmket
+Nomor di kolom terakhir adalah urutan field pada saat kita tekan enter. 
+</P
+><P
+></P
+><OL
+TYPE="1"
+><LI
+><P
+>&#13;      kspar prt9000/sct271
+      </P
+><P
+>&#13;	   gunakan user:root, password:root (kecuali sudah diubah sendiri)
+	   Bila ada kesalahan pada saat kspar dan kspar mengeluarkan
+	   pesan kesalahan nomor tertentu, lihatlah informasi kesalahan
+	   ini di file error.h. 
+	   Fungsi kspar prt9000/sct271 ini menghasilkan frm9000/sct271.frm
+           </P
+></LI
+><LI
+><P
+>&#13;      ksgen -x9000
+      </P
+><P
+>&#13;      	   Perintah ksgen akan menggabung sct271 yang ada di frm9000/sct271 ke sistem menu 
+	   Ksystem sehingga dapat diakses via ksrun. Semua program standar Ksystem ada di
+	   direktori atau folder prg. Jadi ada prg/scr111, prg/scr201 dst. 
+	   Ksgen -x9000 ini akan menghasilkan file scrdef9000.str
+           </P
+></LI
+><LI
+><P
+>&#13;      ksrun -x9000
+      </P
+><P
+>&#13;	    Ksrun -x9000 ini akan membaca sistem menu yang ada di scrdef9000.str.
+	    sesudah login, pilih menu 271, maka akan tampil tampilan sbb:
+	    </P
+></LI
+></OL
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="gambar1.png"></P
+></DIV
+><P
+>&#13;    Dari gambar di atas kita lihat bahwa tulisan SCT271 berada di baris
+    pertama dan bertabrakan dengan tombol tombol perintah yang juga ada
+    di baris pertama. Mari kita pindah tulisan SCT271 ke baris ke dua. Sekalian
+    kita beri warna pada kotak kotak yang ada.
+    dengan cara mengubah baris
+    </P
+><PRE
+CLASS="programlisting"
+>&#13;IMAGE(master) 
+    menjadi
+IMAGE(master) {BASE_ROW=2} {FRSFLD_BACKUP} {LSTFLD_ADVANCE} {IMG_BOX_COLOR1=250,228,205} {IMG_BOX_COLOR2=191,245,196} {IMG_BOX_COLOR3=166,214,240} {IMG_BOX_COLOR4=239,255,151} 
+</PRE
+><P
+>&#13;     	Gunakan editor vi untuk mengubah baris di atas. {BASE_ROW=2} akan membuat IMAGE
+     	ini dimulai dari baris ke 2. {FRSFLD_BACKUP} akan membuat kursor di field pertama akan pindah 
+     	ke field terakhir bila kita tekan tombol Backspace. {LSTFLD_ADVANCE} akan membuat kursor
+     	yang ada di field terakhir berpindah ke field pertama bila kita tekan enter. {IMG_BOX_COLOR1=250,228,205} akan memberi warna pada kotak atas kiri. {IMG_BOX_COLOR2} akan memberi warna pada kotak di 
+     	sebelah kanannya dst. Warna ini adalah warna RGB (Red Green Blue) yang sudah umum.
+     	jalankan lagi kspar prt9000/sct271. Anda tidak perlu mengeluarkan
+     	program ksrun yang sedang berjalan. Anda cukup keluar dari layar 271
+     	dengan menekan tombol escape yang akan membawa anda ke layar menu,
+     	kemudian masuk lagi ke sct271. Program yang sudah kita geser ke bawah 
+     	akan muncul sbb:
+	</P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="gambar2.png"></P
+></DIV
+><P
+>&#13;     	Mari kita coba menambah rekord dengan menekan tombol 't', kursor
+     	akan berada di field No.Bukti. Sekarang kita tekan enter dan kursor 
+     	akan pindah ke field jenis. Hal ini terjadi karena urutan field 
+     	pertama adalah bkknum dan ke 2 adalah bkktype. Kalau kita tekan
+     	enter lagi maka kursor akan berada di field bkkstsexp. Untuk 
+     	mengetahui kursor sekarang berada di field apa, gunakan tombol F7
+     	untuk menampilkan nama field. Tekan F7 lagi untuk kembali ke 
+     	mode normal. 
+	</P
+><P
+>&#13;	Sesudah kita menyelesaikan program pertama kita, marilah kita belajar untuk
+	memahami file bkk yang dipakai di sct271. 
+	<PRE
+CLASS="programlisting"
+>&#13;	Nama File: bkk
+
+	Fungsi: File transaksi Pengeluaran kas, Penerimaan kas, Pengeluaran Kas Bon dan Penyelesaian Kas bon.
+
+	<FONT
+COLOR="RED"
+>Field field utama</FONT
+>
+
+	bkknum: Nomor transaksi
+
+	bkktgl: Tanggal Transaksi
+
+	bkknobbm: No. Rekening buku besar bila pengeluaran hanya butuh satu rekening kas atau bank.
+
+	bkkjmlmut: Total nilai uang yang dikeluarkan, 
+	   mis. Tunai 100rb, Cek 200rb, total=300rb
+
+	bkktotal: Total perincian biaya yang dikeluarkan, 
+	   mis.biaya transport=200rb, biaya pemasaran 100rb, total = 300rb.
+
+	bkktype: Jenis pengeluaran
+	   PU: Pengeluaran Umum
+	   HL: Hutang Lain, mis. hutang ke Bank atau ke orang lain
+	   PL: Piutang Lain, Piutang di luar usaha.
+	   PP: Piutang Pegawai
+
+	bkkstsexp: Jenis pengeluaran yang merinci bkktype = PU
+	   BI: Biaya umum biasa
+	   BAT: Biaya Aktiva Tetap. Pengeluaran untuk pemeliharaan aktiva tetap seperti mobil sehingga kita bisa tahu biaya per mobil.
+
+	bkktype2: Jenis transaksi. 
+	   KK: Kas keluar
+	   KM: Kas masuk
+	   BS: Bon Sementara
+
+	bkkkb: Tipe pengeluaran kas, 
+	   KS untuk tunai 
+	   BK untuk pengeluaran dari Bank.
+
+	bkkcab: Cabang yang pengeluaran kas
+
+	bkkdvs: Divisi yang mengeluarkan
+
+	bkksts: Status dari transaksi ini
+	   OPEN: belum diposting.
+	   CLSD: sudah posting.
+
+	</PRE
+>
+	</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="c290.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x337.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Membuat Program Kas Keluar</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c290.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Mengenal Perintah DEFAULT</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

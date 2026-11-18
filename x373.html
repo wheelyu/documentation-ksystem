@@ -1,0 +1,352 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>&#13;	Mengenal Perintah SUBFILE
+	</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Tutorial Ksystem V2016.09.20"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Membuat Program Kas Keluar"
+HREF="c290.html"><LINK
+REL="PREVIOUS"
+TITLE="
+	Mengenal Perintah SCAN
+	"
+HREF="x360.html"><LINK
+REL="NEXT"
+TITLE="
+	Mengenal Perintah POSTING
+	"
+HREF="x388.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Tutorial Ksystem V2016.09.20</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x360.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 16. Membuat Program Kas Keluar</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x388.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN373"
+>16.7. Mengenal Perintah SUBFILE</A
+></H1
+><P
+>&#13;	Adalah fasilitas untuk menghubungkan file master dengan file trans (detail dari master) atau file trans2 (detail dari trans). Dengan fungsi ini anda dapat mengisi data di trans atau trans2. Tanpa fungsi ini anda tidak akan bisa masuk ke file trans ataupun trans2. Susunan subfile adalah sebagai berikut :
+	</P
+><PRE
+CLASS="programlisting"
+>&#13;  SUBFILE(trans/trans2)
+  SFL_LINES(jumlah baris)
+  SFL_TITLE nama image judul
+  SFL_TARGET
+   index file trans	field master
+  <FONT
+COLOR="RED"
+>(4 perintah di atas harus ada agar anda bisa masuk ke file trans atau trans2)</FONT
+>
+  SFL_MAP
+   field master		field trans
+  SFL_COND nama kondisi
+  SFL_SELECT nama kondisi
+   	</PRE
+><P
+>&#13;	Berikut adalah keterangan dari tiap - tiap perintah yang ada di perintah SUBFILE :
+	</P
+><PRE
+CLASS="programlisting"
+>&#13; SFL_LINES
+ berfungsi untuk menentukan jumlah baris yang ingin ditampilkan di trans/trans2.
+ Rumus jumlah baris adalah : 22-baris data trans/trans2 (base_row trans/trans2).
+
+ SFL_TARGET
+ berfungsi sebagai penghubung master ke trans berdasarkan index trans
+
+ SFL_MAP
+ berfungsi untuk memindahkan isi field master ke field trans/trans2. SFL_MAP tidak memerlukan nama MAP. Jadi, field - field master
+ yang akan dipindah langsung diletakkan di bawah fungsi SFL_MAP.
+
+ SFL_COND
+ berfungsi untuk memberi kondisi pada saat akan masuk ke file trans. Apabila kondisi benar, maka dapat masuk ke layar trans, tapi
+ bila kondisi salah maka anda tidak akan dapat mengisi ataupun masuk ke layar trans.
+
+ SFL_SELECT
+ berfungsi untuk menyeleksi data yang akan dikumpulkan berdasarkan index yang dipakai sesuai dengan kondisi dari select. Data yang
+ sudah diseleksi akan ditampilkan di trans.
+
+ SFL_TITLE
+ berfungsi untuk menentukan nama yang dipakai untuk judul pada saat kursor berada di trans.
+	</PRE
+><P
+>&#13;	Sebagai contoh kita akan menghubungkan file master (bkk) dan file trans (bkd) di screen 271 ini. Maka langkah - langkah yang harus dilakukan adalah sebagai berikut :
+	</P
+><PRE
+CLASS="programlisting"
+>&#13; 1. Kita buat dulu IMAGE yang akan ditampilkan di file trans ini (bkd).
+    
+	IMAGE(transt) {NO_CLS} {LSTFLD_ADVANCE} {FRSFLD_BACKUP} {BASE_ROW=9}
+	/--t-----t------------t----t---------------t----------t--------------t----------------------\
+	|No| F/L | No.Faktur  |Type|    Jumlah     | Rek.Debit| Ket.Rekening |   Keterangan         |
+	|--|-----|------------|----|---------------|----------|--------------|----------------------|
+
+
+
+
+
+
+	\--.-----.------------.----.---------------.----------.--------------.----------------------/
+
+	/*** SUBFILE INFORMATION ***/
+	IMAGE(trans) {NO_CLS} {LSTFLD_ADVANCE} {FRSFLD_BACKUP} {BASE_ROW=12} {COVER_MASTER}
+	|__|  __ |___________ | __ |____________.__|__________|______________|______________________|
+
+ 2. Setelah itu kita isi field2 yang diperlukan untuk ditampilkan pada IMAGE di atas yaitu sebagai berikut :
+ 
+	FIELD(trans)
+	/* Symbol Name  Input Attribute         Output Attribute        Input Order     I/O Special */
+   	bkdnourt       NUMERIC                     INPUTRI                   1       /* Kode Rekening */
+      	bkdcab         NOCHANGE SCROLL             INPUTRI                   2       /* Kode Rekening */
+        bkdbgn         ALLCAPS SCROLL              INPUTRI                   3       /* Kode Rekening */
+	bkdtype        NOCHANGE                    INPUTRI                   4
+	bkdjml         NUMERIC                     INPUTRI                   5       /* jumlah */
+	bkdnobbm       ALLCAPS                     INPUTRI                   6       /* Kode Rekening */
+	bbmket         PROTECT                     INPUTRI                   7       /* jumlah */
+	bkdket         ALLCAPS  SCROLL             INPUTRI                   8
+
+ 3. Setelah IMAGE dan FIELD terisi barulah kita menghubungkan file detail tersebut (bkd) dengan file master (bkk)
+    dengan menggunakan perintah SUBFILE. Perintah ini dituliskan di bwh nama - nama FIELD yang sudah kita buat pd
+    langkah ke-2. Susunan perintah SUBFILE yang ditulis adalah sebagai berikut :
+
+	SUBFILE(trans)
+	SFL_LINES(6)       /* total number of lines sfl takes up on screen  */
+	SFL_TITLE(transt)
+
+	SFL_TARGET
+	/* Index file detil             Field master */
+     	     bkdnumurtbbm                  bkknum
+
+     	SFL_MAP
+     	/* Field master        Field Detil        Type Map */
+        bkknum                   bkdnum           REPLACE
+	bkktgl                   bkdtgl           REPLACE
+	bkksts                   bkdsts           REPLACE
+	bkktype2                 bkdtype2         REPLACE
+	bkkkode                  bkdsup           REPLACE
+	bkkscr                   bkdscr	          REPLACE
+	</PRE
+><P
+>&#13;	Dengan melakukan 3 langkah di atas maka file master bkk dan file detail trans sudah terhubung dan anda dapat masuk dan mengisi data di file trans tersebut. Setelah itu marilah kita mempelajari file - file bkd yang dipakai di layar 271 ini.
+	</P
+><PRE
+CLASS="programlisting"
+>&#13; Nama File : bkd
+ File ini berfungsi untuk menyimpan perincian/detil dari file bkk.
+
+ Field - field penting pada bkd :
+   bkdnum   : isi field ini sama dengan bkknum yaitu no.bukti transaksi.
+   bkdtgl   : isi field ini sama dengan bkktgl yaitu tanggal transaksi.
+   bkdsts   : status transaksi ( OPEN : data belum diposting, CLSD : data sudah diposting )
+   bkdnourt : nomor urut transaksi.
+   bkdcab   : isi field ini sama dengan bkkcab yaitu cabang yang melakukan transaksi pengeluaran kas.
+   bkdbgn   : No.Faktur
+   bkdjml   : nominal pengeluaran kas/bank/cek
+   bkdnobbm : no.rekening lawannya kas/bank/cek. Misalnya diisi dengan rek.biaya, pendapatan lain, piutang karyawan, dll
+   bkdket   : keterangan dari transaksi
+   bkdtype2 : isi field ini sama dengan bkktype2 (pada layar ini diisi dengan KK (Kas Keluar) )
+   bkdscr   : menunjukkan berada di screen mana (dalam hal ini berada di screen 271)
+   	</PRE
+><P
+>&#13;	Setelah kita cukup mengenal file bkd, maka langkah selanjutnya yang harus kita lakukan adalah menghubungkan file pcm dengan file bkk. File pcm juga berfungsi sebagai detail dari bkk. File pcm ini berfungsi untuk mengetahui kita melakukan pengeluaran dengan menggunakan kas / bank / cek. Langkah - langkah yang harus dilakukan untuk menghubungkan file bkk dengan pcm sama persis dengan langkah - langkah menghubungkan bkk dengan bkd yaitu sebagai berikut :
+	</P
+><PRE
+CLASS="programlisting"
+>&#13;  1. Kita buat dulu IMAGE yang akan ditampilkan di file transa (menggunakan nama transa karena merupakan detail ke-2 dari master)
+
+	IMAGE(transat) {NO_CLS} {LSTFLD_ADVANCE} {FRSFLD_BACKUP} {BASE_ROW=9}
+	/----t---t------------t------------t-------------t--------t--------------t-------------------------\
+	|Type|S/O|  Nomor Cek |Rek.Kas/Bank| Nama Bank   |Tgl Jtp |   Nilai      | Keterangan              |
+	|----|---|------------|------------|-------------|--------|--------------|-------------------------/
+
+
+
+
+
+
+	\----.---.------------.------------.-------------.--------.--------------.-------------------------/
+
+	IMAGE(transa) {NO_CLS} {LSTFLD_ADVANCE} {FRSFLD_BACKUP} {BASE_ROW=12} {COVER_MASTER}
+	| _  | _ |____________|____________|_____________|________|___________.__|_________________________|
+
+
+  2. Setelah itu kita isi field - field yang akan ditampilkan pada IMAGE transa tersebut.
+
+	FIELD(transa)
+	pcmtype       NOCHANGE                   INPUTRI    1 /* Type O/S */
+	pcmtype2      NOCHANGE                   INPUTRI    2 /* Type O/S */
+	pcmnocek      ALLCAPS                    INPUTRI    3 /* nomor cek */
+	pcmnobbm      ALLCAPS                    INPUTRI    4 /* Kode Rekening */
+	pcmbank       ALLCAPS                    NONE       5 /* Keterangan */
+	pcmtgljtp     NONE NOLIMIT {DD-MM-YY}    INPUTRI    6 /* Tanggal jt */
+	pcmtotal      NUMERIC                    INPUTRI    7 /* Nilai Cek */
+	pcmket        ALLCAPS SCROLL             INPUTRI    8 /* Kode Rekening */
+
+
+  3. Langkah terakhir untuk menghubungkan file master dengan file pcm ini sama seperti ketika kita menghubungkan bkk dengan bkd.
+     yaitu dengan menggunakan perintah SUBFILE. Susunan perintah SUBFILE adalah sebagai berikut :
+
+	SUBFILE(transa)
+	SFL_LINES(6)     /* total number of lines sfl takes up on screen  */
+	SFL_TITLE(transat)
+
+	SFL_TARGET
+    	pcmty3prcidx              bkktype2 bkknum
+
+    	SFL_MAP
+    	/* parent field         child field          length */
+	bkknum           pcmnoprc
+	bkktgl           pcmtgl
+	bkkkode          pcmplg
+	bkktype2         pcmtype3
+	bkknama          pcmnama
+	bkktype          pcmasaltr
+	bkkscr           pcmscr
+	bkkdvs           pcmdvs
+	bkkcab           pcmcab
+	</PRE
+><P
+>&#13;	Setelah menghubungkan file pcm dengan file master maka alangkah baiknya bila kita mengenal field - field pcm yang digunakan di layar 271 ini.
+	</P
+><PRE
+CLASS="programlisting"
+>&#13;  Nama File : pcm
+  Berfungsi sebagai file yang menyimpan informasi penerimaan dan pengeluaran kas / bank / cek
+
+  pcmnoprc   : isi dari field ini sama dengan bkknum yaitu no.bukti transaksi
+  pcmnocek   : no.cek / giro bila penerimaan / pengeluaran lewat kas /giro
+  pcmsts     : status dari transaksi pcm
+  pcmtype    : tipe dari pcm ( T:Tunai, C:Cek, M:Mutasi, K:Kredit Card )
+  pcmtgl     : tanggal transaksi
+  pcmtgljtp  : tanggal jatuh tempo
+  pcmnobbm   : no.rekening kas / bank
+  pcmnobbm2  : no.rekening piutang giro / hutang giro apabila pcmtype = C
+  pcmtotal   : total kas / bank / cek yang dikeluarkan / diterima
+  pcmdk      : terisi D apabila penerimaan kas / bank / cek
+  	       terisi K apabila pengeluaran kas / bank /cek
+  pcmscr     : nomor screen di mana data diisikan
+  	</PRE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x360.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x388.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Mengenal Perintah SCAN</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c290.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Mengenal Perintah POSTING</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

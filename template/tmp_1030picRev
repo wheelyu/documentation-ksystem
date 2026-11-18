@@ -1,0 +1,107 @@
+IMAGE(tmptranst)
+/-----------------------------------------------------------------------------------\
+|t.PicaRev                                                                          |
+| t.TanggalRev      _______________                                                 |
+| t.TanggalPica     _______________                                                 |
+| spasi                                                                             |
+| t.Problem         __________________________                                      |
+| t.Identification  __________________________                                      |
+| t.Corrective      __________________________                                      |
+| t.Action          __________________________ _                                    |
+\-----------------------------------------------------------------------------------/
+
+
+
+IMAGE(tmptrans)
+
+
+
+
+CALCS()
+cket2            DO_LIB  ap_strln(ketstr1,&lpanjangket);
+cket2a            DO_LIB  ap_strln(ketstr2,&lpanjangket);
+cket2b            DO_LIB  ap_strln(ketstr3,&lpanjangket);
+cket2c            DO_LIB  ap_strln(ketstr4,&lpanjangket);
+cjointldkonfrev      djointldkonfrev==1
+
+FIELD(tmptranst)
+kettgl1       PROTECT {DD-MM-YYYY}     INPUTRI 1
+kettgl2       PROTECT {DD-MM-YYYY}     INPUTRI 1
+ketstr1       TEXTAREA     INPUTRI 2
+ketstr2       TEXTAREA     INPUTRI 3
+ketstr3       TEXTAREA     INPUTRI 4
+ketstr4       TEXTAREA     INPUTRI 5
+lenter        NOCHANGE     INPUTRI 6
+
+
+
+MAP(misitppicrev)
+c1      ketnourt      DO_CALC_IF csaatpic1  
+c2      ketnourt      DO_CALC_IF csaatpic2
+
+MAP(mhitketpic)
+cket2       lpanjangket     DO_CALC
+
+MAP(mhitketpic2)
+cket2a       lpanjangket     DO_CALC
+
+MAP(mhitketpic3)
+cket2b       lpanjangket     DO_CALC
+
+MAP(mhitketpic4)
+cket2c       lpanjangket     DO_CALC
+
+MAP(misitglpic)
+
+ltglrev      ltglrev         REPLACE_IF cjointldkonfrev
+ltglrev      kettgl1         REPLACE
+g_tgltrn     kettgl2         REPLACE  
+
+HOOKS(tmptranst)
+BEFORE_INPUT     cur_field=ketstr1 DO_MAP SHOW misitglpic
+AFTER_INPUT     cur_keybd=EN DO_MAP SHOW misitppicrev
+AFTER_INPUT     cur_field=ketstr1 DO_MAP SHOW mhitketpic
+AFTER_INPUT     cur_field=ketstr2 DO_MAP SHOW mhitketpic2
+AFTER_INPUT     cur_field=ketstr3 DO_MAP SHOW mhitketpic3
+AFTER_INPUT     cur_field=ketstr4 DO_MAP SHOW mhitketpic4
+
+AFTER_INPUT	cur_field=ketstr1	DO_MAP SHOW 
+				IF cpanjangket mdum
+				ELSE HKCURSOR STAY
+				HKMSG t.Minimal30Karakter
+
+AFTER_INPUT	cur_field=ketstr2	DO_MAP SHOW 
+				IF cpanjangket mdum
+				ELSE HKCURSOR STAY
+				HKMSG t.Minimal30Karakter
+
+AFTER_INPUT	cur_field=ketstr3	DO_MAP SHOW 
+				IF cpanjangket mdum
+				ELSE HKCURSOR STAY
+				HKMSG t.Minimal30Karakter
+
+AFTER_INPUT	cur_field=ketstr4	DO_MAP SHOW 
+				IF cpanjangket mdum
+				ELSE HKCURSOR STAY
+				HKMSG t.Minimal30Karakter
+
+
+CALCS()
+cdetpicrev      tlmtype2=="PIC1" || tlmtype2=="PIC2"
+
+SUBFILE(tmptrans)
+SFL_TITLE(tmptranst)
+
+SFL_LINES(1)        /* Jml record yang kelihatan di layar */
+SFL_COND    cdetpicrev
+SFL_SELECT  cselketpicarev
+SFL_TARGET
+	ketdatbukkod    tlmdata tlmnobuk lPICREV
+
+SFL_MAP
+tlmdata     ketdata     REPLACE
+tlmnobuk    ketnobuk    REPLACE
+lPICREV     ketkode     REPLACE
+tlmtype2	kettype		REPLACE
+
+

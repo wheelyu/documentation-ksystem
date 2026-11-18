@@ -1,0 +1,315 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Membuat File Detail</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Tutorial Ksystem V2016.09.20"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Membuat Program Penjualan"
+HREF="c478.html"><LINK
+REL="PREVIOUS"
+TITLE="Membuat Program Penjualan"
+HREF="c478.html"><LINK
+REL="NEXT"
+TITLE="Membuat Perintah Posting"
+HREF="x507.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Tutorial Ksystem V2016.09.20</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="c478.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 18. Membuat Program Penjualan</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x507.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN491"
+>18.2. Membuat File Detail</A
+></H1
+><P
+>&#13;Pada program penjualan ini kita menggunakan file ppd sebagai detail 1 (trans) dan pcm sebagai detail 2 (transa). Cara menghubungkan file master dengan file detail sama seperti yang sudah diajarkan pada bab - bab sebelumnya. Untuk itu marilah ketikkan perintah sebagai berikut di atas perintah END_SCREEN.</P
+><PRE
+CLASS="programlisting"
+>&#13;/************************** DETIL 1 *******************************************/
+IMAGE(transt) {NO_CLS} {LSTFLD_ADVANCE} {FRSFLD_BACKUP} {BASE_ROW=11}
+|Barang: _____________________ ______________________________  SJL :____________ PSN :____________ |
+|--t---t------t-----t------t--------------t---t-----t-------t----t-------t-----------t-------------|
+|No|J/B| S.JLN| PSN |  Kat |  Kd.Barang   |K/B| Lok | Kd.Ukr|Sat.|  Jml  |  Harga    |  Sub.Netto  |
+|--|---|------|-----|------|--------------|---|-----|-------|----|-------|-----------|-------------|
+
+
+
+
+
+\--.---.------.-----.------.--------------.---.-----.-------.----.-------.-----------.-------------/
+
+
+FIELD(transt)
+   ppdbrg     PROTECT           INPUTRI            1
+   brgnama    PROTECT           INPUTRI            2
+   ppdnwo     PROTECT           INPUTRI            2
+   ppdpsn     PROTECT           INPUTRI            2
+
+IMAGE(trans) {NO_CLS} {LSTFLD_ADVANCE} {FRSFLD_BACKUP} {BASE_ROW=15} {COVER_MASTER}
+|__|__ |______|_____|______|______________| _ |_____|_______|____|_______|___________|_____________|
+
+
+FIELD(trans)
+   ppdurt2       PROTECT                INPUTRI     1 /* ada SJL atau tdk */
+   ppdjasbrg     NOCHANGE               INPUTRI     2 /* ada SJL atau tdk */
+   ppdnwo        ALLCAPS SCROLL         INPUTRI     3
+   ppdpsn        ALLCAPS SCROLL         INPUTRI     4
+
+   ppdkat        ALLCAPS SCROLL         INPUTRI     5  /* No. Surat Jalan */
+   ppdbrg        ALLCAPS SCROLL         INPUTRI     6  /* kode barang */
+   ppdsubtran    NOCHANGE               INPUTRI     8  /* Kirim/Belum */
+   ppdlok        ALLCAPS SCROLL         INPUTRI     9  /* Lokasi */
+
+   ppdkdukr      ALLCAPS SCROLL         INPUTRI    11  /* Satuan */
+   ppdsat        ALLCAPS SCROLL         INPUTRI    12  /* Satuan */
+
+   ppdtmp2       NUMERIC                INPUTRI    13  /* Jumlah */
+   ppdhrg3       NUMERIC                INPUTRI    14 /* harga satuan */
+   ppdtotfak     PROTECT                NONE       15 /* total bruto */
+
+DEFAULTS(trans)
+ppdsts          INIT            OPEN
+
+SUBFILE(trans)
+SFL_LINES(5)
+SFL_TITLE(transt)
+
+SFL_TARGET
+    ppdfakurtidx             ppmnofak
+
+SFL_MAP
+    ppmnofak                  ppdnofak
+    ppmmua                    ppdkdmua
+    ppmcab                    ppdcab
+    ppmtglfak                 ppdtglfak
+    ppmplg                    ppdplg
+    ppmsts                    ppdsts
+    ppmtglbyrsbl              ppdupdtgl
+    ppmscr                    ppdscr
+</PRE
+><P
+>&#13;Dengan mengetikkan perintah di atas, kita telah menghubungkan file master dengan file detail trans seperti yang terlihat dari gambar di bawah ini. Tambahkan perintah HOOKS, EDIT, DEFAULT, dan SCAN sesuai yang anda inginkan.</P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="gambar9.png"></P
+></DIV
+><P
+>&#13;Selanjutnya kita akan menghubungkan file pcm yang berfungsi sebagai file detail transa dengan file master ppm. Caranya sama dengan ketika kita menghubungkan ppm dengan ppd, oleh karena itu marilah kita ketikkan perintah di bawah ini.</P
+><PRE
+CLASS="programlisting"
+>&#13;IMAGE(transat) {NO_CLS} {LSTFLD_ADVANCE} {FRSFLD_BACKUP} {BASE_ROW=11}
+|----t--------------t---------t----------t--------t-----------t----t---------t--------------|
+|Type|  Nomer Cek   |Kas/Bank |Nama Bank |Tgl Jtp |  Nilai    |Mt $|Jml Mt$  |  Keterangan  |
+|----|--------------|---------|----------|--------|-----------|----|---------|--------------|
+
+
+
+
+
+
+
+\----.--------------.---------.----------.--------.-----------.----.---------.--------------/
+
+IMAGE(transa) {NO_CLS} {LSTFLD_ADVANCE} {FRSFLD_BACKUP} {BASE_ROW=14} {COVER_MASTER}
+| __ |______________|_________|__________|________|___________|____|_________|______________|
+
+FIELD(transa)
+/* Symbol Name   Input Attribute  Output Attribute  Input Order  I/O Special */
+   pcmtype       NOCHANGE INPUTRI         1 /* nomor cek */
+   pcmnocek      ALLCAPS INPUTRI          2 /* nomor cek */
+   pcmnobbm      ALLCAPS INPUTRI          3 /* Nama Bank */
+   pcmbank       ALLCAPS INPUTRI          4 /* Kota Bank */
+   pcmtgljtp     NOLIMIT {DD-MM-YY} INPUTRI 5 /* Tanggal jt */
+   pcmdf2        NUMERIC INPUTRI          6 /* Nilai faktur */
+   pcmkd1        ALLCAPS INPUTRI          8 /* Mata Uang Terima */
+   pcmdf6        PROTECT INPUTRI          9 /* Mata Uang Terima */
+   pcmket        ALLCAPS SCROLL INPUTRI   10 /* Kota Bank */
+
+CALCS()
+cppmTUNAI       ppmtype4 == "T"
+cnotOPEN        ppmsts != "OPEN"
+
+DEFAULTS(transa)
+pcmsts          INIT            OPEN
+pcmtype         DFALT_SCAN      T "Tunai"
+                                C "Cek"
+
+SUBFILE(transa)
+SFL_LINES(6)
+SFL_TITLE(transat)
+SFL_COND cppmTUNAI
+
+SFL_TARGET
+pcmnoprcidx   ppmnofak
+
+SFL_MAP
+    ppmnofak           pcmnoprc
+    ppmplg             pcmplg
+    ppmtglfak          pcmtgl
+    ppdtype2           pcmtype3
+    ppmdvs             pcmdvs
+    ppmcab             pcmcab
+    ppmscr             pcmscr
+
+RESTRICT(master)
+RST_UPD_COND cnotOPEN
+RST_DEL_COND cnotOPEN
+
+RESTRICT(trans)
+RST_ADD_COND cnotOPEN
+RST_UPD_COND cnotOPEN
+RST_DEL_COND cnotOPEN
+
+RESTRICT(transa)
+RST_ADD_COND cnotOPEN
+RST_UPD_COND cnotOPEN
+RST_DEL_COND cnotOPEN
+</PRE
+><P
+>&#13;Dengan demikian kita telah menghubungkan file detail pcm ke file master ppm seperti yang terlihat dari gambar di bawah ini. Tambahkan perintah HOOK, DEFAULT, EDIT, dan SCAN sesuai yang anda inginkan.</P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="gambar10.png"></P
+></DIV
+><P
+>&#13;Sebelum kita melanjutkan dengan langkah berikutnya yaitu membuat program posting, ada baiknya apabila kita mengenal file detail yang digunakan di program penjualan ini terlebih dahulu. Karena file pcm sudah pernah dibahas maka kali ini kita hanya akan membahas file ppd.</P
+><PRE
+CLASS="programlisting"
+>&#13;Nama file       : ppd
+file ini menyimpan semua informasi aktivitas barang. File ini akan menjadi detail dari semua transaksi yang berhubungan dengan barang
+seperti penjualan, pembelian, dll
+ppdtype2        : tipe transaksi ( misal : PJ = penjualan, PB = pembelian, dll )
+ppdsts          : OPEN (data belum diposting)
+		  CLSD (data sudah diposting)
+ppdnofak        : nomor bukti transaksi
+ppdtglfak       : tanggal faktur
+ppdplg          : kode pelanggan
+ppdbrg          : kode barang
+ppdlok          : kode lokasi saat barang keluar
+ppdsat          : kode satuan barang
+</PRE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="c478.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x507.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Membuat Program Penjualan</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c478.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Membuat Perintah Posting</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

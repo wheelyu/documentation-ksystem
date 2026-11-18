@@ -1,0 +1,203 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Konsep Dasar Ksystem.</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Tutorial Ksystem V2016.09.20"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="Tujuan dan Cara Download "
+HREF="c4.html"><LINK
+REL="NEXT"
+TITLE="Program -Program yang Terdapat di Dalam Bahasa Ksystem."
+HREF="c16.html"></HEAD
+><BODY
+CLASS="chapter"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Tutorial Ksystem V2016.09.20</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="c4.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="c16.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="chapter"
+><H1
+><A
+NAME="AEN8"
+></A
+>Chapter 2. Konsep Dasar Ksystem.</H1
+><P
+>&#13;    Ksystem mempunyai 2 bagian dengan nama yang sama. Pertama, Ksystem adalah 
+    nama program akuntansi siap pakai berbahasa Indonesia. Kedua, 
+    Ksystem adalah bahasa pemrograman yang dipakai untuk 
+    mengembangkan program akuntansi Ksystem. Jadi Ksystem adalah program
+    akuntansi yang dikembangkan dengan bahasa pemrograman Ksystem juga.
+    </P
+><P
+>&#13;    Di buku ini kita akan membahas mengenai bahasa pemrograman Ksystem. Bahasa
+    Ksystem adalah bahasa pemrograman yang ditujukan untuk ahli akuntansi
+    dan tidak membutuhkan latar belakang pemrograman. Bahasa Ksystem ini akan
+    membantu seorang ahli akuntansi untuk menguasai program dengan cepat dan
+    pada posisi untuk mengembangkan program sesuai dengan kebutuhan perusahaan. 
+    Program Akuntansi Ksystem ini sangat cocok untuk dosen akuntansi, mahasiswa
+    akuntansi dan akuntan umum yang ingin menguasai program dengan cepat 
+    hingga ke tingkat programmer sehingga dapat menjadi Programmer Ksystem 
+    Bersertifikasi (Ksystem Certified Programmer).
+    </P
+><P
+>&#13;    Bahasa Ksystem mudah dikuasai karena hanya memiliki 19 perintah yang
+    sederhana. Perintah perintah bahasa Ksystem hanya memberitahu apa yang diinginkan (deklaratif) 
+    tanpa harus mengerjakan sendiri secara detail. Perintah perintah Ksystem dapat dilihat di bagian
+    Daftar perintah program Ksystem.
+    </P
+><P
+>&#13;    Selain mempunyai perintah perintah yang sederhana, bahasa Ksystem juga
+    mempunyai teknologi komponen yang elegan. Kebanyakan program komputer
+    yang beredar merupakan satu kesatuan logika yang saling terkait. 
+    Pengubahan program di satu bagian program dapat memengaruhi logika 
+    program di bagian lain. Semakin lama program dikembangkan, semakin
+    rumit kaitan kaitan yang ada di dalam program sehingga logika program
+    sangat sulit diajarkan ke programmer baru. Ini adalah alasan utama mengapa
+    banyak programmer lebih senang menulis program baru daripada meneruskan
+    program orang lain yang sudah jalan. Bahasa Ksystem mengatasi masalah
+    ini dengan menggunakan teknologi komponen. 
+    </P
+><P
+>&#13;    Dengan teknologi komponen, bahasa Ksystem menempatkan setiap komponen
+    program dalam sebuah file (mis.scr201). Semua logika program ada di dalam
+    scr201 ini dan tidak ada hubungannya dengan komponen lain (mis. scr301).
+    Karena setiap komponen berdiri sendiri secara mandiri, maka bila terjadi
+    masalah dengan scr201, masalahnya ada di dalam scr201 itu dan tidak akan
+    berada di scr (screen) lain. Juga karena logika program scr201 berada di 
+    dalam satu file dan perintah program hanya 19 perintah, maka sangatlah
+    mudah bagi programmer Ksystem yang baru untuk segera mempelajari dan
+    mamahami scr201 ini. Semua komponen standar dari program akuntansi Ksystem
+    dimulai dengan scr (mis. scr201 tadi) dan berada di direktori (folder) prg.
+    Jadi scr201 ada di prg/scr201. Scr222 ada di prg/scr222 dst. 
+    </P
+><P
+>&#13;    Masalah pemrograman menjadi lebih rumit karena setiap perusahaan yang 
+    menggunakan scr201 mungkin membutuhkan perubahan dari komponen baku scr201
+    ini. Misalnya kita punya satu perusahaan PT.ALAM JAYA yang mempunyai 
+    nomor pelanggan 0567 dan kita ingin mengubah scr201 ini bagi pelanggan 
+    nomor 0567 ini, maka yang kita lakukan adalah mengopi file prg/scr201
+    ke prt0567/sct201 dan melakukan perubahan di prt0567/sct201. Di sini kita
+    bisa melihat bahwa program baku prg/scr201 masih ada tapi khusus untuk
+    pelanggan PT.ALAM JAYA dengan nomor pelanggan 0567 kita telah membuatkan
+    program (komponen) baru prt0567/sct201 yang dapat disesuaikan dengan
+    kebutuhan perusahaan. Hanya scr201 saja yang berubah, sedang semua scr yang
+    lain tidak berubah sama sekali. Untuk perusahaan lain dengan nomor pelanggan
+    mis. 0350 kita bisa melakukan perubahaan scr201 dengan mengopikannya ke
+    prt0350/sct201 dan melakukan perubahan di file itu. Dengan teknologi 
+    komponen seperti ini, setiap programmer yang menangani komputerisasi
+    dapat menangani banyak perusahaan dengan mudah tanpa menjadi bingung atau
+    tercampur campur antara program satu perusahaan dengan yang lainnya.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="c4.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="c16.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Tujuan dan Cara Download</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Program -Program yang Terdapat di Dalam Bahasa Ksystem.</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,185 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>HOOKS</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Langkah2 Untuk Membuat Program Dengan Bahasa K-System (K-Language)"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Tipe Program &#38; 19 Perintah Bahasa K-System"
+HREF="c57.html"><LINK
+REL="PREVIOUS"
+TITLE="LOCAL"
+HREF="x144.html"><LINK
+REL="NEXT"
+TITLE="CALCS"
+HREF="x152.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Langkah2 Untuk Membuat Program Dengan Bahasa K-System (K-Language)</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x144.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 6. Tipe Program &#38; 19 Perintah Bahasa K-System</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x152.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN148"
+>6.9. HOOKS</A
+></H1
+><P
+>&#13;	Perintah yang dijalankan sebelum masuk ke dalam field, sesudah masuk(saat keluar) dari field atau
+	pada saat menekan tombol END.
+	Perintah yang dijalankan bisa perhitungan, perintah SKIP(meloncati) field tertentu atau menjalankan
+	perintah ap (aplikasi kecil tambahan dari ksystem)
+	</P
+><PRE
+CLASS="programlisting"
+>&#13;HOOKS(master/trans/trans2)
+   Cara Memakai:
+      BEFORE_INPUT/AFTER_INPUT  cur_field=namaField 	DO_MAP  SHOW namaMap
+      BEFORE_INPUT/AFTER_INPUT  cur_field=namaField 	DO_MAP  SHOW
+		IF namaCalcs  namaMap
+		ELSE
+		HKCURSOR  STAY/NOSTAY/HOME/namaField
+		HKMSG     pesan yang akan ditampilkan
+      BEFORE_INPUT/AFTER_INPUT  cur_field=namaField  DO_LIB namaFungsiAp(parm, parm,parms);
+      BEFORE_INPUT/AFTER_INPUT  cur_field=namaField  DO_LIB_IF namaCalcs namaFungsiAp (parm, parm,parms);
+      BEFORE_INPUT/AFTER_INPUT  cur_field=namaField  DO_SKIP_IF namaCalcs
+      BEFORE_INPUT/AFTER_INPUT  cur_field=namaField  DO_SCAN namaDbcalcs
+      BEFORE_INPUT/AFTER_INPUT  cur_field=namaField  DO_SCAN F2/F3 namaDbscan 
+      BEFORE_INPUT/AFTER_INPUT  cur_field=namaField  DO_SCAN_IF namaCalcs namaDbcalcs
+      BEFORE_INPUT/AFTER_INPUT  cur_field=namaField  DO_NXT_POSTING nomorScreen namaNxtMap
+      BEFORE_INPUT/AFTER_INPUT  cur_keybd=EN         DO_NXT_POSTING_IF namaCalc  nomorScreen namaNxtMap
+
+      Kapan HOOKS dijalankan?
+	 HOOKS dijalankan pada saat kursor masuk ke satu field, pada saat
+	 keluar atau pada saat menekan tombol tertentu, misalnya tombol END.
+	 HOOKS yang BEFORE_INPUT akan dijalankan pada saat masuk ke field.
+	 HOOKS ini tetap dijalankan meskipun field itu sendiri di PROTECT
+	 di atribut inputnya.
+	 HOOKS yang AFTER_INPUT dijalankan pada saat kursor akan keluar
+	 dari field tersebut tetapi sesudah EDITS dijalankan dulu. Dengan
+	 kata lain, EDITS akan dijalankan SEBELUM HOOKS yang AFTER_INPUT.
+	 Pada saat kursor keluar dari satu field, semua HOOKS yang AFTER_INPUT
+	 untuk field itu akan dijalankan sesuai dengan urutan dari atas kebawah.
+	 Bila ada satu dari HOOKS tersebut gagal (masuk ke bagian ELSE dari
+	 HOOKS) maka perintah perintah HOOKS selanjutnya TIDAK dijalankan.
+	 Bila tidak ada ELSE, perintah HOOKS selanjutnya tetap dijalankan.
+
+	</PRE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x144.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x152.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>LOCAL</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c57.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>CALCS</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

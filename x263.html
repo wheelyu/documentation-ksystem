@@ -1,0 +1,242 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>SCAN</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Tutorial Ksystem V2016.09.20"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Daftar Perintah Program Ksystem"
+HREF="c173.html"><LINK
+REL="PREVIOUS"
+TITLE="SUBFILE"
+HREF="x259.html"><LINK
+REL="NEXT"
+TITLE="MASTER_MP"
+HREF="x267.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Tutorial Ksystem V2016.09.20</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x259.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 15. Daftar Perintah Program Ksystem</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x267.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN263"
+>15.13. SCAN</A
+></H1
+><P
+>&#13;   	Perintah Scan adalah fasilitas untuk melihat sekelompok rekord 
+   	dengan menggunakan index tertentu.
+   	Fasilitas ini dapat dipanggil melalui 
+	1. EDITS tipe VALIDATE
+	2. DBCACLS tipe SCANSCAN
+
+   	Untuk menggunakan fasilitas Scan ini tinggal mengopi dari file "scan"
+   	yang sudah disediakan di direktori kerangka.
+	</P
+><PRE
+CLASS="programlisting"
+>&#13;	Cara memakai:
+	SCAN(nama_scan)
+
+	Catatan:
+	Untuk DBC_COMMAND SCANSCAN, jumlah field yang dipakai untuk
+	mencari rekord di DBC_TARGET namaIndex namaField namaField
+	adalah jumlah field yang ada - 1, jadi mis. bila
+	DBC_TARGET brtkodtglidx brgkode brttgl
+
+	maka field yang dipakai untuk mencari rekord dengan index
+	brtkodtglidx adalah brgkode saja, tidak termasuk brttgl.
+	Fasilitas USE_SET tidak dipakai untuk SCANSCAN.
+
+   Keterangan pilihan:
+	{SCAN_IGNORE_CABDVS}    
+	     Untuk user yang grupnya ada proteksi CAB dan DVS (scr911,4d), pilihan
+	     ini mengabaikan pembatasan tsb untuk VALIDATE yang menggunakan
+	     SCAN ini.
+	{SCAN_SUM_FIELD=namaField}    
+	     Field yang akan ditotal jumlahnya, khusus untuk membantu 
+	     DBCALCS tipe SCANSCAN yang menggunakan SCAN_SUM_CALCS.
+	{SCAN_SUM_CALCS=namaCalcs}    
+	     Kadang field yang ingin ditotal perlu dihitung dulu.
+	     Fasilitas ini menyediakan sarana perhitungan field 
+	     sebelum dimasukkan ke SCAN_SUM_FIELD.
+	{SCAN_REKAP=namaField}    
+	     Field yang sama akan digabung jadi satu. Bila nilai rekord di 
+	     field ini sama, maka rekord rekord yang sama ini akan
+	     ditampilkan menjadi satu rekord di scann. Semua field
+	     yang tipenya numeric otomatis akan dijumlahkan.
+	{SCAN_REKAP_LEN=panjangString}    
+	     Kadang kita tidak ingin membandingkan seluruh field untuk
+	     digabung jadi satu, mis. untuk scr155 kita mau menggabungkan
+	     bbmno khusus untuk 3 digit pertama, maka gunakanlah 
+	     kombinasi {SCAN_REKAP=bbmno} dan {SCAN_REKAP_LEN=3}.
+	{SCAN_SELECT=namaCalcs}  
+	     Bila SCAN_SELECT diisi, rekord rekord yang memenuhi syarat 
+	     di calcs saja yang akan terseleksi.
+	{SCAN_SELECT_IDX=namaCalcs}  
+	     Bila SCAN_SELECT diisi, rekord rekord yang memenuhi syarat 
+	     di calcs saja yang akan terseleksi. Semua database field
+	     yang ada di calcs HARUS menjadi bagian dari index yang ada
+	     di DBC_TARGET.
+	{SCAN_RTS=namaRts}  
+	     SCAN untuk tipe monitor dilengkapi dengan fasilitas untuk
+	     mencetak pada saat scan dengan menggunakan tombol 'o'.
+	{SCAN_MAP=namaMap}
+	     Sebelum dicetak map ini akan dijalankan bila ada
+	{SCAN_SCR_ADD=nomorScr}
+  	     Fasilitas ini sebagai pengganti IMAGE_ADD. Pada saat ditekan
+	     F8 atau data kosong, program langsung "terbang" ke layar
+	     nomorLayar. Untuk mengambil rekord yang sedang dibaca, 
+	     gunakan tombol F8. Bila tidak ingin mengambil rekord dan 
+	     kembali ke posisi SCAN, gunakan tombol ESC ESC atau Bye untuk
+	     keluar dari layar "terbang".
+	{SCAN_SCR_QRYONLY=nomorScr}
+	     Fasilitas ini seperti SCAN_SCR_ADD tetapi langsung dalam posisi
+	     cari pada saat "terbang" ke layar F8. Untuk mengambil rekord yang
+	     sedang dibaca, gunakan tombol F8 lagi.
+	{SCAN_SCR_ADD_AUTO=nomorScr}
+	     Fasilitas ini seperti SCAN_SCR_ADD tetapi langsung dalam posisi
+	     tambah pada saat "terbang" ke layar F8. Bila ketemu, harus 
+	     ketemu satu rekord dan langsung "terbang" ke layar ini, cari
+	     rekord bersangkutan dan pada posisi update. Bila tombol End
+	     ditekan, langsung keluar dari layar add ini dan kembali ke
+	     layar awal. Bila Esc Esc, masih tetap di layar add. Harus
+	     dipakai bareng dengan SCAN_SCR_QRYFLD dan SCAN_SCR_EQLFLD.
+	{SCAN_SCR_QRYFLD=namaField} mis. {SCAN_SCR_QRYFLD=brgkode}
+	{SCAN_SCR_EQLFLD=namaField} mis. {SCAN_SCR_EQLFLD=ppdbrg}
+	     Sepasang fasilitas diatas memungkinkan untuk
+	     masuk ke layar SCAN_SCR_ADD dan sekaligus mencari
+	     rekord dengan cara QRYFLD diisi dengan isian dari EQLFLD
+	     seakan akan melakukan qryfld INIT_QUERY {EQLFLD}
+	{SCAN_F8_QRYFLD=namaField}
+	{SCAN_F8_EQLFLD=namaField}
+	     Sepasang fasilitas diatas memungkinkan untuk
+	     masuk ke layar SCAN_SCR_ADD dari layar query dengan menggunakan
+	     tombol F8 dan sekaligus mencari
+	     rekord dengan cara QRYFLD diisi dengan isian dari EQLFLD
+	     seakan akan melakukan qryfld INIT_QUERY {EQLFLD}
+	{SELECT_BAR}                
+	     Jangan diubah, supaya timbul persepsi blok.
+	{ROLL_LINES=jumlahBaris}
+	     Jumlah baris yang akan digunakan untuk naik turun.
+
+	</PRE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x259.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x267.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>SUBFILE</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c173.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>MASTER_MP</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

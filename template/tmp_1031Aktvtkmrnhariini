@@ -1,0 +1,35 @@
+
+IMAGE(tmptranst) 
+/-------------------------t-------------t-------------------------------t-----------------------------\
+|t.Type                   |t.Jumlah     | t.Pilihan                     |t.Keterangan                 |
+\-------------------------.-------------.-------------------------------.-----------------------------/
+
+IMAGE(tmptrans)  
+|_________________________|_____________|_______________________________|_____________________________|
+
+FIELD(tmptrans)
+tldsat                 PROTECT         INPUTRI     1     
+lfreetext              DIGITS          INPUTRI     2    
+tldkat                 ALLCAPS         INPUTRI     3
+tldket                 ALLCAPS         INPUTRI     4
+
+EDITS(tmptrans)
+e.Mandatory tldkat      MANDATORY_IF cBjmlhcctv
+e.Mandatory tldket      MANDATORY_IF cproblem
+e.Validate  tldkat      VALIDATE_IF cBjmlhcctv tbtdattypkod mmaptld stbt {Pgv_dttabel} {Pgv_dttabel21} {PlSPKCCTV1031} {Ptlmdari} {Ptldlok}
+
+
+HOOKS(tmptrans)
+BEFORE_INPUT        cur_field=lfreetext     DO_SKIP_IF cBjmlhcctv
+BEFORE_INPUT        cur_field=tldkat        DO_SKIP_IF cjmlhcctv
+AFTER_INPUT         cur_field=lfreetext     DO_MAP SHOW mblanksft
+AFTER_INPUT         cur_field=tldkat        DO_MAP SHOW misiprblm
+AFTER_INPUT         cur_keybd=EN            DO_MAP SHOW misiprblm
+
+
+SUBFILE(tmptrans)
+SFL_LINES(10)
+SFL_TITLE(tmptranst)
+SFL_SORT_BY_FIELD   tldnourt
+SFL_TARGET
+    tldbukbrglok tlmnobuk tmpkode

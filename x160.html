@@ -1,0 +1,232 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>SUBFILE</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Langkah2 Untuk Membuat Program Dengan Bahasa K-System (K-Language)"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Tipe Program &#38; 19 Perintah Bahasa K-System"
+HREF="c57.html"><LINK
+REL="PREVIOUS"
+TITLE="MAP"
+HREF="x156.html"><LINK
+REL="NEXT"
+TITLE="SCAN"
+HREF="x164.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Langkah2 Untuk Membuat Program Dengan Bahasa K-System (K-Language)</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x156.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 6. Tipe Program &#38; 19 Perintah Bahasa K-System</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x164.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN160"
+>6.12. SUBFILE</A
+></H1
+><P
+>&#13;   	Perintah ini berfungsi untuk menghubungkan dua file data dalam
+      	formasi master file dan detail file. Field atau kombinasi field
+      	dari file master akan digunakan untuk mencari rekord rekord yang
+      	ada di file detail dengan menggunakan index dari file detail.
+      	Index ini sendiri harus bisa duplikat. Bila SUBFILE ada DEFAULT
+      	mis. SUBFILE(trans) ada DEFAULT(trans) maka setiap rekord yang
+      	ditemukan di detail akan disimpan di file sementara di harddisk 
+      	sehingga perubahan data di trans akan terus disimpan di file 
+      	sementara tsb. Bila tidak ada kebutuhan menyimpan ke file 
+      	sementara, jangan menggunakan DEFAULT untuk SUBFILE tsb.
+	</P
+><PRE
+CLASS="programlisting"
+>&#13;   Cara Memakai:
+   SUBFILE(trans/trans2)
+   SFL_LINES(8)    /* Jumlah baris yang akan digunakan oleh detail */
+   SFL_TITLE(transt/trans2t)
+   SFL_MAP_MAP(namaMap) /* Map umum, tidak bisa bareng dengan SFL_MAP */
+   SFL_RKP_SCR nomorScreen /* Scr ini akan dijalankan pada saat ke master, ke detail atau 'o'. */
+   SFL_RKP_MAP(namaMap) /* Map ini dijalankan sebelum SFL_RKP_SCR */
+   SFL_RKP_COND namaCalc /* Bila cond ini ada, akan dicek dulu sebelum menjalankan SFL_RKP_SCR*/
+   SFL_SELECT  namaCalc       /* kondisi yang diselect */
+   SFL_COND  namaCalc       /* kondisi untuk ke detail */
+   SFL_DEL_COND  namaCalc   /* kondisi untuk menghapus tampilan rekord 
+   			       ** sfl yang bukan hasil dari ctrl-N, tapi 
+			       ** rekord sesungguhnya belum dihapus dari
+			       ** hard-disk. Gunakan PST_AFT_DELCMD bila
+			       ** ingin menghapus rekord dari hard-disk.
+			       */
+
+   SFL_TARGET
+   SFL_TARGET_GTE
+   /* index dari file detail          field field master u/ target  */
+   
+   SFL_MAP
+   /* parent field        child field  */        
+   
+   SFL_APP_TYPE		/* Mengubah subfile tipe query menjadi applikasi */
+   SFL_ADD_OK 		/* Boleh menambah rekord tambahan di subfile yang
+			   lain dari yang pertama ditampilkan di layar
+			   dengan menggunakan Ctrl-N
+		        */
+  SFL_ADD_ENTER         Tombol enter pada baris terakhir di SUBFILE akan
+			diubah menjadi Ctrl-N secara otomatis untuk
+			penambahan rekord.
+  SFL_HOOKS_AFTER_EDIT
+  		Fasilitas ini menjalankan HOOKS BEFORE_INPUT (yang
+		tidak PROTECT) pada saat turun ke detail.
+  SFL_SHOW_SFL
+  		Menampilkan detail dari rekord ini. Sementara hanya
+		berjalan bila sedang di trans dan akan menampilkan trans2.
+  SFL_SORT_BY_FIELD namaField
+  		Fasilitas ini mengurutkan detail berdasarkan field ini.
+		Berguna untuk mengurutkan detail dari field yang tidak
+		punya index.
+  SFL_SORT_UPDOWN UP/DOWN 
+  		untuk mengurutkan naik atau turun
+
+   Keterangan:
+   1. Rekord rekord yang muncul di detail dicari dengan cara menggabung
+      field field master menjadi satu target pencarian. Kemudian target
+      ini dicari di index dari file detail.
+   2. Bila SFL_TARGET yang digunakan, rekord rekord di detail dicari 
+      dengan memastikan bahwa index yang ditemukan cocok dengan target
+      yang dicari SEPANJANG target itu.
+      contoh:
+	 SFL_TARGET    ppdfakbrgidx     ppmfak
+	 ppmfak = "FAK-1"
+	 maka semua rekord di ppd yang depannya FAK-1 akan ditampilkan, tapi
+	 FAK-2 tidak akan ditampilkan.
+   3. Bila SFL_TARGET_GTE (Greater or Equal) yang digunakan, rekord rekord 
+      di detail dicari dengan memastikan bahwa index yang ditemukan lebih 
+      besar atau sama dengan target awal dan lebih kecil atau sama dengan
+      target akhir. Dengan kata lain SFL_TARGET_GTE SELALU membutuhkan
+      pasangan target awal dan akhir. Target akhir ditandai dengan kurung
+      paragraph.
+      contoh:
+	 SFL_TARGET_GTE    ppdfakbrgidx     ppmfak {lfak}
+	 ppmfak = "FAK1"    lfak = "FAK5"
+	 maka semua rekord di ppd yang lebih besar FAK1 dan lebih kecil
+	 FAK5 akan ditampilkan.
+   4. SFL_MAP berfungsi mengopi field dari master ke detail HANYA pada
+      saat PENAMBAHAN rekord di detail.
+   5. Pada layar tipe QUERY_TYPE, SUBFILE atau detail yang biasanya 
+      berbentuk QUERY_TYPE juga dapat diubah menjadi APP_TYPE
+      dengan menambahkan perintah SFL_APP_TYPE
+	</PRE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x156.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x164.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>MAP</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c57.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>SCAN</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

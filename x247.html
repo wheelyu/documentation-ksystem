@@ -1,0 +1,207 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>HOOKS</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Tutorial Ksystem V2016.09.20"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Daftar Perintah Program Ksystem"
+HREF="c173.html"><LINK
+REL="PREVIOUS"
+TITLE="LOCAL"
+HREF="x243.html"><LINK
+REL="NEXT"
+TITLE="CALCS"
+HREF="x251.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Tutorial Ksystem V2016.09.20</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x243.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 15. Daftar Perintah Program Ksystem</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x251.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN247"
+>15.9. HOOKS</A
+></H1
+><P
+>&#13;   	Perintah ini melakukan perhitungan pada saat
+	masuk ke dalam field, ke luar dari field atau pada saat
+	menekan tombol END.
+	</P
+><PRE
+CLASS="programlisting"
+>&#13;HOOKS(master/trans/trans2)
+   Cara Memakai:
+      BEFORE_INPUT/AFTER_INPUT  cur_field=namaField/EN 	DO_MAP  namaMap
+      BEFORE_INPUT/AFTER_INPUT  cur_field=namaField/EN 	DO_MAP  SHOW namaMap
+      BEFORE_INPUT/AFTER_INPUT  cur_field=namaField/EN 	DO_MAP  SHOW
+		IF namaCalcs  namaMap
+		namaCalcs  namaMap
+		namaCalcs  namaMap
+		ELSE
+		HKCURSOR  STAY/NOSTAY/HOME/namaField
+		HKMSG     pesan yang akan ditampilkan
+      BEFORE_INPUT/AFTER_INPUT  cur_field=namaField/EN DO_NXT_POSTING nomorScreen namaNxtMap
+      BEFORE_INPUT/AFTER_INPUT  cur_keybd=NamaField/EN DO_NXT_POSTING_IF namaCalc  nomorScreen namaNxtMap
+      Catatan:
+	 1. Bila menggunakan DO_MAP atau DO_NXT_POSTING dengan IF maka 
+	    a. bila salah satu calcs sudah memenuhi syarat, map untuk 
+	    calcs tsb. dijalankan dan calcs selanjutnya tidak diperiksa lagi.
+	 2. Bila semua calcs tidak memenuhi syarat dan ada bagian ELSE
+	    maka pesan ditampilkan dan kursor diatur sesuai dengan
+	    permintaan DAN HOOKS selanjutnya untuk field yang sama TIDAK
+	    DIJALANKAN!!.
+
+      BEFORE_INPUT/AFTER_INPUT  cur_field=namaField  DO_LIB namaFungsiAp(parm, parm,parms);
+      BEFORE_INPUT/AFTER_INPUT  cur_field=namaField  DO_LIB_IF namaCalcs namaFungsiAp (parm, parm,parms);
+      BEFORE_INPUT/AFTER_INPUT  cur_field=namaField  DO_SKIP_IF namaCalcs
+      BEFORE_INPUT/AFTER_INPUT  cur_field=namaField  DO_SCAN namaDbcalcs
+      BEFORE_INPUT/AFTER_INPUT  cur_field=namaField  DO_SCAN_IF namaCalcs namaDbcalcs
+      BEFORE_INPUT/AFTER_INPUT  cur_field=namaField  DO_OUT namaCalcs
+
+      Daftar pilihan DO_LIB
+	 1. DOEDITS - Semua EDITS untuk IMAGE ini dijalankan dulu. Bila
+	       ada EDITS yang tidak memenuhi syarat, DO_LIB gagal
+	 2. DOEDITS_HOME - Sama seperti DOEDITS tapi kursor akan kembali
+	       ke field pertama bila EDITS gagal
+	 3. ADD_ONLY - Hanya dijalankan pada saat penambahan rekord.
+	 4. READ_AFTER - Rekord untuk IMAGE ini akan dibaca lagi dari hard-disk
+	       sesudah DO_LIB dilaksanakan. Kadang-kadang DO_LIB mengubah rekord
+	       yang di hard-disk dan pilihan ini memungkinkan kita untuk
+	       membuat rekord yang di layar sesuai dengan yang di hard-disk.
+	
+      Kapan HOOKS dijalankan?
+	 HOOKS dijalankan pada saat kursor masuk ke satu field, pada saat
+	 keluar atau pada saat menekan tombol tertentu, misalnya tombol END.
+	 HOOKS yang BEFORE_INPUT akan dijalankan pada saat masuk ke field.
+	 HOOKS ini tetap dijalankan meskipun field itu sendiri di PROTECT
+	 di atribut inputnya.
+	 HOOKS yang AFTER_INPUT dijalankan pada saat kursor akan keluar
+	 dari field tersebut tetapi sesudah EDITS dijalankan dulu. Dengan
+	 kata lain, EDITS akan dijalankan SEBELUM HOOKS yang AFTER_INPUT.
+	 Pada saat kursor keluar dari satu field, semua HOOKS yang AFTER_INPUT
+	 untuk field itu akan dijalankan sesuai dengan urutan dari atas kebawah.
+	 Bila ada satu dari HOOKS tersebut gagal (masuk ke bagian ELSE dari
+	 HOOKS) maka perintah perintah HOOKS selanjutnya TIDAK dijalankan.
+	 Bila tidak ada ELSE, perintah HOOKS selanjutnya tetap dijalankan.
+
+	</PRE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x243.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x251.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>LOCAL</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c173.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>CALCS</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

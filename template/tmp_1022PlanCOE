@@ -1,0 +1,190 @@
+IMAGE(tmptranst)
+/--------------------------------------------------------------------\
+ /------------------------------------------------------------------\
+    t.NoBukti	    : _________________
+    t.KodeICQ	    : _________________
+    t.Ketuatim 	    : _______  ________
+    t.Auditor1 	    : _______  ________
+    t.Auditor2	    : _______  ________ 
+    t.Auditor3	    : _______  ________ 
+    t.Auditor4	    : _______  ________ 
+    t.Auditor5	    : _______  ________ 
+    t.Bisnisperiksa : ________________  
+    t.Auditee	    : ________________ 
+    t.Parameter	    : _____________________ 
+    t.RinciParam    : __________________________________
+    t.PlnMul	    : _________________
+    t.Planselesai   : _________________
+    t.LmPeriksa	    : _________________
+    t.HariEff	    : _________________
+    t.ActSelesai    : _________________
+                        ____
+ \------------------------------------------------------------------/
+ ___________
+\--------------------------------------------------------------------/
+
+IMAGE(tmptrans)
+
+FIELDS(tmptranst)
+tldnobuk	PROTECT 	                 	INPUTRI 1
+tldukrwrn	PROTECT							INPUTRI 1
+tldlok      ALLCAPS                      	INPUTRI 2
+lnamaketua  PROTECT                      	INPUTRI 3
+tldplg		ALLCAPS		                 	INPUTRI 4
+lnamaaud	PROTECT		                 	INPUTRI 5
+tldkirim	ALLCAPS		                 	INPUTRI 6
+lnamaaud2	PROTECT		                 	INPUTRI 7
+tldstr1		ALLCAPS		                 	INPUTRI 6
+lnamaaud3	PROTECT		                 	INPUTRI 7
+tldstr2		ALLCAPS		                 	INPUTRI 6
+lnamaaud4	PROTECT		                 	INPUTRI 7
+tldstr3		ALLCAPS		                 	INPUTRI 6
+lnamaaud5	PROTECT		                 	INPUTRI 7
+tlddvs		NOCHANGE						INPUTRI 8
+tldkat		NOCHANGE	                 	INPUTRI 8
+tldsat 		NOCHANGE	                 	INPUTRI 9
+lrinparam	PROTECT							INPUTRI 9
+tldtgl2		ALLCAPS	NOLIMIT {DD-MM-YYYY} 	INPUTRI 10
+tldtglfak	ALLCAPS	NOLIMIT {DD-MM-YYYY} 	INPUTRI 11
+tldjml		PROTECT		                 	INPUTRI 12
+tldhrg		PROTECT     	             	INPUTRI 13
+tldtgl3		PROTECT NOLIMIT {DD-MM-YYYY}	INPUTRI 14
+lenter      NOCHANGE                     	INPUTRI 14
+
+ltomfactfind	TOMBOL						INPUTRI 15
+
+DEFAULTS(tmptranst)
+ltomfactfind	INIT	"FACT FIND"
+tlddvs			DFALT_SCAN_BLANKS	HMC
+									M2W
+									M4W
+									H2
+									DLP
+									EXPRESS
+									KLIKNSS_SPAREPART
+									KLIKNSS_HMC
+									KLIKNSS_M2W
+									KLIKNSS_HMCM2W
+									KLIKNSC
+									MGA
+									FURNITURE_IVARO
+
+EDITS(tmptranst)
+e.Validate	        tldlok		     VALIDATE psistsdepkod mpsid spsi {Pgv_INPG} {PlAUDITQA}
+e.Validate	        tldplg		     VALIDATE psistsdepkod mpsid1 spsi {Pgv_INPG} {PlAUDITQA}
+e.Validate          tldkirim         VALIDATE psistsdepkod mpsid2 spsi {Pgv_INPG} {PlAUDITQA}
+e.Validate          tldstr1          VALIDATE psistsdepkod mpsid3 spsi {Pgv_INPG} {PlAUDITQA}
+e.Validate          tldstr2          VALIDATE psistsdepkod mpsid4 spsi {Pgv_INPG} {PlAUDITQA}
+e.Validate          tldstr3          VALIDATE psistsdepkod mpsid5 spsi {Pgv_INPG} {PlAUDITQA}
+e.Mandatory			tldstr3 		 MANDATORY_IF cksgsmua
+e.Mandatory			tldkat			 MANDATORY
+e.Mandatory			tldsat			 MANDATORY
+t.DivPeriksa        tldkat           VALIDATE_IF cdvshmc tbddatkodidx mtbdsbr stbdon 			{Pgv_dttabel} {Plaudit21} {PlICQHMC}
+t.DivPeriksa        tldkat           VALIDATE_IF cdvsm2w tbddatkodidx mtbdsbr stbdon 			{Pgv_dttabel} {Plaudit21} {PlICQM2W}
+t.DivPeriksa        tldkat           VALIDATE_IF cdvsm4w tbddatkodidx mtbdsbr stbdon 			{Pgv_dttabel} {Plaudit21} {PlICQM4W}
+t.DivPeriksa        tldkat           VALIDATE_IF cdvsh2 tbddatkodidx mtbdsbr stbdon 			{Pgv_dttabel} {Plaudit21} {PlICQH2}
+t.DivPeriksa        tldkat           VALIDATE_IF cdvsdlp tbddatkodidx mtbdsbr stbdon 			{Pgv_dttabel} {Plaudit21} {PlICQDLP}
+t.DivPeriksa        tldkat           VALIDATE_IF cdvsexp tbddatkodidx mtbdsbr stbdon 			{Pgv_dttabel} {Plaudit21} {PlICQEXP}
+t.DivPeriksa        tldkat           VALIDATE_IF cdvskliknssp tbddatkodidx mtbdsbr stbdon 		{Pgv_dttabel} {Plaudit21} {PlICQKLIKNSSP}
+t.DivPeriksa        tldkat           VALIDATE_IF cdvskliknsshmc tbddatkodidx mtbdsbr stbdon 	{Pgv_dttabel} {Plaudit21} {PlICQKLIKNSSHMC}
+t.DivPeriksa        tldkat           VALIDATE_IF cdvskliknssm2w tbddatkodidx mtbdsbr stbdon 	{Pgv_dttabel} {Plaudit21} {PlICQKLIKNSSM2W}
+t.DivPeriksa        tldkat           VALIDATE_IF cdvskliknsshmcm2w tbddatkodidx mtbdsbr stbdon 	{Pgv_dttabel} {Plaudit21} {PlICQKLIKNSSHMCM2W}
+t.DivPeriksa        tldkat           VALIDATE_IF cdvskliknschmc tbddatkodidx mtbdsbr stbdon 	{Pgv_dttabel} {Plaudit21} {PlICQKLIKNSCHMC}
+t.DivPeriksa        tldkat           VALIDATE_IF cdvsmga tbddatkodidx mtbdsbr stbdon 			{Pgv_dttabel} {Plaudit21} {PlICQMGA}
+t.DivPeriksa        tldkat           VALIDATE_IF cdvsfurni tbddatkodidx mtbdsbr stbdon 			{Pgv_dttabel} {Plaudit21} {PlICQFURNI}
+t.ParamPeriksa		tldsat			 VALIDATE_IF cdvshmc tbtdatkodtyp mtbtparam stbt 			{Pgv_dttabel} {Plaudit21} {PlICQHMC} {Ptldkat} {Pgv_dttabel21}
+t.ParamPeriksa		tldsat			 VALIDATE_IF cdvsm2w tbtdatkodtyp mtbtparam stbt 			{Pgv_dttabel} {Plaudit21} {PlICQM2W} {Ptldkat} {Pgv_dttabel21}
+t.ParamPeriksa		tldsat			 VALIDATE_IF cdvsm4w tbtdatkodtyp mtbtparam stbt 			{Pgv_dttabel} {Plaudit21} {PlICQM4W} {Ptldkat} {Pgv_dttabel21}
+t.ParamPeriksa		tldsat			 VALIDATE_IF cdvsh2	 tbtdatkodtyp mtbtparam stbt 			{Pgv_dttabel} {Plaudit21} {PlICQH2} {Ptldkat} {Pgv_dttabel21}
+t.ParamPeriksa		tldsat			 VALIDATE_IF cdvsdlp tbtdatkodtyp mtbtparam stbt 			{Pgv_dttabel} {Plaudit21} {PlICQDLP} {Ptldkat} {Pgv_dttabel21}
+t.ParamPeriksa		tldsat			 VALIDATE_IF cdvsexp tbtdatkodtyp mtbtparam stbt 			{Pgv_dttabel} {Plaudit21} {PlICQEXP} {Ptldkat} {Pgv_dttabel21}
+t.ParamPeriksa		tldsat			 VALIDATE_IF cdvskliknssp	tbtdatkodtyp mtbtparam stbt 	{Pgv_dttabel} {Plaudit21} {PlICQKLIKNSSP} {Ptldkat} {Pgv_dttabel21}
+t.ParamPeriksa		tldsat			 VALIDATE_IF cdvskliknsshmc	tbtdatkodtyp mtbtparam stbt 	{Pgv_dttabel} {Plaudit21} {PlICQKLIKNSSHMC} {Ptldkat} {Pgv_dttabel21}
+t.ParamPeriksa		tldsat			 VALIDATE_IF cdvskliknssm2w	tbtdatkodtyp mtbtparam stbt 	{Pgv_dttabel} {Plaudit21} {PlICQKLIKNSSM2W} {Ptldkat} {Pgv_dttabel21}
+t.ParamPeriksa		tldsat			 VALIDATE_IF cdvskliknsshmcm2w	tbtdatkodtyp mtbtparam stbt {Pgv_dttabel} {Plaudit21} {PlICQKLIKNSSHMCM2W} {Ptldkat} {Pgv_dttabel21}
+t.ParamPeriksa		tldsat			 VALIDATE_IF cdvskliknschmc	tbtdatkodtyp mtbtparam stbt 	{Pgv_dttabel} {Plaudit21} {PlICQKLIKNSCHMC} {Ptldkat} {Pgv_dttabel21}
+t.ParamPeriksa		tldsat			 VALIDATE_IF cdvsmga	tbtdatkodtyp mtbtparam stbt 		{Pgv_dttabel} {Plaudit21} {PlICQMGA} {Ptldkat} {Pgv_dttabel21}
+t.ParamPeriksa		tldsat			 VALIDATE_IF cdvsfurni 	tbtdatkodtyp mtbtparam stbt 		{Pgv_dttabel} {Plaudit21} {PlICQFURNI} {Ptldkat} {Pgv_dttabel21}
+e.Mandatory			tldtgl2			 MANDATORY
+e.Mandatory			tldtglfak		 MANDATORY
+
+HOOKS(tmptranst)
+BEFORE_INPUT	cur_field=tldlok	DO_MAP SHOW mtldurut
+AFTER_INPUT		cur_field=tldtglfak	DO_MAP SHOW mlamahari
+
+AFTER_INPUT   	cur_field=tldlok        DO_MAP SHOW
+			    IF csamaaud mdum
+			    ELSE HKCURSOR STAY
+			    HKMSG SDM tidak sesuai dengan SDM PENUGASAN
+
+AFTER_INPUT   	cur_field=tldplg        DO_MAP SHOW
+			    IF csamaaud0 mdum
+			    ELSE HKCURSOR STAY
+			    HKMSG SDM tidak sesuai dengan SDM PENUGASAN
+
+AFTER_INPUT   	cur_field=tldkirim        DO_MAP SHOW
+			    IF csamaaud1 mdum
+			    ELSE HKCURSOR STAY
+			    HKMSG SDM tidak sesuai dengan SDM PENUGASAN
+				
+AFTER_INPUT   	cur_field=tldstr1        DO_MAP SHOW
+			    IF csamaaud2 mdum
+			    ELSE HKCURSOR STAY
+			    HKMSG SDM tidak sesuai dengan SDM PENUGASAN
+
+AFTER_INPUT   	cur_field=tldstr2        DO_MAP SHOW
+			    IF csamaaud3 mdum
+			    ELSE HKCURSOR STAY
+			    HKMSG SDM tidak sesuai dengan SDM PENUGASAN
+
+AFTER_INPUT   	cur_field=tldstr3        DO_MAP SHOW
+			    IF csamaaud4 mdum
+			    ELSE HKCURSOR STAY
+			    HKMSG SDM tidak sesuai dengan SDM PENUGASAN
+
+AFTER_INPUT   	cur_field=tldplg        DO_MAP SHOW
+			    IF cjgnsama mdum
+			    ELSE HKCURSOR STAY
+			    HKMSG NIP SDM sudah ada
+
+AFTER_INPUT   	cur_field=tldkirim        DO_MAP SHOW
+			    IF cjgnsama0 mdum
+			    ELSE HKCURSOR STAY
+			    HKMSG NIP SDM sudah ada
+
+AFTER_INPUT   	cur_field=tldstr1        DO_MAP SHOW
+			    IF cjgnsama1 mdum
+			    ELSE HKCURSOR STAY
+			    HKMSG NIP SDM sudah ada
+
+AFTER_INPUT   	cur_field=tldstr2        DO_MAP SHOW
+			    IF cjgnsama2 mdum
+			    ELSE HKCURSOR STAY
+			    HKMSG NIP SDM sudah ada
+
+AFTER_INPUT   	cur_field=tldstr3        DO_MAP SHOW
+			    IF cjgnsama3 mdum
+			    ELSE HKCURSOR STAY
+			    HKMSG NIP SDM sudah ada
+
+CLICKED         cur_field=ltomfactfind    DO_FLY IF copmeetok 1025 m1025x
+
+MAP(m1025x)
+tlmnobuk       	r_string1       REPLACE
+tldukrwrn		r_string2		REPLACE
+tldcab			r_string3		REPLACE
+tlmthbl			r_string4		REPLACE
+tlmuntuk		r_string5		REPLACE
+                
+SUBFILE(tmptrans)
+SFL_LINES(1)
+SFL_TITLE(tmptranst)
+SFL_SORT_BY_FIELD tldnourt
+SFL_TARGET
+    tldbukbrglok   tlmnobuk lPLANCOE
+SFL_MAP
+lPLANCOE		tlddata			REPLACE
+tlmnobuk       	tldnobuk       	REPLACE
+gv_INPG        	tldsts         	REPLACE
+lPLANCOE    	tldbrg         	REPLACE
+tlmcab			tldcab			REPLACE

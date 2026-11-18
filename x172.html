@@ -1,0 +1,223 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>DBCALCS</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Langkah2 Untuk Membuat Program Dengan Bahasa K-System (K-Language)"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Tipe Program &#38; 19 Perintah Bahasa K-System"
+HREF="c57.html"><LINK
+REL="PREVIOUS"
+TITLE="MASTER_MP"
+HREF="x168.html"><LINK
+REL="NEXT"
+TITLE="SPCALCS"
+HREF="x176.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Langkah2 Untuk Membuat Program Dengan Bahasa K-System (K-Language)</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x168.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 6. Tipe Program &#38; 19 Perintah Bahasa K-System</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x176.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN172"
+>6.15. DBCALCS</A
+></H1
+><P
+>&#13;   Perintah ini berfungsi untuk menambah, mengubah atau menghapus SATU rekord yang ada di 
+      hard-disk sesuai type perintah yang dipakai. Selain itu ada fungsi lain untuk mengecek keberadaan 
+      rekord tertentu (DBC_COMMAND JOIN) atau menghitung sekumpulan rekord (SCANSCAN).
+	</P
+><PRE
+CLASS="programlisting"
+>&#13;   Cara memakai:
+DBCALCS(namaDbcalcs)
+         1.DBC_COMMAND  ADD/ADD_NO_CLEAR  /* Menambah 1 record data */
+           DBC_FILE     namaFile   /* misal: ppm/pmb/bkm */
+           DBC_MAP      namaMap    /* misal: maddppm */
+           DBC_COND     namaCalc   /* isi dengan kondisi jika ada*/
+
+         2.DBC_COMMAND  UPDATE/UPDATE_BUF3/UPDATE_UPDATE_LT  /*Mengubah 1 record data */
+           DBC_TARGET   namaIndex  namaField1/lokal1 namaField2/lokal2 ...
+           DBC_MAP      namaMap    /* misal: mupdppm */
+           DBC_COND     namaCalc   /* isi dengan kondisi jika ada*/
+
+         3.DBC_COMMAND  DELETE /*Menghapus 1 record data */
+           DBC_TARGET   namaIndex  namaField1/lokal1 namaField2/lokal2 ...
+           DBC_COND     namaCalc   /* isi dengan kondisi jika ada*/
+           
+         4.DBC_COMMAND       UPDATE_RANGE  /*Mengubah beberapa record data */
+           DBC_TARGET        namaIndex  namaField1_awal/lokal1_awal namaField2_awal/lokal2_awal ...
+           DBC_LAST_TARGET   namaIndex  namaField1_akhir/lokal1_akhir namaField2_akhir/lokal2_akhir ...
+	   DBC_SELECT        NamaCalc  /* Dari data range tsb, jika perlu di seleksi lagi */
+           DBC_MAP           namaMap    /* misal: mupdppm */
+           DBC_COND          namaCalc   /* isi dengan kondisi jika ada*/
+
+         5.DBC_COMMAND       DELETE_RANGE  /*Menghapus beberapa record data */
+           DBC_TARGET        namaIndex  namaField1_awal/lokal1_awal namaField2_awal/lokal2_awal ...
+           DBC_LAST_TARGET   namaIndex  namaField1_akhir/lokal1_akhir namaField2_akhir/lokal2_akhir ...
+	   DBC_SELECT        NamaCalc  /* Dari data range tsb, jika perlu di seleksi lagi */
+           DBC_COND          namaCalc   /* isi dengan kondisi jika ada*/
+
+         6.DBC_COMMAND       JOIN/JOIN_LAST_SFL/JOIN_LT   /*Mengecek data */
+           DBC_TARGET        namaIndex  namaField1/lokal1 namaField2/lokal2 ...  /* Index boleh DUP*/
+           DBC_MAP           namaMap    /* Nama Map Jika ada */
+
+         7.DBC_COMMAND	     ADD_SUBSTITUTE /* Menambah nomor urut/bukti otomatis */
+	   DBC_FILE	     namaFile
+	   DBC_MAP           namaMap
+	   DBC_PREFIX        prefix
+	   DBC_LAST_LEN      panjangDigit atau {namaField}
+	   DBC_LAST_TARGET   namaIndex	namaField
+	    ** Hrs dengan perintah di bagian POSTING(master/trans/trans2) menggunakan PST_SUB_ADDCMD 
+
+         8.DBC_COMMAND	     MAPMAP         /* Menambah nomor urut/bukti otomatis */
+	   DBC_MAP           namaMap
+
+	   Fungsi: Menjalankan MAP dengan melalui DBCALCS. Fungsi ini dibutuhkan karena 
+	             SPCALCS hanya dapat melaksanakan DBCALCS dan tidak MAP. Maka untuk 
+		     memberikan fasilitas MAP pada SPCALCS, DBCALCS dengan tipe MAPMAP diadakan.
+
+	   
+         9.DBC_COMMAND       SCANSCAN
+           DBC_TARGET        namaIndex  namaField1_awal/lokal1_awal namaField2_awal/lokal2_awal ...
+	   DBC_SCAN_COND     namaCalcs /* Kondisi untuk mengecek ** apakah rekord ditambahkan 
+				          ke SUM_FIELD atau tidak */
+	   DBC_SUM_MAP       namaMap   /* Menjumlah lewat MAP */
+		             Map dari scan ini akan menjumlah ke field
+		             tujuan, baik itu REPLACE maupun DO_CALC. Bila ada
+		             field yang bukan total, misalnya harga rata yang dihitung
+		             sesudah  DBC_SUM_MAP, gunakan DBC_MAP yang akan dijalankan
+		             sesudah DBC_SUM_MAP ini..
+
+	 /* khusus SCAN ada fasilitas tambahan lainnya*/
+	 DBC_SCAN       namaScan  /* scan harus diatas dbcalcs ini */
+	 DBC_SUM_FIELD  namaField/namaCalcs  /* hasil masuk r_double8 */
+	 DBC_SUM_FIELD2 namaField/namaCalcs /* hasil masuk r_double7 */
+	 DBC_SUM_FIELD3 namaField/namaCalcs  /* hasil masuk r_double6 */
+	 DBC_SUM_FIELD4 namaField/namaCalcs  /* hasil masuk r_double5 */
+	 DBC_SCAN_IMAGE namaImage /* ditampilkan di layar ** bila run -d */
+         DBC_LAST_TARGET namaIndex  namaField/lokal namaField/lokal ..
+	 				/* batas akhir dari scan */
+         DBC_JOIN_TARGET   namaIndex  namaField/lokal 
+ 
+	</PRE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x168.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x176.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>MASTER_MP</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c57.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>SPCALCS</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

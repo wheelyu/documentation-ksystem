@@ -1,0 +1,26 @@
+IMAGE(tmptranst)
+/-----------------------------------------------\
+|t.TujuanJabatan                                |
+|/------------t--------------------------------\|
+||t.Jabatan   |t.TujuanJabatan                 ||
+|\------------.--------------------------------/|
+\-----------------------------------------------/
+
+IMAGE(tmptrans)
+!|____________|_________________________________|
+
+FIELD(tmptrans)
+spknobuk    PROTECT        INPUTRI         1
+spknote     TEXTAREA PROTECT                INPUTRI         2
+
+CALCS()
+cdettujuan  tmpkode=="TUJUAN"
+
+SUBFILE(tmptrans)
+SFL_TITLE(tmptranst)
+SFL_SORT_BY_FIELD spkjrk
+SFL_COND cdettujuan
+
+SFL_LINES(6)        /* Jml record yang kelihatan di layar */
+SFL_TARGET
+spkdatbuktyp   lDTJOBDESC tbdkode lJD01 

@@ -1,0 +1,258 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>&#13;Membuat Program Pembayaran Hutang
+</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Tutorial Ksystem V2016.09.20"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="Membuat Laporan"
+HREF="x515.html"><LINK
+REL="NEXT"
+TITLE="
+Membuat File Detail
+"
+HREF="x535.html"></HEAD
+><BODY
+CLASS="chapter"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Tutorial Ksystem V2016.09.20</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x515.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x535.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="chapter"
+><H1
+><A
+NAME="AEN522"
+></A
+>Chapter 19. 
+Membuat Program Pembayaran Hutang
+</H1
+><P
+>&#13;Pada bab kali ini kita akan membuat program pembayaran hutang. Program ini akan kita masukkan ke layar 471. Seperti biasa langkah pertama untuk membuat suatu screen adalah dengan membuat file masternya terlebih dahulu. Untuk program pembayaran hutang ini kita akan menggunakan file pbc sebagai file master.</P
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN525"
+>19.1. Membuat File Master</A
+></H1
+><P
+>&#13;Buka editor vi dan ketikkan vi prt9000/sct471. Setelah kita masuk ke layar editor sct471 ketikkan perintah sebagai berikut untuk membuat file master.</P
+><PRE
+CLASS="programlisting"
+>&#13;SCREEN 471 QUERY_TYPE Pembayaran Hutang
+SCR_FILE pbc
+
+LOCAL
+PGM_FIELDS
+ltomdet_d	STRING		20
+ltomdet_2d	STRING		20
+lselisih	DFLOAT		8
+
+IMAGE(master) {BASE_ROW=2} {FRSFLD_BACKUP} {LSTFLD_ADVANCE} {IMG_BOX_COLOR1=250,228,240} {IMG_BOX_COLOR2=208,209,250} {IMG_BOX_COLOR3=150,200,225} {IMG_BOX_COLOR4=191,245,196}
+/---SCT471-----------------------------PEMBAYARAN HUTANG ------------------------------------------\
+| /---------------------------\ /---------------------------------------------\ /----------------\ |
+| |No.Bukti:______________    | |Suplier __ :__________  ______               | |Tanggal:________| |
+| |Cab/Dvs :________ /______  | |Nama       :________________________________ | |Status :_____   | |
+| |Hut.Cab :______            | |Keterangan :________________________________ | |                | |
+| \---------------------------/ \---------------------------------------------/ \----------------/ |
+|  __________________  _________________                          ____           User     :______  |
+|                                                                                                  |
+|                                                                                                  |
+|                                                                                                  |
+|                                                                                                  |
+|                                                                                                  |
+|                                                                                                  |
+|                                                                                                  |
+|                                                                                                  |
+|                                                                                                  |
+|                                                                                                  |
+| /--------TOTAL BAYAR-----------t-----------TOTAL FAKTUR-----------\ /---------SELISIH----------\ |
+| |______________________________|__________________________________| |__________________________| |
+| |                              |                                  | |                          | |
+| |                              |                                  | |                          | |
+| \------------------------------.----------------------------------/ \--------------------------/ |
+\--------------------------------------------------------------------------------------------------/
+
+FIELD(master)
+   pbcnoprc        ALLCAPS          INPUTRI         1
+   pbctype         NOCHANGE         INPUTRI         6
+   pbcsup          ALLCAPS          INPUTRI         7
+   pbcplg          PROTECT          INPUTRI         8  /* juga sebagai pelanggan */
+   pbctgl          NONE {DD-MM-YY}  INPUTRI         12
+
+   pbccab          ALLCAPS SCROLL   INPUTRI         2
+   pbcdvs          ALLCAPS SCROLL   INPUTRI         3
+   supnama         PROTECT          NONE            10
+   pbcsts          ALLCAPS PROTECT  INPUTRI         13
+
+   pbccab2         ALLCAPS SCROLL   INPUTRI         4  /* Hutang Cabang  */
+   pbcket          ALLCAPS SCROLL   INPUTRI         11
+
+
+   ltomdet_d       TOMBOL           INPUTRI         18 /* Tombol Detil d*/
+   ltomdet_2d      TOMBOL           INPUTRI         19 /* Tombol Detil 2d*/
+
+   pbcscr          PROTECT NOCHANGE NONE            20
+   pbccrtusr       PROTECT SCROLL   NONE            20
+   pbctotcek       PROTECT          BIG             21
+   pbctotfak       PROTECT          BIG             22
+   lselisih        PROTECT          BIG             23
+
+CALCS()
+cselisih        pbctotcek - pbctotfak
+
+DEFAULTS(master)
+pbctgl                   INIT           {g_tgltrn}
+pbcscr                   INIT           {g_scrnumstr}
+pbcscr                   INIT_QUERY     {g_scrnumstr}
+ltomdet_d                INIT           "1d.Isi No.Faktur"
+ltomdet_2d               INIT           "2d.Isi Kas/Bank"
+pbctype                  DFALT_LIST     DN LN
+pbcsts                   INIT           OPEN
+pbccrtusr                INIT           {g_usrkode}
+
+EDITS(master)
+tombol d tidak		ltomdet_d	SHOW_SFL trans
+tombol 2d tidak		ltomdet_2d	SHOW_SFL transa
+
+END_SCREEN
+</PRE
+><P
+>&#13;Dengan demikian kita telah membuat file master pembayaran hutang yang sederhana seperti yang terlihat dari gambar di bawah ini. Tambahkan perintah EDIT, DEFAULT, SCAN, HOOK sesuai yang anda inginkan.</P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="gambar11.png"></P
+></DIV
+><P
+>&#13;Sebelum kita melangkah ke langkah selanjutnya yaitu membuat file detail, alangkah baiknya bila kita mengetahui terlebih dahulu field - field pbc yang digunakan di file master ini. </P
+><PRE
+CLASS="programlisting"
+>&#13;nama file	: pbc
+fungsi		: menyimpan bukti pembayaran hutang ke supplier
+pbctype		: type pembayaran hutan ke supplier ( DN:Dalam Negri, LN:Luar Negri )
+pbcscr		: asal screen di mana data diisi
+pbcsts		: OPEN (data belum diposting)
+		  CLSD (data sudah diposting)
+pbctgl		: tanggal pembayaran hutang
+pbcnoprc	: nomor bukti pembayaran hutang
+pbcsup		: kode supplier
+pbctotcek	: total pembayaran hutang
+pbctotfak	: total hutang untuk faktur tersebut
+</PRE
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x515.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x535.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Membuat Laporan</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Membuat File Detail</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,15 @@
+Cara grant database agar bisa di akses oleh ip lain :
+	1. GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'root';
+        2. FLUSH PRIVILEGES;
+
+Pastikan port database nya bisa di akses atau di telnet dari ip lain dengan cara :
+      	1. Cek port dengan cara telnet no_ip 3306
+		Contoh : telnet 172.16.1.48 3306
+ 		      - jika tidak bisa, maka port nya harus di buka dulu 
+		      - jika tidak bisa, cek lagi docker ps -a, cek apakah ada perubahan port disana
+		      - jika ada maka DS nya perlu ditambahin port nya , contoh 198.168.1.37:7996
+
+Cara merubah password mysql root :
+	- update user set password=PASSWORD('password_baru') where User='root';
+	- flush privileges;
+

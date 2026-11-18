@@ -1,0 +1,440 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Daftar Perintah Program Ksystem</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Tutorial Ksystem V2016.09.20"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="Cara install Scanner Sidik Jari Futronic FS80 atau FS88"
+HREF="c144.html"><LINK
+REL="NEXT"
+TITLE="IMAGE"
+HREF="x219.html"></HEAD
+><BODY
+CLASS="chapter"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Tutorial Ksystem V2016.09.20</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="c144.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x219.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="chapter"
+><H1
+><A
+NAME="AEN173"
+></A
+>Chapter 15. Daftar Perintah Program Ksystem</H1
+><P
+>&#13;    Program Ksystem terdiri dari 19 perintah sbb:
+    <P
+></P
+><OL
+TYPE="1"
+><LI
+><P
+>SCREEN</P
+></LI
+><LI
+><P
+>IMAGE</P
+></LI
+><LI
+><P
+>FIELD</P
+></LI
+><LI
+><P
+>EDIT</P
+></LI
+><LI
+><P
+>DEFAULT</P
+></LI
+><LI
+><P
+>RESTRICT</P
+></LI
+><LI
+><P
+>HELP</P
+></LI
+><LI
+><P
+>LOCAL</P
+></LI
+><LI
+><P
+>HOOKS</P
+></LI
+><LI
+><P
+>CALCS</P
+></LI
+><LI
+><P
+>MAP</P
+></LI
+><LI
+><P
+>SUBFILE</P
+></LI
+><LI
+><P
+>SCAN</P
+></LI
+><LI
+><P
+>MASTER_MP</P
+></LI
+><LI
+><P
+>DBCALCS</P
+></LI
+><LI
+><P
+>SPCALCS</P
+></LI
+><LI
+><P
+>POSTING</P
+></LI
+><LI
+><P
+>RTREE</P
+></LI
+><LI
+><P
+>END_SCREEN</P
+></LI
+></OL
+>
+    </P
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN215"
+>15.1. SCREEN</A
+></H1
+><P
+>&#13;	Setiap program Ksystem diawali dengan perintah SCREEN.
+	Perintah SCREEN ini memberi informasi nomor layar, tipe layar dan
+	judul dari layar ini yang akan ditampilkan di sistem menu.
+	</P
+><PRE
+CLASS="programlisting"
+>&#13;	Cara Memakai: SCREEN nomor_layar tipe_layar judul_layar
+
+	Contoh: SCREEN 201 QUERY_TYPE Input Keluar Kas/Bank
+
+	Nomor Layar mempunyai ruang lingkup dari 0 s/d 9999
+	Tipe layar:
+		MENU_TYPE       	Layar tipe menu
+		QUERY_TYPE      	Layar tipe query
+		QUERY_ROOT_TYPE      	Layar tipe query khusus untuk grup ROOT dan grup RI.
+					User lain tidak kelihatan.
+		APPLICATION_TYPE        Layar applikasi
+		APP_TYPE          	sama dengan APPLICATION_TYPE
+		APP_TYPE_NXT          	layar aplikasi untuk posting lanjutan
+		APP_TYPE_NXT_LOOP      	layar aplikasi untuk posting lanjutan
+					dan mampu mengulang ulang layar ini
+					sendiri dengan menggunakan kondisi
+					SCR_LOOP_COND
+		MONITOR_TYPE            Layar monitor
+		REPORT_TYPE             Layar laporan
+	Judul layar dapat diisi sembarang karakter yang dapat dicetak
+
+	Pilihan pada SCREEN:
+	   SCR_FILE  namaFile        
+		Khusus QUERY_TYPE atau MONITOR_TYPE, pilihan ini harus diisi 
+		untuk mengetahui nama dari master file 
+
+	   SCR_QRY_SCAN namaDbcalcs_yang_tipenya_SCANSCAN
+		Scan yang akan dijalankan secara otomatis pada saat query dan
+		pada saat pindah dari satu rekord ke rekord lain. Fungsi
+		utama untuk menghitung total barang dan dimasukkan ke field
+		brg (scr711). 
+
+	   SCR_QRY_SCAN2 namaDbcalcs_yang_tipenya_SCANSCAN
+		Scan 2 yang akan dijalankan secara otomatis pada saat query dan
+		pada saat pindah dari satu rekord ke rekord lain. Fungsi
+		utama untuk menghitung total barang dan dimasukkan ke field
+
+	   SCR_TO_FLY nomor_layar nomor_layar ...
+		Layar layar lain yang dapat "diterbangi" langsung dari
+		layar ini dengan menggunakan tombol 'f' atau 'ctrl-f'
+
+	   RPT_TO_FLY nomor_layar nomor_layar ...
+		Layar layar laporan yang dapat "diterbangi" langsung untuk
+		mencetak rekord yang sudah diquery.
+
+	   SCR_REPORT_IF namaCalcs nomor_layar namaCalcs nomor layar
+		Menjalankan laporan di scr lain lewat tombol 'e'.
+
+	   SCR_NXT_POSTING nomor_layar
+		Pilihan ini memungkinkan untuk melakukan posting dari layar
+		lain sesudah layar ini. Khusus untuk layar dengan tipe APP_TYPE 
+		atau APP_TYPE_NXT
+
+	   SCR_NXT_POSTING_IF namaCalcs nomor_layar namaCalcs nomor layar
+		Pilihan ini memungkinkan untuk melakukan posting dari layar
+		lain sesudah layar ini. Khusus untuk layar dengan tipe APP_TYPE.
+		Calcs dicek dari yang pertama. Bila ada satu calcs yang sudah
+		memenuhi syarat, layar di sampingnya akan dijalankan.
+		Sesudah layar terakhir, otomatis akan kembali ke layar ini
+		(seperti 'g' di layar query).
+		Tidak boleh bersamaan dengan SCR_NXT_POSTING.
+
+	   SCR_NXT_MAP namaMap
+		Map yang dilakukan sebelum pindah ke layar lain untuk melakukan
+		POSTING lagi.
+
+	   SCR_IMAGE_MAP namaMap
+		Map yang dilakukan untuk memilih tipe dari master 
+		dengan mengubah variabel global g_master_type.
+		Isinya  boleh 'a' s/d 'z'. Bila diisi 'a'
+		maka harus ada IMAGE(mastera) dan master2a bila
+		ada layar kedua.
+
+           SCR_ENTER_COND namaCalcs 	   
+		Kondisi untuk masuk ke layar ini, bila gagal pesan di
+		SCR_ENTER_MSG akan dikeluarkan
+
+	   SCR_ENTER_MSG Pesan
+		Pesan yang dikeluarkan bila gagal masuk ke layar karena tidak
+		memenuhi SCR_ENTER_COND
+
+	   SCR_NXT_COND namaCalcs
+		Kondisi untuk melakukan posting secara otomatis dengan
+		pilihan 'g' di layar query, juga berlaku untuk layar
+		APPLICATION_TYPE.
+
+	   SCR_NXT_MSG Pesan anda bila kondisi 'g' tidak memenuhi.
+
+	   SCR_APR_COND NamaCalcs
+		Kondisi untuk melakukan approval secara otomatis dengan
+		pilihan 'v' di layar query.
+	   SCR_APR NamaCalcs
+	   	Perintah ini menjalankan proses approval lewat calcs.
+		Calcs ini harus memanggil ap_apprv.
+	   SCR_APR_TRANS Nama_trans,  mis SCR_APR_TRANS transb
+	   SCR_APR_MSG Pesan anda bila kondisi 'v' tidak memenuhi.
+
+	   SCR_LOOP_COND namaCalcs
+		Kondisi ini berfungsi
+		pada layar APP_TYPE_NXT_LOOP yang akan mengulang-ulang
+		layar ini hingga kondisi ini gagal. Pada saat kondisi
+		ini gagal, layar di SCR_NXT_POSTING akan dijalankan.
+
+	   SCR_READ_DVS_UMUM
+		Kondisi ini bila diset akan membuat program membaca
+		rekord dvs dengan target UMUM dan index dvskodidx yang
+		tidak boleh duplikat. Bila rekord tidak ditemukan, pesan
+		ditampilkan dan tidak bisa masuk ke layar ini.
+
+	   SCR_TGLTRN_PASS_OK
+		Bila ststrntoday diisi "Y" dan g_tgltrn &#60;&#62; SYSDATE maka
+		program tidak bisa masuk ke layar query maupun aplikasi.
+		Pilihan ini memungkinkah untuk tetap masuk ke layar
+		walaupun g_tgltrn &#60;&#62; SYSDATE. Pilihan ini juga memungkinkan
+		untuk masuk ke layar walau stsbintang berisi 'Y'.
+
+	   SCR_CHDIR namaDirektori atau SCR_CHDIR {namaVariabel}
+		Pindah ke direktori sebelum masuk ke layar ini. Mis.
+		SCR_CHDIR 9999 (harus nomor) atau SCR_CHDIR {r_string2},
+		berarti pindah ke dir 9999 atau ke dir isian dari r_string2
+		seperti kita menjalankan cd coba. Sesudah selesai dengan 
+		scr ini, direktori tetap di dir coba sampai program 
+		menjalankan scr yang SCR_CHDIR 0 untuk kembali ke dir semula.
+		Struktur di dir harus sama dengan dir 0. Khusus untuk layar
+		layar lanjutan tipe aplikasi pada saat posting atau 
+		RT_NXT_POSTING, sesudah posting akan kembali ke direktori asal.
+
+	   SCR_LOG = SCRLOG_ADD + SCR_LOG_UPD + SCR_LOG_DEL
+		Perintah ini akan membuat semua perubahan, penghapusan
+		dan penambahan rekord baru di layar ini (khusus untuk
+		QUERY_TYPE) dicatat di LOG.dat yang dapat dilihat
+		melalui scr961
+
+	   SCR_LOG_ADD, SCR_LOG_UPD, SCR_LOG_DEL
+	        Perintah ini sama seperti SCR_LOG tapi khusus untuk ADD, UPDATE
+		dan DELETE.
+
+	   SCR_APP_DIR_OK  (khusus APP_TYPE)
+		Posting boleh dijalankan walaupun berada di subdir (mis.9802)
+
+	   SCR_G_POSTING   (khusus APP_TYPE)
+		Menjalankan 'g' seperti di layar query, pada saat rekam
+		di layar ini, layar selanjutnya akan otomatis dijalankan
+		tanpa perlu merekam lagi.
+
+           SCR_POS
+	   	Membuat layar QUERY_TYPE menjadi layar QUERY_TYPE_POS 
+		(mis.scr531).
+
+           SCR_AUTO_ADD_MST
+	   	Pilihan ini membuat pada saat menekan end di master akan
+		otomatis turun ke detail1 dan langsung pada posisi tambah.
+		Demikian juga sesudah menambah di detail1 akan pada posisi
+		tambah lagi masih di detail1.
+
+	   SCR_JOIN_IF namaCalcs
+	        Kondisi untuk menjalankan SCR_JOIN.
+
+	   SCR_JOIN_COND namaCalcs
+	        Kondisi di SCR_JOIN tidak boleh mengandung field dari rekord
+		yang dijoin (SCR_JOIN_FIELD2).
+
+	   SCR_JOIN_FIELD1 namaField
+
+	   SCR_JOIN_FIELD2 namaJoinField
+	        Satu pasang pilihan di atas berfungsi untuk menggabung
+		file yang sedang diquery dengan file yang ingin dijoin
+		dengan perintah namaField = namaJoinField.
+		Dengan perintah ini semua field yang termasuk di file yang
+		dijoin akan ikut dalam pencarian (tidak diloncati).
+
+	   SCR_JRNFLD namaField
+	   	Mis. bkknum
+	   	Field ini akan berisi nama field utama yang tidak duplikat
+		yang akan dipakai untuk membuat jurnal percobaan (F2) di 
+		laporan scr144.rts.
+
+	   SCR_QRYFLD jrnpst
+	   	1. Ini dipakai untuk membuat jurnal percobaan (F2) untuk 
+		   memberitahu bahwa field penghubung di jrn adalah jrnpst, 
+		   bila tidak ada pilihan ini maka field penghubung adalah 
+		   jrnnomut. 
+		2. Untuk layar query yang batal posting (SCR_BATALPST), 
+		   pilihan ini sebagai field penghubung guna mencari semua jrn 
+		   yang jrnpstnya (dengan memakai index jrnpstmutidx) supaya 
+		   semua jurnal dengan jrnpst yang sama akan dihapus.
+		3. Bila tidak ada pilihan ini, maka field penghubung adalah 
+		   jrnnomut dengan index jrnmutidx.
+
+	   SCR_BATALPST untuk memberi tahu bahwa SCREEN untuk batal posting, 
+	       SCR_FILE harus btl.  Variabel global g_batalpst akan terisi 1 
+	       di saat proses batal posting. Semua calcs akan diubah + jadi -
+	       dan sebaliknya kecuali nama calcs diawali dengan ct_. Jurnal
+	       yang terbentuk pada saat posting akan dihapus.
+
+	   SCR_VOIDPST sama dengan SCR_BATALPST tapi jurnal yang terbentuk
+	       pada saat posting tidak dihapus, tapi jurnal balik akan
+	       ditambahkan untuk mengimbangkan (mengoffset) jurnal pada saat
+	       posting.
+
+           SCR_NO_REKAM akan membuat pada saat kita menekan tombol End di
+	       layar APP_TYPE, kita tidak perlu lagi menekan tombol (R)ekam.
+	</PRE
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="c144.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x219.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Cara install Scanner Sidik Jari Futronic FS80 atau FS88</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>IMAGE</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

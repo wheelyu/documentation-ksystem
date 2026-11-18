@@ -1,0 +1,246 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>&#13;	Mengenal Perintah HOOKS, CALCS dan MAP
+	</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Tutorial Ksystem V2016.09.20"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Membuat Program Kas Keluar"
+HREF="c290.html"><LINK
+REL="PREVIOUS"
+TITLE="
+	Mengenal Perintah DEFAULT 
+	"
+HREF="x337.html"><LINK
+REL="NEXT"
+TITLE="
+	Mengenal Perintah EDIT
+	"
+HREF="x355.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Tutorial Ksystem V2016.09.20</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x337.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 16. Membuat Program Kas Keluar</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x355.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN346"
+>16.4. Mengenal Perintah HOOKS, CALCS dan MAP</A
+></H1
+><P
+>&#13;	Perintah HOOKS menjalankan program pada saat kursor masuk
+	ke field tertentu atau keluar dari field tertentu atau pada
+	saat tombol End ditekan. 
+	</P
+><P
+>&#13;	Perintah CALCS menghitung nilai tertentu. Nilai yang dihasilkan bisa benar (1) atau
+	salah (0) atau nilai tertentu. Nama CALCS ada di setiap baris, jadi contoh di bawah
+	ini ada 2 CALCS dengan nama cBLANKS dan cbknPU.
+	<P
+CLASS="literallayout"
+><br>
+CALCS()<br>
+c0		0<br>
+cBLANKS	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BLANKS<br>
+cbknPU&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	bkktype&nbsp;!=&nbsp;"PU"<br>
+	</P
+>
+	</P
+><P
+>&#13;	Perintah MAP adalah perintah
+	untuk mengisi satu field dengan satu nilai tertentu. 
+	Nama dari MAP adalah di dalam kurung misalnya 
+	<P
+CLASS="literallayout"
+><br>
+MAP(mmut)<br>
+c0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	bkkjmlmut&nbsp;&nbsp;&nbsp;	DO_CALC<br>
+bkkjmlmut&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bkkjmlsls&nbsp;&nbsp;&nbsp;&nbsp;	REPLACE<br>
+cBLANKS		bbmket	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DO_CALC<br>
+	</P
+>
+	menunjukkan MAP dengan nama mmut. MAP mmut ini mengandung 3 baris perintah yang
+	akan dijalankan pada saat perintah MAP mmut ini dipanggil. Baris
+	pertama akan menghitung c0 yang hasilnya adalah 0 dan memasukkan angka 0 ini ke
+	dalam field bkkjmlmut. Baris ke dua akan mengopi langsung isian bkkjmlmut ke bkkjmlsls
+	dan baris ke tiga akan mengosongkan field bbmket karena cBLANKS yang isinya BLANKS atau
+	kosong dikopikan ke bbmket. 
+	Tuliskan perintah di bawah ini di atas perintah END_SCREEN.
+	</P
+><PRE
+CLASS="programlisting"
+>&#13;/*-----------------------HOOKS(master)--------------------------*/
+CALCS()
+cPUbknBPO	bkktype == "PU" &#38;&#38; bkkstsexp != "BPO" &#38;&#38; bkkstsexp != "BT " &#38;&#38; bkkstsexp != "BC "
+
+cbkknobbm0      bkknobbm == BLANKS 
+c0              0
+cBLANKS	        BLANKS
+cbknPU     	bkktype != "PU"
+
+MAP(mmut)
+c0      	bkkjmlmut   	DO_CALC
+bkkjmlmut       bkkjmlsls    	REPLACE
+cBLANKS		bbmket	     	DO_CALC
+
+CALCS()
+cotY       	stsnokk == "Y"
+cnomer     	STRIP(dvsnokk) + THBLS(bkktgl) + "-"
+cnomer2     	STRIP(dvsnobk) + THBLS(bkktgl) + "-"
+ctypaddKS    	g_curcmd == 1 &#38;&#38; stsnokk =="Y" &#38;&#38; bkkkb == "KS"
+ctypaddBK    	g_curcmd == 1 &#38;&#38; stsnokk =="Y" &#38;&#38; bkkkb == "BK"
+cBI		"BI"
+csatu           1
+ctypePUPP	bkktype == "PU" || bkktype == "PP"
+cyt16T     	stsyt16 == "T"
+
+MAP(mnomer)
+cnomer         	bkknum   	DO_CALC_IF ctypaddKS
+cnomer2        	bkknum   	DO_CALC_IF ctypaddBK
+cBLANKS        	bkkkode  	DO_CALC_IF cPUbknBPO
+cBI	       	bkkstsexp  	DO_CALC_IF cbknPU
+
+MAP(mpin)
+bkkjmlmut     bkkjmlsls    REPLACE
+
+HOOKS(master)
+BEFORE_INPUT	cur_field=bkknum  	DO_SKIP_IF cotY  
+BEFORE_INPUT	cur_field=bkkkode 	DO_SKIP_IF cPUbknBPO
+BEFORE_INPUT	cur_field=bkkstsexp  	DO_SKIP_IF cbknPU
+BEFORE_INPUT	cur_field=bkktgl  	DO_SKIP_IF cyt16T
+BEFORE_INPUT	cur_field=bkknama  	DO_SKIP_IF ctypePUPP
+BEFORE_INPUT	cur_field=bkkjmlmut 	DO_SKIP_IF cbkknobbm0
+BEFORE_INPUT    cur_field=bkktotal   	DO_SKIP_IF csatu  
+AFTER_INPUT	cur_field=bkktgl   	DO_MAP SHOW IF cotY mnomer
+AFTER_INPUT	cur_field=bkktype  	DO_MAP SHOW IF cotY mnomer
+AFTER_INPUT	cur_field=bkkkb    	DO_MAP SHOW IF cotY mnomer
+AFTER_INPUT 	cur_field=bkknobbm      DO_MAP SHOW IF cbkknobbm0 mmut
+AFTER_INPUT 	cur_field=bkkjmlmut     DO_MAP SHOW mpin
+
+	</PRE
+><P
+>&#13;	Sesudah berhasil melakukan kspar prt9000/sct271, coba perhatikan
+	bahwa pada saat kita menambah rekord dengan menekan tombol 't'
+	maka field langsung berada di field Jenis (bkktype). Ini terjadi
+	karena field bkknum diSKIP atau dilewati.
+	</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x337.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x355.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Mengenal Perintah DEFAULT</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c290.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Mengenal Perintah EDIT</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

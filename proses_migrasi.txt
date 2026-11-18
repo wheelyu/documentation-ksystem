@@ -1,0 +1,9 @@
+1. Import data ppm kstex ke pik ksweb
+	a. Masuk ke layar 925
+	b. Ketik pik / pilih pik
+	c. Tunggu sampai proses selesai
+	d. Masuk ke prompt 80
+	e. ambil file pik.txt copy kan ke production
+	f. login ke ksweb kemudian proses dengan layar 3020
+	g. Selesai
+

@@ -1,0 +1,228 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>FIELD</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Tutorial Ksystem V2016.09.20"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Daftar Perintah Program Ksystem"
+HREF="c173.html"><LINK
+REL="PREVIOUS"
+TITLE="IMAGE"
+HREF="x219.html"><LINK
+REL="NEXT"
+TITLE="EDIT"
+HREF="x227.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Tutorial Ksystem V2016.09.20</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x219.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 15. Daftar Perintah Program Ksystem</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x227.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN223"
+>15.3. FIELD</A
+></H1
+><P
+>&#13;	Perintah ini menjelaskan tampilan garis-garis bawah yang ada
+	di IMAGE. Perintah ini juga mengatur apakah input akan menjadi
+	huruf besar, hanya menerima angka, menampilkan huruf besar dan
+	mengontrol urutan perpindahan field pada saat kita menekan tombol
+	enter.
+	</P
+><PRE
+CLASS="programlisting"
+>&#13;FIELD(master/trans/trans2)
+
+   Cara memakai:
+   Nama field   Atribut input       Atribut output   Urutan Kursor
+
+   contoh:
+      IMAGE(master)
+      /-------------------------\
+      |  Nama: _________        |
+      \-------------------------/
+
+      FIELD(master)
+         plgnama    ALLCAPS      INPUTRI   1
+
+   Pilihan Atribut Input
+      NONE 		- normal
+      NOCHANGE 		- Field tidak bisa diubah
+      NUMERIC 		- Hanya angka yang diterima
+      ALPHANUMERIC 	- Hanya angka dan huruf a-z yang diterima
+      ALLCAPS 		- Semua input diubah menjadi huruf besar
+      FRSWORDCAPS 	- Huruf pertama dari kata PERTAMA diubah menjadi 
+                          huruf besar
+      ALLWORDCAPS 	- Huruf pertama dari SEMUA kata diubah menjadi 
+      			  huruf besar
+      SCROLL 		- Isian field ini bisa bergeser kekiri bila 
+                          tempat tidak cukup
+      TABLE_IN 		- Input akan disesuaikan dengan TABLES yang harus diisi
+      PROTECT 		- Field akan diloncati
+      QPROTECT 		- Field ini tidak bisa di "query" dan juga dilewati 
+      			  pada saat RPT_TO_FLY (Ctrl-O) ke layar ini
+      UNSEEN 		- Field tidak kelihatan
+      UNSEEN_IF 	- Diikuti calcs, field tidak kelihatan bila hasil 
+                          calcs benar.
+
+      Input juga dapat diatur dengan memakai karakter-karakter khusus
+	 X - Semua karakter diterima
+	 A - Hanya alphabet yang diterima (A-z)
+	 Z - Semua karakter termasuk control-karakter
+	 ! - Ubah input jadi huruf besar
+	 9 - Hanya angka yang diterima
+	 P - Prefix diikuti nama field, khusus untuk prefix dimasukkan
+	     sebagai bagian dari field.
+	 contoh:
+	    plgphn   NUMERIC {(999)999-9999}    NONE   9
+	    ppmnofak NONE {Pusrnam}
+   
+   Pilihan Atribut Output
+      NONE 	- normal
+      RI 	- Field selalu ditampilkan dalam bentuk blok kursor. (reverse)
+      UL 	- Field akan digaris bawahi.
+      INPUTRI 	- Field akan menjadi blok kursor pada saat masuk dan kembali
+	          normal pada saat kursor keluar dari field.
+      EOL 	- Dari posisi field sampai ke akhir baris akan dihapus sebelum
+	 	  field ditampilkan.
+      TABLE_OUT - Output akan disesuaikan dengan TABLES yang harus diisi.
+      ZERO 	- Angka nol angka muncul bila nilai dari field ini 0.
+      BIG  	- Menghasilkan angka besar di tampilan layar.
+      PICTURE jumlah_baris  
+      		- Menghasilkan gambar dengan ukuran baris
+      	    mis:
+	    brgkode         PROTECT QPROTECT  PICTURE 3     61 
+	    berarti gambar ditambah setinggi 3 baris.
+
+      TOMBOL  	- Menampilkan tombol di windows.
+      Fnomor_layar
+      		- Pilihan ini khusus untuk layar tipe MONITOR_TYPE.
+		  Dengan pilihan ini pada saat kursor berada di 
+		  field tsb, menekan tombol 'f' akan membuat kita
+		  "terbang" ke layar nomor_layar.
+
+   Urutan kursor 
+      Angka disini berfungsi mengatur urutan field yang akan disinggahi
+	 oleh kursor pada saat kita menekan tombol enter atau Backspace.
+
+	</PRE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x219.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x227.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>IMAGE</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c173.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>EDIT</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

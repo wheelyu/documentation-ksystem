@@ -1,0 +1,47 @@
+IMAGE(tmptranst)
+/-----t-----------t------------------------------------------------------------------------------------t----------t---------\
+|t.No |t.Aspek    |t.Pertanyaan                                                                        |t.SkorSPV |t.SkorAM |
+\-----.-----------.------------------------------------------------------------------------------------.----------.---------/
+
+IMAGE(tmptrans)
+|_____|___________|____________________________________________________________________________________|__________|_________|
+
+FIELDS(tmptrans)
+ketnourt          PROTECT         	    INPUTRI 1
+ketnama           PROTECT         	    INPUTRI 2
+ketisi2  	      PROTECT {DD-MM-YY}	INPUTRI 3
+ketdf1            ALLCAPS         	    INPUTRI 4
+ketdf2            ALLCAPS         	    INPUTRI 4
+
+DEFAULTS(tmptrans)
+ketdf1	DFALT_SCAN_BLANKS      1 "JELEK"
+                               2 "CUKUP PAHAM" 
+                               3 "NORMAL"
+                               4 "BAGUS" 
+                               5 "SANGAT BAGUS" 
+
+ketdf2	DFALT_SCAN_BLANKS      1 "JELEK"
+                               2 "CUKUP PAHAM" 
+                               3 "NORMAL"
+                               4 "BAGUS" 
+                               5 "SANGAT BAGUS"
+
+EDITS(tmptrans)
+e.Mandatory 	ketdf1		MANDATORY_IF cSPVGADAI
+e.Mandatory     ketdf2      MANDATORY_IF cAM
+
+HOOKS(tmptrans)
+BEFORE_INPUT    cur_field=ketdf1    DO_SKIP_IF cAM
+BEFORE_INPUT    cur_field=ketdf2    DO_SKIP_IF cSPVGADAI
+
+AFTER_INPUT     cur_field=ketdf1    DO_MAP SHOW mcopylokal
+AFTER_INPUT     cur_field=ketdf2    DO_MAP SHOW mcopylokal
+AFTER_INPUT     cur_keybd=EN        DO_SPCALCS saddhasilojt
+
+SUBFILE(tmptrans)
+SFL_SORT_BY_FIELD ketnourt
+SFL_TITLE(tmptranst)
+SFL_COND ckecsdmtrn
+SFL_LINES(8)
+SFL_TARGET 
+ketdatbuktgl   lSKROJTMGA tlmnobuk lOJTPICM211

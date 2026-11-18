@@ -1,0 +1,189 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>&#13;	Mengenal Perintah EDIT
+	</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Tutorial Ksystem V2016.09.20"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Membuat Program Kas Keluar"
+HREF="c290.html"><LINK
+REL="PREVIOUS"
+TITLE="
+	Mengenal Perintah HOOKS, CALCS dan MAP
+	"
+HREF="x346.html"><LINK
+REL="NEXT"
+TITLE="
+	Mengenal Perintah SCAN
+	"
+HREF="x360.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Tutorial Ksystem V2016.09.20</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x346.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 16. Membuat Program Kas Keluar</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x360.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN355"
+>16.5. Mengenal Perintah EDIT</A
+></H1
+><P
+>&#13;	Perintah EDIT berfungsi untuk membantu mengecek apakah data yang 
+	kita masukkan ke dalam field sudah benar. Ketikkan perintah di bawah
+	ini seperti biasa sebelum perintah END_SCREEN.
+	</P
+><PRE
+CLASS="programlisting"
+>&#13;/*--------------------------------EDIT(master)-----------------------*/
+CALCS()
+cbknbiayaAtauBPO	bkktype != "PU" || bkkstsexp == "BPO" 
+cbkknobbm1      	bkknobbm != BLANKS 
+
+EDITS(master)
+Harus masukkan KS(Kas)  BK(Bank) bkkkb MANDATORY
+Nomor Bukti sudah ada 		bkknum DUPKEY bkknumidx 
+Harus masukan Nomor Bukti 	bkknum MANDATORY
+Harus masukan Tanggal 		bkktgl MANDATORY
+Penerima harus diisi            bkkkode  MANDATORY_IF cbknbiayaAtauBPO
+Jumlah Kas/Bank Harus diisi bkkjmlmut MANDATORY_IF cbkknobbm1
+Keterangan harus diisi bkkket MANDATORY
+Harus Masukkan kode Cabang bkkcab MANDATORY
+Harus Masukkan Divisi bkkdvs MANDATORY
+Kode cabang ini tidak ada bkkcab VALIDATE cabnoidx mcab 
+
+MAP(mcab)
+cabno		bkkcab		REPLACE
+cabbkjln	bkkbgn		REPLACE
+	</PRE
+><P
+>&#13;	Sesudah melakukan kspar prt9000/sct271, cobalah masuk ke sct271 dan lakukan tambah rekord
+	dengan menekan tombol t. Tekan enter sampai ke tampilan Cab/Div. Pada saat menekan enter
+	lagi, maka akan tampil pesan "Harus Masukkan kode Cabang". Pesan ini ditampilkan karena
+	field bkkcab kita set MANDATORY atau harus diisi. Coba sekarang anda isi dengan ABC terus 
+	tekan enter, maka akan muncul pesan "Kode cabang ini tidak ada". Pesan ini tampil karena
+	ada perintah VALIDATE di field bkkcab yang mengecek apakah isian kode ABC ini ada 
+	di file cab dengan mengecek index cabnoidx. Kode ABC ternyata tidak ada di file cab.
+	Coba kita keluar dari layar 271 dan masuk ke scr113 yang menyimpan data master cabang.
+	Di scr113 kita cari cabang yang tersedia dengan menekan tombol 'c' kemudian End,
+	maka akan muncul cabang dengan kode PST.
+	</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x346.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x360.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Mengenal Perintah HOOKS, CALCS dan MAP</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c290.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Mengenal Perintah SCAN</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

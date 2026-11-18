@@ -1,0 +1,257 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Variabel - Variabel Global di Ksystem</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Tutorial Ksystem V2016.09.20"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="Tipe Data yang Tersedia di Bahasa Ksystem"
+HREF="c111.html"><LINK
+REL="NEXT"
+TITLE="File sts"
+HREF="c133.html"></HEAD
+><BODY
+CLASS="chapter"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Tutorial Ksystem V2016.09.20</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="c111.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="c133.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="chapter"
+><H1
+><A
+NAME="AEN129"
+></A
+>Chapter 11. Variabel - Variabel Global di Ksystem</H1
+><P
+>&#13;    Variabel global yang diawali dengan g_ adalah variabel yang diset
+    secara otomatis oleh program Ksystem. Sedang variabel global yang
+    diawali dengan r_ bisa dipakai oleh programmer.
+    </P
+><PRE
+CLASS="programlisting"
+>&#13;    Nama        Tipe    Panjang  Keterangan
+    ----------------------------------------------
+    g_curcmd    INT2	2	Perintah yang sedang dijalankan
+    				1 =&#62; ADD, sedang menambah rekord
+				2 =&#62; UPDATE, sedang mengubah rekord
+				3 =&#62; QUERY, sedang mencari rekord
+				4 =&#62; REMOVE, sedang menghapus rekord.
+    g_dir	STRING	21	Direktori sekarang
+    				g_dir == 0912 berarti sedang di direktori 0912
+				g_dir == "", sedang di direktori utama.
+    g_grpcab    STRING  11	Bila g_sglcab1 benar, variabel ini terisi
+     				cabang yang hanya satu itu.
+    g_grpdvs    STRING  11	Bila  g_sgldvs1 benar, variabel ini terisi
+    				divisi yang hanya satu itu.
+    g_grpnam	STRING	11	Grup dari user yang aktif, ambil dari usrgrp.
+    g_numsfl1	INT4	4	Jumlah detail1 yang ada sekarang (lihat scr1721)
+    g_numsfl2	INT4	4	Jumlah detail2 yang ada sekarang (lihat scr1721)
+    g_persh	STRING	81	Nama perusahaan, diambil dari stspersh
+    g_print	INT2	2	Jumlah laporan sudah dicetak ketika sedang
+    				di layar naik turun hasil laporan.
+    g_rtsno	STRING	15	Nama rts yang sedang dicetak di laporan.
+    g_scrno	STRING	11	Nama screen yang sedang aktif, mis.
+    				scr525 atau sct201.
+    g_scrnumstr STRING  10      Nomor layar yang sedang berjalan
+    				(nomornya saja), mis 201.
+    g_system	STRING	51	Jenis program yang sedang dipakai, tergantung
+    				dari isian stsytdo
+    				
+
+    g_sglcab   INT2    2        Cabang hanya 1 (scr113) atau User 
+                                dibatasi oleh scr912 hanya boleh masuk 1 cabang 
+    g_sgldvs	INT2	2	Divisi hanya 1 (scr2892) atau user hanya boleh
+    				masuk 1 divisi via scr912.
+    g_tgltrn	DATE	4	Menyimpan informasi tanggal transaksi sekarang,
+    				tanggal ini akan berubah pada saat proses
+				tutup hari.  
+    g_master_type STRING 2	Nomor master, mis. a atau b dst.
+                                Kadang satu screen memiliki banyak masater,
+				g_master_type bisa disesuaikan sehingga
+				program umum di scr525 menggunakan 
+				IMAGE(master) sedang program kredit di scr525 
+				menggunakan IMAGE(mastera).
+    g_usrkode	STRING	11	Kode user diisi di scr912.
+    g_usrno	INT2	2	Nomor user diisi di scr912.
+    g_usrpos	STRING	11      Menyimpan informasi jabatan dari user.
+    g_batalpst	INT2	2	Nilai 1 pada saat posting via SCR_BATALPST atau
+    				SCR_VOIDPST
+    g_grpcab    STRING	11	Cabang dari grp, ambil dari grpcab
+    g_ipname	STRING	21	IP address dari komputer yang lagi jalan run
+    g_sglcab	INT2	2	Nilai 1 bila hanya ada 1 cabang untuk user ini.
+    g_sgldvs	INT2	2	Nilai 1 bila hanya ada 1 divisi untuk user ini
+    g_sgllok  	INT2	2       nilai 1 bila hanya ada 1 lokasi
+    g_usrkode	STRING	11	kode user, diambil dari usrkode pada saat login
+    g_impdt_update INT2	2	Khusus untuk membantu ap_impdt yang akan
+                                mengubah rekord yang sudah ada.
+
+    r_count1	INT2  	2       menyimpan angka dari -32000 s/d 32000
+      s/d
+    r_count16	INT2  	2       menyimpan angka dari -32000 s/d 32000
+
+    r_date1	INT4  	4       menyimpan tanggal dalam angka YYYYMMDD
+      s/d
+    r_date8	INT4  	4       menyimpan tanggal dalam angka YYYYMMDD
+
+    r_double1   DFLOAT  8	menyimpan angka double, desimal presisi tinggi
+       s/d
+    r_double9   DFLOAT  8	menyimpan angka double, desimal presisi tinggi
+
+    r_long1	INT4  	4       menyimpan nomor bulat -2 milyar s/d 2 milyar
+      s/d
+    r_long8	INT4  	4       menyimpan nomor bulat -2 milyar s/d 2 milyar,
+    				
+    r_string1	STRING 	51      menyimpan text
+       s/d
+    r_string32	STRING 	51      menyimpan text
+
+    r_time1	INT2  	2       menyimpan informasi jam s/d menit
+      s/d
+    r_time8	INT2  	2       menyimpan informasi jam s/d menit
+
+    r_sum1	DFLOAT 	8       menyimpan hasil RT_SUM1
+      s/d
+    r_sum8	DFLOAT 	8       menyimpan hasil RT_SUM8
+
+    r_title1    STRING	21	menyimpan hasil ap_title
+      s/d
+    r_title24   STRING	21	menyimpan hasil ap_title
+
+	Keterangan:
+	   ap_impdt(nama_calc,nama_map,dirtxt,replace_calc);
+	   Bila replace_calc kosong atau nilainya == 0, maka hanya menambahkan
+	   data baru ke file, bila duplikat, data lama tidak diubah.
+	   Bila replace_calc hasilnya == 1, maka bila duplikat, rekord baru
+	   akan menumpuki rekord yang sudah ada.
+	   Bila replace_calc hasilnya == 2, maka bila duplikat, rekord lama
+	   akan diubah dengan menjalankan nama_map sekali lagi dan data 
+	   yang baru akan tersedia di buf3 dan ada variabel global 
+	   g_impdt_update yang hanya dijalankan pada saat update ini.
+	   Maka MAP misalnya akan sbb:
+	   CALCS()
+	   cbukanupdate    g_impdt_update == 0
+	   cupdate    	   g_impdt_update == 1
+
+	   MAP(mimpdt)
+	   cOPEN      brgsts    DO_CALC_IF cbukanupdate
+	   #brghrg    brghrg    DO_CALC_IF cupdate
+
+    g_jrndvs	STRING	11	variabel ini digunakan untuk mengisi 
+                                jrndvs pada saat ap_adjrn. Ini dilakukan
+				agar tidak perlu menambah parameter di
+				ap_adjrn.
+
+
+    </PRE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="c111.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="c133.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Tipe Data yang Tersedia di Bahasa Ksystem</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>File sts</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

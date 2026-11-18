@@ -1,0 +1,205 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>RESTRICT</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Tutorial Ksystem V2016.09.20"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Daftar Perintah Program Ksystem"
+HREF="c173.html"><LINK
+REL="PREVIOUS"
+TITLE="DEFAULT"
+HREF="x231.html"><LINK
+REL="NEXT"
+TITLE="HELP"
+HREF="x239.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Tutorial Ksystem V2016.09.20</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x231.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 15. Daftar Perintah Program Ksystem</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x239.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN235"
+>15.6. RESTRICT</A
+></H1
+><P
+>&#13;   	Restrict (pembatasan) berfungsi membatasi ruang gerak operator
+      dalam memanipulasi data pada saat QUERY. Pembatasan ini dilakukan
+      dengan tidak memberi kesempatan kepada operator untuk mengubah/menambah
+      ataupun menghapus rekord dengan kondisi tertentu. Pembatasan untuk  
+      masuk ke detail juga dapat dilakukan.
+	</P
+><PRE
+CLASS="programlisting"
+>&#13;RESTRICT(master/trans/trans2)
+
+   Cara Memakai:
+
+   RESTRICT(master/trans/trans2)
+	RST_IF          namaCalcs  
+		RESTRICT dijalankan kalau kond benar,
+		BILA tidak ada RST_IF berarti 
+		dijalankan
+
+	RST_ADD_COND    namaCalcs  
+		kondisi untuk tidak menambah rekord
+
+	RST_ADD_FLDS  namaFields     
+		field field yang dibatasi
+
+	RST_ADD_FLDS_NOT  namaFields 
+		field field yang tidak dibatasi
+
+	RST_UPD_COND    namaCalcs   
+		kondisi untuk tidak mengubah rekord
+
+	RST_UPD_FLDS  namaFields     
+		field field yang dibatasi
+
+	RST_UPD_FLDS_NOT  namaFields&#62; 
+		field field yang tidak dibatasi
+
+	RST_DEL_COND    namaCalcs      
+		kondisi untuk tidak menghapus
+
+	RST_DET_COND    namaCalcs
+		kondisi untuk tidak ke detail
+
+	RST_IGNDET_COND namaCalcs      
+		boleh hapus walau ada detail
+
+	RST_UPDALL_COND namaCalcs      
+		kondisi u/ membatasi pengubahan semua field. Kondisi ini bila 
+		betul membuat kondisi di RST_UPD_FIELDS tidak berfungsi 
+
+	RST_EXIT_COND  namaCalcs       
+		Kondisi u/ bisa keluar dari layar atau naik ke master,
+		rekord kosong boleh keluar
+
+	RST_EXIT_MOV_COND namaCalcs    
+		Kondisi untuk bisa melakukan add, next dan prev walau tidak
+		bisa keluar 
+
+	RST_EXIT_MSG   pesan anda disini  
+		Pesan yang ditampilkan bila berusa- ha keluar tapi tidak boleh
+	</PRE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x231.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x239.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>DEFAULT</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c173.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>HELP</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

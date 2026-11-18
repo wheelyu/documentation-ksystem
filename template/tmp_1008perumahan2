@@ -1,0 +1,28 @@
+IMAGE(tmptranst)
+/---------------------------------------t----------t-----------------------------------------\
+|t.Parameter                            |t.Jawaban |t.Keterangan                             |
+\---------------------------------------.----------.-----------------------------------------/
+
+IMAGE(tmptrans)
+|_______________________________________|__________|_________________________________________|
+
+FIELD(tmptrans)
+tldket          PROTECT SCROLL     INPUTRI         1 /*Parameter*/
+tldkat          ALLCAPS            INPUTRI         2 /*Jawaban*/
+tldket2         PROTECT SCROLL     INPUTRI         3 /*Keterangan*/
+
+EDITS(tmptrans)
+e.Mandatory         tldkat     MANDATORY
+e.ValidateJawab     tldkat     VALIDATE tbtdatkodtyp mtbt stbtscore {Pgv_dttabel} {PlGADAIEKSPANSI} {PlPROFPERUM} {Ptldbrg} {PlDTTABEL21}
+
+SUBFILE(tmptrans)
+SFL_LINES(10)
+SFL_TITLE(tmptranst)
+SFL_SHOW_NEXT
+SFL_SELECT cSCORING
+SFL_TARGET
+    tldbukbbmidx tlmnobuk lPROFPERUM
+SFL_MAP
+    lSCORING    tlddata     REPLACE
+    tlmnobuk    tldnobuk    REPLACE
+    lPROFPERUM  tldnobbm    REPLACE

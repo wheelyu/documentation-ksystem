@@ -1,0 +1,88 @@
+Masalah jika terjadi conflict :
+	1. vi file yang membuat conflict
+	2. Cari baris mana yang membikin file tsb conflict, biasa nya ditandai spt dibawah ini :
+		<<======== HEAD
+                      dst
+	3. Dari situ sesuaikan baris mana yang betul dan hapus baris mana yang salah
+	4. simpan file tsb
+	5. git add file_tsb
+	6. git commit -i file_tsb
+	7. git push origin master
+
+Install Repository Lokal :
+	1. Buat Direktori di ubuntu masing masing
+	   Misal : mkdir prt9020
+
+	2. Buat inisialisasi di dalam folder tsb 
+	   Misal : - cd prt9020 {pastikan nanti bekerja dengan git selalu ada di dalam repositori yang sudah kita buat}
+		   - git init    {ini di dalam folder prt9020, pastikan ada di /home/ksystem/prt9020}
+
+	3. Membuat inisial nama di repo lokal dengan cara sbb :
+	   Misal : git config --global user.name "ari setiawan"
+
+	4. Membuat inisial mail di repo lokal dengan cara sbb :
+	   Misal : git config --global user.email "arisetiawan@nusantara-sakti.co.id"
+
+	5. Buat koneksi ke repository remote (server 193.16.14.81)
+  		    git remote add origin ssh://ksystem@172.16.1.81:/home/ksystem/prt0500
+
+        6. Tarik sct yang sudah ada di server dengan cara sbb :
+		    git pull origin master
+
+        7. Menhapus remote origin
+		    git remote rm origin
+
+* Penting setiap kalai menggunakan git harus ada di repositori lokal
+
+	Perintah yang biasa di gunakan :
+	pull		: Untuk menarik sct dari server ke repo lokal kita
+			  contoh perintah :
+				git pull origin master
+
+	push		: Untuk mengirim sct dari repo lokal ke repo server / remote
+			  contoh perintah :
+				git push origin master
+
+        merge		: Jika terjadi conflict antara master (lokal kita) dengan origin  (server / remote)
+			  contoh perintah :
+				git merge origin master
+
+	add		: Menambahkan sct yang sudah kita edit ke daftar siap di komit ke repo lokal
+			  contoh perintah :
+				git add sct301
+
+	commit		: Mengkomit sct yang sudah di daftarkan ke repositori lokal kita 
+			  contoh perintah :
+				git commit sct301 -m "Ini message kenapa kita melakukan perubahan"
+
+	reset		: membatalkan perintah add / membatalkan perubahan / tidak jadi kita mengedit (kondisi jika belum di commit)
+			  contoh perintah :
+				git reset sct301
+
+	checkout	: membatalkan file yang sudah kita commit / kita tidak jadi commit (misal sct301)
+				git checkout sct301
+	
+	log		: Melihat perubahan yang ada di dalam dokumen / layar
+			  contoh perintah :
+				git log sct301
+
+	gitk		: install dl gitk nya, fungsi nya untuk melihat perubahan git dengan gui
+			  contoh perintah :
+				gitk sct301
+	status		: Melihat status repositori lokal kita
+			  contoh perintah :
+				git status
+
+Harap diperhatikan :
+	1. Pastikan setiap pagi lakukan pull
+	2. Sebelum pulang pastikan juga melakukan pull
+	3. pastikan melakukan commit setelah ada perubahan yang sudah benar, misal, setelah kita buat layar trans,
+	   jika sudah bisa di parser di lokal, lakukan perintah commit
+	4. Sebelum membuat sct atau merubah sct baru, gunakan pull dulu untuk menghindari conflict
+		   
+
+Membuat server git
+	1. mkdir repositori nya
+		misal : prt0500
+	2. Masuk ke folder repositori
+	3. buat git server dengan perintah git init --bare

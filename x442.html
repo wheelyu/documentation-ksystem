@@ -1,0 +1,293 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>&#13;Membuat File Detail
+</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Tutorial Ksystem V2016.09.20"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="
+Membuat Program Pembelian
+"
+HREF="c428.html"><LINK
+REL="PREVIOUS"
+TITLE="
+Membuat Program Pembelian
+"
+HREF="c428.html"><LINK
+REL="NEXT"
+TITLE="
+Membuat Perintah Posting
+"
+HREF="x458.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Tutorial Ksystem V2016.09.20</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="c428.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 17. Membuat Program Pembelian</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x458.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN442"
+>17.2. Membuat File Detail</A
+></H1
+><P
+>&#13;Pada program pembelian ini kita akan menggunakan file ppd sebagai trans dan file pcm sebagai transa. Untuk dapat menghubungkan file master dengan file detail kita akan menggunakan perintah SUBFILE seperti yang sudah dijelaskan pada bab sebelumnya. Untuk itu marilah kita ketikkan perintah sebagai berikut di atas perintah END_SCREEN.</P
+><PRE
+CLASS="programlisting"
+>&#13;IMAGE(transt) {CLR_LINES=14} {LSTFLD_ADVANCE} {FRSFLD_BACKUP} {BASE_ROW=11}
+|---t--------t----------t--t------t------t----t---------t----------t------t-------t----------|
+|NO |KATEGORI|KD BARANG |SB|LOKASI|UKURAN|SAT | JUMLAH  |HRG BRUTO |DISC %|DIS NIL| SUB.TOTAL|
+|---|--------|----------|--|------|------|----|---------|----------|------|-------|----------|
+
+
+
+
+
+\---.--------.----------.--.------.------.----.---------.----------.------.-------.----------/
+
+IMAGE(trans) {NO_CLS} {LSTFLD_ADVANCE} {FRSFLD_BACKUP} {BASE_ROW=15} {COVER_MASTER}
+|___|________|__________|_ |______|______|____|______.__|_______.__|__.__ |_______|__________|
+
+
+FIELD(trans)
+
+   ppdurt2       NOCHANGE               INPUTRI         2  /* kode barang */
+   ppdkat        ALLCAPS SCROLL         INPUTRI         3  /* kode barang */
+   ppdbrg        ALLCAPS SCROLL         INPUTRI         5  /* kode barang */
+   ppdsubtran    NOCHANGE               INPUTRI         6  /* kode barang */
+   ppdlok        ALLCAPS SCROLL         INPUTRI         7  /* Lokasi */
+   ppdkdukr      ALLCAPS SCROLL         INPUTRI         8
+   ppdsat        ALLCAPS SCROLL         INPUTRI         9   /* unit sat kecil */
+   ppdtmp2       NUMERIC                INPUTRI         10  /* unit sat kecil */
+   ppdhrg3       NUMERIC                INPUTRI         11  /*Harga Bruto*/
+   ppdperdis     NUMERIC                INPUTRI         12  /* Disc */
+   ppdtotdis     NUMERIC                INPUTRI         13
+   ppdtotfak     PROTECT                INPUTRI         14  /* unit sat kecil */
+
+DEFAULTS(trans)
+ppdsubtran      DFALT_LIST      S B
+ppdtype2        INIT            PB
+ppdsts          INIT            OPEN
+ppdsatbsr       INIT            1
+
+SUBFILE(trans)
+SFL_LINES(5)       /* Rumusnya : 22 - base_row trans */
+SFL_TITLE(transt)
+
+SFL_TARGET
+/* Index file detil             Field master */
+     ppdfakurtidx                pmbnofak
+
+SFL_MAP
+/* Field master        Field Detil       Type Map */
+   pmbnofak             ppdnofak           REPLACE
+   pmbsup               ppdplg             REPLACE
+   pmbtglfak            ppdtglfak          REPLACE
+   pmbcab               ppdcab             REPLACE
+   pmbdvs               ppddvs             REPLACE
+   pmbscr               ppdscr             REPLACE
+</PRE
+><P
+>&#13;Dengan menuliskan perintah di atas maka file detail trans dan file master telah terhubung. Setelah kita mengisi data di file master dan menyimpannya kemudian tekan tombol 1d untuk masuk ke file detail trans seperti ditunjukkan pada gambar di bwh ini.</P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="gambar6.png"></P
+></DIV
+><P
+>&#13;Berikutnya kita akan menghubungkan file master dengan file detail transa dengan mengetikkan perintah sebagai berikut di atas perintah END_SCREEN.</P
+><PRE
+CLASS="programlisting"
+>&#13;IMAGE(transat) {NO_CLS} {LSTFLD_ADVANCE} {FRSFLD_BACKUP} {BASE_ROW=11}
+|-----t---t--------------t----t----------t------------t--------t--------------t--------------------|
+|Type |S/O|  Nomor Cek   |Sts |Rek Kas/Bk| Nama Bank  |Tgl Jtp |     Nilai    |     Keterangan     |
+|-----|---|--------------|----|----------|------------|--------|--------------|--------------------|
+
+
+
+
+
+
+
+
+\-----.---.--------------.----.----------.------------.--------.--------------.--------------------/
+
+IMAGE(transa) {NO_CLS} {LSTFLD_ADVANCE} {FRSFLD_BACKUP} {BASE_ROW=14} {COVER_MASTER}
+|  _  | _ |______________|____|__________|____________|________|___________.__|____________________|
+
+
+FIELD(transa)
+   pcmtype       NOCHANGE            INPUTRI          1
+   pcmtype2      NOCHANGE            INPUTRI          2
+   pcmnocek      ALLCAPS             INPUTRI          3
+   pcmsts        PROTECT             NONE             4
+   pcmnobbm      ALLCAPS             INPUTRI          5
+   pcmbank       PROTECT             NONE             6
+   pcmtgljtp     NONE {DD-MM-YY}     INPUTRI          7
+   pcmtotal      NUMERIC             INPUTRI          8
+   pcmket        ALLCAPS SCROLL      INPUTRI          9
+
+DEFAULTS(transa)
+pcmtype         DFALT_LIST      T C M
+pcmtype2        DFALT_LIST      S O
+pcmsts          INIT            OPEN
+
+SUBFILE(transa)
+SFL_LINES(6)       /* Rumusnya : 22 - base_row trans */
+SFL_TITLE(transat)
+
+SFL_TARGET
+/* Index file detil             Field master */
+      pcmnoprcidx                 pmbnofak
+
+SFL_MAP
+/* Field master        Field Detil     Type Map */
+     pmbnofak           pcmnoprc
+     pmbsup             pcmplg
+     ppdtglfak          pcmtgl
+     ppdtype2           pcmtype3
+     pmbscr             pcmscr
+</PRE
+><P
+>&#13;Dengan demikian file detail transa telah terhubung ke file master seperti yang terlihat dari gambar di bawah ini. Tambahkan perintah HOOKS, EDITS, MAP, SCAN, dan DEFAULT sesuai kebutuhan yang anda inginkan.</P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="gambar7.png"></P
+></DIV
+><P
+>&#13;Sebelum melangkah ke langkah selanjutnya yaitu membuat program POSTING, alangkah baiknya bila kita mengenal terlebih dahulu field - field ppd dan pcm yang digunakan di program pembelian ini. Karena pada bab sebelumnya kita telah membahas file pcm, maka kali ini kita hanya akan membahas file ppd saja.</P
+><PRE
+CLASS="programlisting"
+>&#13;Nama file       : ppd
+file ini menyimpan semua informasi aktivitas barang. File ini akan menjadi detail dari semua transaksi yang berhubungan dengan barang
+seperti penjualan, pembelian, dll
+ppdurt2		: nomor urut
+ppdkat		: kategori barang
+ppdbrg		: nama barang
+ppdlok		: lokasi barang
+ppdperdis	: diskon per barang
+ppdtotdis	: total diskon
+ppdtotfak	: total faktur
+</PRE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="c428.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x458.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Membuat Program Pembelian</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c428.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Membuat Perintah Posting</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

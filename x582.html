@@ -1,0 +1,278 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>&#13;Membuat File Detail
+</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Tutorial Ksystem V2016.09.20"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="
+Membuat Program Penerimaan Piutang Pelanggan
+"
+HREF="c569.html"><LINK
+REL="PREVIOUS"
+TITLE="
+Membuat Program Penerimaan Piutang Pelanggan
+"
+HREF="c569.html"><LINK
+REL="NEXT"
+TITLE="
+Membuat Program Posting
+"
+HREF="x597.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Tutorial Ksystem V2016.09.20</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="c569.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 20. Membuat Program Penerimaan Piutang Pelanggan</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x597.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN582"
+>20.2. Membuat File Detail</A
+></H1
+><P
+>&#13;Setelah kita menyelesaikan file master, maka langkah selanjutnya adalah membuat file detail. Seperti biasa kita akan membuat file detail dengan perintah SUBFILE. Kita akan menggunakan file pjd sebagai file detail trans dan pcm sebagai file detail transa. Untuk itu marilah kita ketikkan perintah di bawah ini di atas perintah END_SCREEN</P
+><PRE
+CLASS="programlisting"
+>&#13;/*** SUBFILE INFORMATION ***/
+IMAGE(transt) {NO_CLS} {LSTFLD_ADVANCE} {FRSFLD_BACKUP} {BASE_ROW=9}
+/---t----t--------------t------t---t--------t--------t-----------t---------------t-----------------\
+|F/L|Type| No.Faktur    |Cabang|Div|Tgl.Fak |Tgl.Jtp |No.Rekening| Jml Bayar     |   Keterangan    |
+|---|----|--------------|------|---|--------|--------|-----------|---------------|-----------------|
+
+
+
+
+
+
+\---.----.--------------.------.---.--------.--------.-----------.---------------.-----------------/
+
+IMAGE(trans) {NO_CLS} {LSTFLD_ADVANCE} {FRSFLD_BACKUP} {BASE_ROW=12}
+| _ |____|______________|______|___|________|________|___________|____________.__|_________________|
+
+
+FIELD(trans)
+   pjdyt             NOCHANGE           	 INPUTRI     1 /* F/L */
+   pjdtype           NOCHANGE            	 INPUTRI     2
+   pjdnofak          ALLCAPS SCROLL      	 INPUTRI     3 /* nomor nota */
+   pjdcab            ALLCAPS SCROLL            	 INPUTRI     4
+   pjddvs            ALLCAPS SCROLL              INPUTRI     5
+   pjdtglfak         NONE NOLIMIT {DD-MM-YY} 	 INPUTRI     6 /* tgl jatuh tempo */
+   pjdtgljtp         NONE NOLIMIT {DD-MM-YY} 	 INPUTRI     7 /* tgl jatuh tempo */
+   pjdnobbm          ALLCAPS SCROLL              INPUTRI     8 /* nomor nota */
+   pjdjml            NUMERIC             	 INPUTRI     9 /* jumlah nota */
+   pjdket            ALLWORDCAPS SCROLL     	 INPUTRI     10
+
+DEFAULTS(trans)
+pjdsts		INIT		OPEN
+
+SUBFILE(trans)
+SFL_LINES(6)
+SFL_TITLE(transt)
+SFL_TARGET
+pjdbukurtidx   pjcnoprc
+
+SFL_MAP
+pjctgl          pjdtglbyr
+pjcplg          pjdplg
+pjcnoprc        pjdnobuk
+pjcscr          pjdscr
+</PRE
+><P
+>&#13;Dengan mengetikkan perintah di atas kita telah menghubungkan file master pjc dengan file detail trans pjd seperti yang terlihat pada gambar di bawah ini. Tambahkan perintah HOOK, EDIT, DEFAULT, MAP, dan SCAN sesuai yang anda inginkan.</P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="gambar15.png"></P
+></DIV
+><PRE
+CLASS="programlisting"
+>&#13;/*** SUBFILE INFORMATION ***/
+IMAGE(transat) {LSTFLD_ADVANCE} {FRSFLD_BACKUP} {BASE_ROW=9}
+/----t-------------t-----------t-------------t-----------t---------t---------------t------------\
+|Type|No.Cek/Bukti | Kas/Bank  |  Nama Bank  | Kota Bank | Tgl Jtp | Total Kas/Cek | Keterangan |
+|----|-------------|-----------|-------------|-----------|---------|---------------|------------|
+
+
+
+
+
+
+\----.-------------.-----------.-------------.-----------.---------.---------------.------------/
+
+IMAGE(transa) {NO_CLS} {LSTFLD_ADVANCE} {FRSFLD_BACKUP} {BASE_ROW=12} {COVER_MASTER}
+| __ |_____________|___________| ____________|___________|_________|____________.__|____________|
+
+FIELD(transa)
+   pcmtype       NOCHANGE            INPUTRI          1 /* nomor cek */
+   pcmnocek      ALLCAPS SCROLL      INPUTRI          2 /* nomor cek */
+   pcmnobbm      ALLCAPS SCROLL      INPUTRI          3 /* Nama Bank */
+   pcmbank       ALLCAPS SCROLL      INPUTRI          4 /* Nama Bank */
+   pcmkota       ALLCAPS SCROLL      INPUTRI          5 /* Kota Bank */
+   pcmtgljtp     NOLIMIT {DD-MM-YY}  INPUTRI          6 /* Tanggal jt */
+   pcmdf2        NUMERIC             INPUTRI          7 /* Nilai Cek */
+   pcmket        ALLCAPS SCROLL      INPUTRI          8 /* Kota Bank */
+
+DEFAULTS(transa)
+pcmsts		INIT			OPEN
+pcmtype         DFALT_SCAN_BLANKS      	T "Tunai"
+                                        C "Cek/Giro"
+                                        M "Mutasi/Transfer Bank"
+                                        K "Kredit Card "
+
+SUBFILE(transa)
+SFL_LINES(6)
+SFL_TITLE(transat)
+
+SFL_TARGET
+pcmnoprcidx   pjcnoprc
+
+SFL_MAP
+     pjcnoprc           pcmnoprc
+     pjcplg             pcmplg
+     pjctgl             pcmtgl
+     pjcscr             pcmscr
+     pjcdvs             pcmdvs
+     pjccab             pcmcab
+</PRE
+><P
+>&#13;Dengan demikian kita telah membuat file detail transa yang sederhana seperti yang terlihat dari gambar di bawah ini. Tambahkan perintah EDIT, DETAIL, HOOKS, SCAN sesuai yang anda inginkan.</P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="gambar16.png"></P
+></DIV
+><P
+>&#13;Seperti biasa sebelum kita lanjutkan dengan membuat program POSTING, alangkah baiknya bila kita mempelajari dahulu field - field detail yang digunakan di layar ini. Kita tidak akan membahas file pcm karena sudah pernah dibahas di bab sebelumnya.</P
+><PRE
+CLASS="programlisting"
+>&#13;nama file	: pjd
+fungsi		: menyimpan informasi penerimaan piutang per faktur. Jadi data pjd ini terbentuk pada saat anda memilih nomor faktur yang diterima piutangnya
+pjdnofak	: nomor faktur yang akan diterima piutangnya
+pjdtglfak	: tanggal faktur
+pjdtgljtp	: tanggan jatuh tempo faktur
+pjdjml		: jumlah yang akan diterima piutangnya
+pjdsts		: OPEN (data belum diposting), CLSD (data sudah diposting)
+pjdnobbm	: nomor rekening piutang di buku besar
+</PRE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="c569.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x597.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Membuat Program Penerimaan Piutang Pelanggan</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c569.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Membuat Program Posting</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

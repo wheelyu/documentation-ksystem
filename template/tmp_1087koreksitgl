@@ -1,0 +1,115 @@
+IMAGE(tmptranst)
+/-----------------------------------------------------\
+|/---------------------------------------------------\|
+||t.KorTgl                                           ||
+|\---------------------------------------------------/|
+|/---------------------------------------------------\|
+||t.TglKoreksi    __________                         ||
+||                t.TglAwl    t.TglRev    t.Alasan   ||
+||t.TglMulaiAP    __________  __________  __________ ||
+||t.TglDlAwl      __________  __________  __________ ||
+||spasi                                              ||
+||t.AprAtas                                          ||
+||t.Np            __________  ______________________ ||
+||t.Approval      __________                         ||
+||                __________                         ||
+|\---------------------------------------------------/|
+\-----------------------------------------------------/
+
+IMAGE(tmptrans)
+
+FIELDS(tmptranst)
+amtstr1                 NOCHANGE                                                INPUTRI 1   /*Tgl yang mau diubah*/
+amttgl1                 PROTECT                                                 INPUTRI 2   /*Tgl mulai awal*/
+amttgl2                 NONE                    NOLIMIT         {DD-MM-YYYY}    INPUTRI 3   /*Tgl mulai rev*/
+amtstr2                 TEXTAREA 2                                              INPUTRI 4   /*Alasan pic diubah*/
+amttgl3                 PROTECT                                                 INPUTRI 5   /*Tgl deadline awal*/
+amttgl4                 NONE                    NOLIMIT         {DD-MM-YYYY}    INPUTRI 6   /*Tgl deadline rev*/
+amtstr3                 TEXTAREA 2                                              INPUTRI 7   /*Alasan atasan diubah*/
+amtstr4                 PROTECT                                                 INPUTRI 8   /*Nip approval*/
+lnamakortgl             PROTECT                                                 INPUTRI 9   /*Nama approval*/
+amtstr5                 NOCHANGE                                                INPUTRI 10  /*Approval*/
+lenter                  ALLCAPS                                                 INPUTRI 99
+
+DEFAULTS(tmptranst)
+amtstr4                 INIT                    "1839075" /*Ricky PDCAHEAD*/
+
+amtstr1                 DFALT_SCAN_BLANKS
+                                                MULAI       "   "
+                                                DEADLINE    "   "
+                                                ALL         "   "
+
+amtstr5                 DFALT_SCAN_BLANKS
+                                                ACC     "   "
+                                                TACC    "   "
+
+CALCS()
+cskiptglawl             amtstr1 == "DEADLINE"
+cskiptgldl              amtstr1 == "MULAI"
+cjikatglawl             amtstr1 == "MULAI" || amtstr1 == "ALL"
+cjikatgldl              amtstr1 == "DEADLINE" || amtstr1 == "ALL"
+cselainatasan           g_usrkode != amtstr4
+chanyakortgl            abktype == "KORTGL"
+csdhjawab               amtstr5 != BLANKS
+cacc                    amtstr5 == "ACC"
+
+MAP(mpsikortgl)
+psikode                 amtstr4                 REPLACE
+psinama                 lnamakortgl             REPLACE
+
+EDITS(tmptranst)
+t.Mandatory             amtstr4                 VALIDATE                psikodidx mpsikortgl 0
+
+HOOKS(tmptranst)
+BEFORE_INPUT            cur_field=amttgl2       DO_SKIP_IF cskiptglawl
+BEFORE_INPUT            cur_field=amtstr2       DO_SKIP_IF cskiptglawl
+BEFORE_INPUT            cur_field=amttgl4       DO_SKIP_IF cskiptgldl
+BEFORE_INPUT            cur_field=amtstr3       DO_SKIP_IF cskiptgldl
+BEFORE_INPUT            cur_field=amtstr5       DO_SKIP_IF cselainatasan
+
+MAP(maddabkkortgl)
+cSYSTIME                lSYSTIME                DO_CALC
+
+lKUNCIABSEN	        abkdata	                REPLACE
+tkdnoll		        abknobuk                REPLACE
+amtstr4		        abkkym	                REPLACE
+lketaprkortgl	        abkkym2	                REPLACE
+
+gv_INPG		        abksts	                REPLACE_IF cbwh1600
+g_tgltrn	        abktgl	                REPLACE_IF cbwh1600
+
+gt_RINP                 abksts                  REPLACE_IF cats1600
+cbesok                  abktgl                  DO_CALC_IF cats1600
+
+l1087		        abkscr	                REPLACE
+tkdnobuk                abknoll                 REPLACE
+lKORTGL                 abktype	                REPLACE
+DEBUG   ldum            ldum                    REPLACE
+
+MAP(mupdkoreksitgl)
+amttgl2                 tkdtgl                  REPLACE_IF cjikatglawl
+amttgl4                 tkdtgl2                 REPLACE_IF cjikatgldl
+
+SPCALCS(spaddkoreksitgl)
+DO_LIB                  ap_dbclc(DNAME daddabkkortgl,DCOMMAND ADD,DFILE abk,DMAP maddabkkortgl);
+
+SPCALCS(spupdkoreksitgl)
+DO_LIB_IF csdhjawab     ap_dbclc(DNAME dupdabkkortgl,DCOMMAND UPDATE_RANGE,DTARGET abkdatbukidx lKUNCIABSEN tkdnoll,DBC_COND chanyakortgl,DMAP mupdabkclsd);
+DO_LIB_IF cacc          ap_dbclc(DNAME dupdkoreksitgl,DCOMMAND UPDATE,DTARGET tkdprmidx tkdprm,DMAP mupdkoreksitgl);
+
+SUBFILE(tmptrans)
+SFL_LINES(1)
+SFL_TITLE(tmptranst)
+SFL_SHOW_NEXT
+SFL_TARGET	
+        amtdatotoidx    lKORTGL tkdnoll
+
+SFL_MAP
+lKORTGL                 amtdata                 REPLACE
+tkdnoll                 amtbukoto               REPLACE
+tkdtgl                  amttgl1                 REPLACE
+tkdtgl2                 amttgl3                 REPLACE
+
+POSTING(tmptranst)
+PST_ADDCMD              spaddkoreksitgl
+PST_UPDCMD              spupdkoreksitgl

@@ -1,0 +1,250 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>&#13;Membuat Program Penerimaan Piutang Pelanggan
+</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Tutorial Ksystem V2016.09.20"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="
+Membuat Laporan
+"
+HREF="x562.html"><LINK
+REL="NEXT"
+TITLE="
+Membuat File Detail
+"
+HREF="x582.html"></HEAD
+><BODY
+CLASS="chapter"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Tutorial Ksystem V2016.09.20</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x562.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x582.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="chapter"
+><H1
+><A
+NAME="AEN569"
+></A
+>Chapter 20. 
+Membuat Program Penerimaan Piutang Pelanggan
+</H1
+><P
+>&#13;Pada bab ini kita akan membuat program penerimaan piutang pelanggan. Seperti yang sudah pernah kita lakukan di bab - bab sebelumnya, langkah pertama untuk membuat suatu screen adalah membuat file masternya terlebih dahulu. Pada program penerimaan piutang ini kita akan menggunakan file pjc sebagai file master. Program ini akan kita masukkan ke layar 671.</P
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN572"
+>20.1. Membuat File Master</A
+></H1
+><P
+>&#13;Untuk itu bukalah editor vi dan ketikkan vi prt9000/sct671. Setelah kita masuk ke layar editor vi, ketikkan perintah di bawah ini untuk membuat file masternya.</P
+><PRE
+CLASS="programlisting"
+>&#13;SCREEN 671 QUERY_TYPE Penerimaan Piutang Pelanggan
+SCR_FILE pjc
+
+LOCAL
+PGM_FIELDS
+lnama		STRING		60
+ltomdet_d	STRING		20
+ltomdet_2d	STRING		20
+lselisih	DFLOAT		8
+
+IMAGE(master) {BASE_ROW=2} {FRSFLD_BACKUP} {LSTFLD_ADVANCE} {IMG_BOX_COLOR1=242,191,191} {IMG_BOX_COLOR2=191,245,196} {IMG_BOX_COLOR3=250,223,223} {IMG_BOX_COLOR4=239,255,151} {IMG_BOX_COLOR5=239,255,151}
+/---SCR671-----------------------------PENERIMAAN PIUTANG------------------------------------------\
+| /----------------------------\ /------------------\ /------------------------------------------\ |
+| |No.Bukti:______________     | |Piu.Cab  :______  | |Pelanggan : __________                    | |
+| |Tanggal :________           | |Status   :_____   | |Nama      : _____________________________ | |
+| |Cab/Div :_____  /_____      | |Type Byr :______  | |Keterangan: _____________________________ | |
+| \----------------------------/ \------------------/ \------------------------------------------/ |
+|  __________________  _________________    ___ ____   User      : ___________      Scr : _____    |
+|                                                                                                  |
+|                                                                                                  |
+|                                                                                                  |
+|                                                                                                  |
+|                                                                                                  |
+|                                                                                                  |
+|                                                                                                  |
+|                                                                                                  |
+| /--------TOTAL TERIMA----------t-----------TOTAL FAKTUR-----------\ /---------SELISIH----------\ |
+| |___________________________.__|_______________________________.__| |_______________________.__| |
+| |                              |                                  | |                          | |
+| |                              |                                  | |                          | |
+| \------------------------------.----------------------------------/ \--------------------------/ |
+\--------------------------------------------------------------------------------------------------/
+
+FIELD(master)
+   pjcnoprc        ALLCAPS          INPUTRI		1 /* No Rencana Penerimaan */
+   pjckodcab       ALLCAPS SCROLL   INPUTRI		5 /* Cabang Piu*/
+   pjcplg          ALLCAPS          INPUTRI             10 /* Kode Pelanggan */
+
+   pjctgl          NONE {DD-MM-YY}  INPUTRI		2 /* Tanggal */
+   pjcsts          ALLCAPS PROTECT  INPUTRI		6 /* Status Rencana */
+   lnama           PROTECT          NONE                12 /* Nama Pelanggan */
+
+
+   pjccab          ALLCAPS SCROLL   INPUTRI		3 /* Cabang */
+   pjcdvs          ALLCAPS SCROLL   INPUTRI		4 /* Divisi */
+   pjckb           NOCHANGE         NONE		7 /* Type Byr */
+   pjcket          ALLCAPS          INPUTRI             13 /* Selisih */
+
+
+   ltomdet_d       TOMBOL           INPUTRI		15 /* Tombol Detil d*/
+   ltomdet_2d      TOMBOL           INPUTRI         	16 /* Tombol Detil 2d */
+
+   pjctyplg        PROTECT QPROTECT UNSEEN INPUTRI     	12 /* Status Rencana */
+   pjctype         PROTECT QPROTECT UNSEEN INPUTRI     	13
+   pjccrtusr       PROTECT          NONE             	14 /* Type Byr */
+   pjcscr          PROTECT          INPUTRI         	18 /* Total Cek */
+   pjctotcek       PROTECT          BIG             	19 /* Total Cek */
+   pjctotfak       PROTECT          BIG             	20 /* Total Faktur */
+   lselisih        PROTECT          BIG             	21 /* Selisih */
+
+DEFAULTS(master)
+pjcsts			INIT		OPEN
+ltomdet_d		INIT		"1d.Isi No.Faktur"
+ltomdet_2d		INIT		"2d.Isi Kas/Bank"
+
+EDITS(master)
+tombol d tidak		ltomdet_d	SHOW_SFL trans
+tombol 2d tidak		ltomdet_2d	SHOW_SFL transa
+
+END_SCREEN
+</PRE
+><P
+>&#13;Dari perintah yang telah kita tulis maka sudah terbentuk file master yang sederhana seperti yang terlihat dari gambar di bawah ini. Tambahkan perintah HOOKS, EDITS, DEFAULTS, SCAN sesuai dengan yang anda inginkan.</P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="gambar14.png"></P
+></DIV
+><P
+>&#13;Sebelum kita melanjutkan langkah selanjutnya yaitu membuat file detail, kita akan mempelajari terlebih dahulu field - field pjc yang kita gunakan sebagai file master di layar 671 ini.</P
+><PRE
+CLASS="programlisting"
+>&#13;nama file	: pjc
+fungsi		: menyimpan informasi penerimaan piutang dari pelanggan
+pjcnoprc	: nomor bukti penerimaan piutang
+pjcplg		: kode pelanggan
+pjccab		: cabang yang melakukan penerimaan piutang
+pjcdvs		: divisi yang melakukan penerimaan piutang
+pjcsts		: OPEN (data belum diposting), CLSD (data sudah diposting)
+pjctotcek	: total penerimaan piutang
+</PRE
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x562.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x582.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Membuat Laporan</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Membuat File Detail</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

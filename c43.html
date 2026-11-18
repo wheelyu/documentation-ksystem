@@ -1,0 +1,170 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>File-File Penting Yang Ada di K-Program.</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Langkah2 Untuk Membuat Program Dengan Bahasa K-System (K-Language)"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="Pemahaman Database, File, Rekord, Field dan Index"
+HREF="c20.html"><LINK
+REL="NEXT"
+TITLE="Konsep Nomer Pelanggan Ksystem."
+HREF="c47.html"></HEAD
+><BODY
+CLASS="chapter"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Langkah2 Untuk Membuat Program Dengan Bahasa K-System (K-Language)</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="c20.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="c47.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="chapter"
+><H1
+><A
+NAME="AEN43"
+></A
+>Chapter 4. File-File Penting Yang Ada di K-Program.</H1
+><P
+>&#13;<PRE
+CLASS="programlisting"
+>&#13;    Daftar file yang ada di K-Program bisa anda dilihat di file posting.h, dimana ada sekitar 115 s/d 120 file. 
+    Tetapi dari 120 file tersebut, ada beberapa file penting yang harus anda ingat dan pahami fungsinya. 
+    
+    File File penting tersebut adalah:
+       - File Kode
+       	  1. bbm	: File buku besar master. misal 100.01 (kas)
+	  2. bbg	: File gabungan nomer buku besar dengan grup misal: 100.0101 adalah kas kecil
+	  								    100.0102 adalah kas kantor
+	  3. bbc	: File neraca dan rugi laba, yang menyimpan informasi,nomer file bbg(misal 100.0101),tahun bulan,Cabang,Divisi,
+	  		  Saldo Awal, Mutasi Debet, Mutasi Kredit, Saldo Akhir.
+    	  4. cmp 	: File Pelanggan, Suplier, Hutang lain dan piutang lain.
+    	  5. brg	: File Barang yang menyimpan semua informasi tentang barang Misal: Kode, Nama barang, satuan, kategori dll
+	  6. brd	: File saldo FIFO/LIFO barang
+	  7. tbl      	: File tabel. File ini menyimpan data yang sifatnya informasi berdasarkan kelompok tertentu. misal:		
+	  		  Data Kategori Barang, Satuan barang, Lokasi barang, Ukuran barang, Bidang Usaha Pelanggan, Bidang Usaha
+			  Suplier, Agama, Gol Darah Karyawan, Jabatan Karyawan dll
+	  8. tbd	: File yang menyimpan perincian informasi dari file tbl. misal data tbl untuk Satuan Barang, data tbd adalah 
+	                  pcs, dozen, koli, kg, buah, pasang dll.
+	  9. cab	: File yang menyimpan informasi cabang.
+	  10. psm,psi   : File yang menyimpan informasi seseorang. Misalnya: Karyawan, Kolektor, Pasien, Kasir dll
+
+
+       - File Transaksi
+          1. bkm,bkd,tcm     : File yang menyimpan data transaksi terima kas/bank dan transaksi keluar kas/bank.
+	  2. ppm,ppd,tcm     : File yang menyimpan transaksi penjualan baik tunai / kredit
+	  3. pmb,ppd,tcm     : File yang menyimpan transaksi pembelian baik tunai / kredit
+	  4. mts,mtd,tlm,tld : File ini bisa dipakai untuk transaksi lainnya. misalnya: Pesanan barang, Koreksi Barang,
+	                       Mutasi Barang dll
+</PRE
+>
+</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="c20.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="c47.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Pemahaman Database, File, Rekord, Field dan Index</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Konsep Nomer Pelanggan Ksystem.</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

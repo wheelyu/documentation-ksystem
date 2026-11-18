@@ -1,0 +1,343 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>&#13;	Mengenal Perintah POSTING untuk APP_TYPE
+	</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Tutorial Ksystem V2016.09.20"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Membuat Program Kas Keluar"
+HREF="c290.html"><LINK
+REL="PREVIOUS"
+TITLE="
+	Mengenal Perintah RTREE
+	"
+HREF="x405.html"><LINK
+REL="NEXT"
+TITLE="
+Membuat Program Pembelian
+"
+HREF="c428.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Tutorial Ksystem V2016.09.20</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x405.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 16. Membuat Program Kas Keluar</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="c428.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN415"
+>16.11. Mengenal Perintah POSTING untuk APP_TYPE</A
+></H1
+><P
+>&#13;Fungsi dari POSTING ini adalah untuk menambah data atau mengubah data saat konfirmasi data (saat kita menekan tombol G pada layar ksystem). Data yang sudah diposting tidak bisa diubah lagi, jadi sebelum kita posting suatu data, kita harus pastikan bahwa data itu benar - benar sudah tepat. Berikut adalah contoh POSTING untuk layar 271. Perintah POSTING untuk APP_TYPE ini tidak bisa digabungkan dengan layar QUERY_TYPE. Oleh karena itu kita harus membuka layar baru. Misalnya kita gunakan layar 272 untuk layar POSTING dari 271. Maka pada bagian atas layar 271 harus diberi perintah seperti berikut:
+	</P
+><PRE
+CLASS="programlisting"
+>&#13;	SCREEN 271 QUERY TYPE Program Kas Keluar
+	SCREEN_FILE bkk
+	SCREEN_NXT_POSTING 272
+	SCREEN_NXT_MAP mnext
+
+	MAP(mnext)
+	bkknum		r_string12	REPLACE
+	bkktgl		r_date1		REPLACE
+	bkkdvs		g_jrndvs	REPLACE
+	</PRE
+><P
+>&#13;	Setelah menuliskan perintah di atas maka barulah kita masuk ke layar 272. Di layar 272 tuliskan perintah - perintah sbg berikut.
+	</P
+><PRE
+CLASS="programlisting"
+>&#13;	SCREEN 272 APP_TYPE Posting Keluar Kas / Bank
+
+	LOCAL
+	PGM_FIELDS
+	lstatus		STRING		5
+	lmutawl		STRING		15
+	lmutakh		STRING		15
+	ltglawl		DATE		4
+	ltglakh		DATE		4
+	lD		STRING		2
+	lK		STRING		2
+	lKK		STRING		3
+	lganti		INT2		2
+
+	IMAGE(master) {BASE_ROW=1} {FRSFLD_BACKUP} {LSTFLD_ADVANCE}
+	SCT272                                                              @DATE
+	+1Posting Pengeluaran Kas/Bank/Giro                                            +1 {TOP}
+               Status        : ____
+	       Nomor. Bukti  : ______________  s/d  ______________
+	       Tanggal       : ________        s/d  ________
+	+2                                                                             +2 {TOP}
+	 No Bukti       Kode Biaya Diskripsi                       Jumlah Biaya  Status
+	+3                                                                             +3 {TOP}
+
+	FIELD(master)
+	/* Symbol Name   Input Attribute  	   Output Attribute  Input Order  Special */
+	     lstatus        PROTECT             	NONE     	1 /* Status OPEN,CLSD */
+	     lmutawl        ALLCAPS             	INPUTRI  	2 /* No. Mutasi */
+	     lmutakh        ALLCAPS             	INPUTRI  	3 /* No. Mutasi */
+	     ltglawl        NONE {DD-MM-YY}             NONE  		4 /* */
+	     ltglakh        NONE {DD-MM-YY}             NONE  		5 /* */
+	
+	DEFAULTS(master)
+	lD		INIT		D
+	lK		INIT		K
+	lKK		INIT		KK
+	lstatus		INIT		OPEN
+	</PRE
+><P
+>&#13;Setelah kita menuliskan field - field master langkah selanjutnya adalah membuat detail untuk file bkd dan pcm dengan menggunakan perintah SUBFILE.
+	</P
+><PRE
+CLASS="programlisting"
+>&#13;
+	/*** SUBFILE INFORMATION ***/
+	IMAGE(trans) {NO_CLS} {LSTFLD_ADVANCE} {FRSFLD_BACKUP} {BASE_ROW=9}
+	 ______________ __________ _______________________ ___________.__  ____ __ ____ _______
+
+	FIELD(trans)
+	/* Symbol Name   Input Attribute  Output Attribute  Input Order  I/O Special */
+    	bkdnum           NOCHANGE      INPUTRI            1 /* jumlah */
+       	bkdnobbm         NOCHANGE      INPUTRI            2 /* Kode Rekening */
+	bbmket           PROTECT       INPUTRI            3 /* diskripsi */
+	bkdjml           PROTECT       INPUTRI            4 /* jumlah */
+	bkdsts           PROTECT       INPUTRI            5 /* Kode Rekening */
+	bkdpry           PROTECT SCROLL      INPUTRI      5 /* Kode Rekening */
+	bkdbgn           PROTECT SCROLL      INPUTRI      6 /* Kode Rekening */
+	bkkkode          PROTECT SCROLL      INPUTRI      6 /* Kode Rekening */
+
+	SUBFILE(trans)
+	SFL_LINES(8)
+
+	SFL_TARGET_GTE
+	/* key symbol name     fields for target     prefix */
+	bkdstsnumidx   lstatus lKK lmutawl {lstatus} {lKK} {lmutakh}
+
+
+	IMAGE(trans2) {NO_CLS} {LSTFLD_ADVANCE} {FRSFLD_BACKUP} {BASE_ROW=15}
+	_____________ ____________ __________ _____ __________.__ ____
+
+	FIELD(trans2)
+	/* Symbol Name   Input Attribute  Output Attribute     Input Order  I/O Special */
+   	pcmnoprc         NOCHANGE		INPUTRI             1 	/* jumlah */
+      	pcmnocek         NOCHANGE       	INPUTRI             2 	/* Kode Rekening */
+        pcmnobbm         PROTECT       		INPUTRI             3 	/* Kode Rekening */
+	pcmdvs           PROTECT       		INPUTRI             4 	/* diskripsi */
+	pcmtotal         PROTECT       		INPUTRI             5 	/* jumlah */
+	pcmsts           PROTECT       		INPUTRI             6 	/* Kode Rekening */
+
+	SUBFILE(trans2)
+	SFL_LINES(6)
+	SFL_COND cganti0
+
+	SFL_TARGET
+	pcmnoprcidx   bkdnum
+	</PRE
+><P
+>&#13;Setelah kita membuat detail file bkd dan pcm maka langkah selanjutnya adalah membuat perintah POSTING seperti berikut:
+	</P
+><PRE
+CLASS="programlisting"
+>&#13;	/*------------------- dupdbkk --------------------*/
+	CALCS()
+	cBT             bkktype == "PU" &#38;&#38; bkkstsexp == "BT"
+	cCLSD		"CLSD"
+
+	MAP(mupdbkk)
+   	cCLSD          bkksts       DO_CALC
+      	cINPG          bkksts       DO_CALC_IF cBT
+        g_tgltrn       bkkpostgl    REPLACE
+
+	DBCALCS(dupdbkk)
+	DBC_COMMAND     UPDATE
+	DBC_TARGET      bkknumidx              bkdnum
+	DBC_MAP         mupdbkk
+
+
+	/*--------------------dupdbkd--------------------*/
+	MAP(mupdbkd)
+	cCLSD		bkdsts		DO_CALC
+
+	DBCALCS(dupdbkd)
+		DBC_COMMAND	UPDATE
+		DBC_TARGET	bkdprmidx	bkdprm
+		DBC_MAP		mupdbkd
+
+
+	/* ------------------ dupdpcm -------------------*/
+	CALCS()
+	cTM            pcmtype =="T" || pcmtype =="M"
+	cSK            pcmtype == "K"
+	c1              1
+
+	MAP(mupdpcm)
+   	cCLSD                pcmsts     DO_CALC_IF cTM
+      	cINPG                pcmsts     DO_CALC_IF cSK
+
+	DBCALCS(dupdpcm)
+	DBC_COMMAND     UPDATE
+	DBC_TARGET      pcmprmidx   pcmprm
+	DBC_MAP         mupdpcm
+
+	/*--------------------dmappcm--------------------*/
+	MAP(mmappcm)
+	c1                   lganti             DO_CALC
+
+	DBCALCS(dmappcm)
+	DBC_COMMAND MAPMAP
+	DBC_MAP     mmappcm
+
+
+	SPCALCS(spdetail)
+	dupdbkk
+	dupdbkd
+
+	SPCALCS(spdetail2)
+	dupdpcm
+	dmappcm
+
+	POSTING(trans)
+	PST_COMMAND spdetail
+
+	POSTING(trans2)
+	PST_COMMAND spdetail2
+	</PRE
+><P
+>&#13;Dari perintah dupdbkk dan dupdbkd yang terdapat di spdetail fungsinya adalah untuk mengubah bkdsts dan bkksts dari "OPEN" menjadi "CLSD". Karena pada bagian RESTRICT terdapat perintah RST_UPD_COND cnotOPEN di mana cnotOPEN isinya adalah bkksts != "OPEN", maka kita tidak bisa mengubah data di bkk. Oleh sebab itu kita harus benar - benar memastikan bahwa data yang akan kita POSTING sudah tepat.
+	</P
+><P
+>&#13;Urut - urutan jalannya perintah di atas adalah sebagai berikut:
+	</P
+><PRE
+CLASS="programlisting"
+>&#13;	1. Program akan menjalankan POSTING trans terlebih dahulu.
+	2. Setiap program membaca 1 record trans akan dilanjutkan dengan membaca semua record trans2.
+	3. Setelah membaca record trans2 maka program akan kembali lagi ke trans untuk membaca record trans selanjutnya jika ada.
+	4. Setelah membaca record trans selanjutnya maka program akan kembali membaca semua record trans2
+
+	Note: oleh karena itu untuk menghindari program membaca record trans2 berkali - kali ( jika record trans lebih dari 1),
+	maka di layar 272 ini di dalam perintah spdetail2 terdapat perintah dmappcm.
+	Fungsi dari dmappcm ini adalah untuk mengcopykan c1 yang isinya 1 ke dalam lganti. Karena di SFL_COND untuk trans2 adalah
+	cganti0 yang isinya lganti == 0. Maka ketika program membaca record trans selanjutnya tidak diteruskan masuk ke record trans2
+	karena lganti == 1.
+	</PRE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x405.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="c428.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Mengenal Perintah RTREE</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c290.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Membuat Program Pembelian</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

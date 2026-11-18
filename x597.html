@@ -1,0 +1,338 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>&#13;Membuat Program Posting
+</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Tutorial Ksystem V2016.09.20"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="
+Membuat Program Penerimaan Piutang Pelanggan
+"
+HREF="c569.html"><LINK
+REL="PREVIOUS"
+TITLE="
+Membuat File Detail
+"
+HREF="x582.html"><LINK
+REL="NEXT"
+TITLE="
+Membuat Laporan
+"
+HREF="x608.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Tutorial Ksystem V2016.09.20</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x582.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 20. Membuat Program Penerimaan Piutang Pelanggan</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x608.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN597"
+>20.3. Membuat Program Posting</A
+></H1
+><P
+>&#13;Karena program posting untuk APP_TYPE tidak bisa digabungkan dengan layar QUERY_TYPE maka layar posting ini akan kita masukkan ke layar 672. Sebelum masuk ke layar 672, ketikkan terlebih dahulu perintah berikut di layar 671 di bwh perintah SCR_FILE pjc.</P
+><PRE
+CLASS="programlisting"
+>&#13;SCR_NXT_POSTING 672
+SCR_NXT_MAP mnext
+
+MAP(mnext)
+pjcnoprc	r_string1	REPLACE
+pjctgl		r_date1		REPLACE
+</PRE
+><P
+>&#13;Setelah mengetikkan perintah di atas marilah kita segera masuk ke layar 672 untuk membuat program postingnya. Buka editor vi dan ketikkan perintah vi prt9000/sct672. Setelah kita masuk ke layar 672 ketikkan perintah berikut untuk membuat program POSTING.</P
+><PRE
+CLASS="programlisting"
+>&#13;SCREEN 672 APP_TYPE Posting Bayar Piutang Pelanggan
+
+LOCAL
+PGM_FIELDS
+lopen		STRING		5
+lmutawl		STRING		15
+ltipe		STRING		2
+
+IMAGE(master) {BASE_ROW=1} {FRSFLD_BACKUP} {LSTFLD_ADVANCE}
+SCT672                                                             @DATE
+               Posting Pembayaran Piutang Pelanggan
+===============================================================================
+               Status        : ____    Type : _
+               Nomor. Bukti  : ______________   Dir: _______
+===============================================================================
+
+
+FIELD(master)
+   lopen     NOCHANGE            NONE     1 /* Status OPEN,CLSD */
+   ltipe     PROTECT             NONE     1
+   lmutawl   ALLCAPS             INPUTRI  2
+   g_dir     PROTECT             NONE     1
+
+DEFAULTS(master)
+lopen		INIT		OPEN
+lmutawl		INIT		{r_string1}
+ltipe		INIT		S
+
+/*** SUBFILE INFORMATION (trans) ***/
+IMAGE(transt) {NO_CLS} {LSTFLD_ADVANCE} {FRSFLD_BACKUP} {BASE_ROW=8}
+=============================================================================
+ Nomor Fak       Tgl jt    No.Rek      Sisa Hutang    Jumlah Bayar  Dvisi
+=============================================================================
+
+IMAGE(trans) {NO_CLS} {LSTFLD_ADVANCE} {FRSFLD_BACKUP} {BASE_ROW=11}
+ ______________ _______________ ________ ____________ _________ _______ ________ __
+
+FIELD(trans)
+/* Symbol Name   Input Attribute  Output Attribute  Input Order  I/O Special */
+   pjdnofak      NOCHANGE            INPUTRI          1 /* Nomor Faktur */
+   pjdnobuk      NOCHANGE SCROLL     INPUTRI          1 /* Nomor Faktur */
+   pjdnobbm      PROTECT SCROLL      NONE             3 /* Sisa Hutang */
+   pjdjml        NOCHANGE            NONE             4 /* Jumlah dibayar */
+   pjddvs        NOCHANGE SCROLL     NONE             4 /* Jumlah dibayar */
+   pjccab        NOCHANGE SCROLL     NONE             4 /* Jumlah dibayar */
+   pjckodcab     NOCHANGE SCROLL     NONE             4 /* Jumlah dibayar */
+   pjdtype       NOCHANGE SCROLL     NONE             4 /* Jumlah dibayar */
+
+SUBFILE(trans)
+SFL_LINES(4)
+SFL_TITLE(transt)
+
+SFL_TARGET
+pjdbukurtidx   lmutawl
+
+/*** SUBFILE INFORMATION ***/
+IMAGE(trans2) {NO_CLS} {LSTFLD_ADVANCE} {FRSFLD_BACKUP} {BASE_ROW=16}
+ ______________  ______________ ____ ____________ ________ ___________ _ ____
+
+FIELD(trans2)
+   pcmnoprc      NOCHANGE            NONE             1
+   pcmnocek      PROTECT             INPUTRI          2 /* nomor cek */
+   pcmsts        PROTECT             NONE             3 /* Status */
+   pcmbank       PROTECT             INPUTRI          4 /* Kode Rekening */
+   pcmtgljtp     PROTECT {DD-MM-YY}  INPUTRI          5 /* Tanggal jt */
+   pcmtotal      PROTECT             INPUTRI          6 /* Nilai Cek */
+   pcmtype       PROTECT             INPUTRI          6 /* Nilai Cek */
+   pcmdvs        PROTECT             NONE             9
+
+CALCS()
+cganti0		lganti == 0
+
+SUBFILE(trans2)
+SFL_LINES(4)
+SFL_COND cganti0
+
+SFL_TARGET
+    pcmnoprcidx    pjdnobuk
+
+/*--------------- dupdppm ---------------*/
+CALCS()
+cTsisa1         ppmsisa != 0
+cCLSD		"CLSD"
+cINPG		"INPG"
+cppmbyr         ppmbyr + pjdjml
+cppmsisa        ppmsisa - pjdjml
+cLUNAS          ppmsisa == 0
+
+MAP(mupdppm)
+   g_tgltrn       ppmtglbyr      REPLACE
+   cppmbyr        ppmbyr         DO_CALC
+   cppmsisa       ppmsisa        DO_CALC
+   cCLSD          ppmsts         DO_CALC_IF cLUNAS
+   cINPG          ppmsts         DO_CALC_IF cTsisa1
+
+DBCALCS(dupdppm)
+	DBC_COMMAND	UPDATE
+	DBC_TARGET	ppmnofakidx	pjdnofak
+	DBC_MAP		mupdppm
+
+/*--------------- dupdpjd ---------------*/
+MAP(mupdpjd)
+   cCLSD	pjdsts		DO_CALC
+
+DBCALCS(dupdpjd)
+	DBC_COMMAND	UPDATE
+	DBC_TARGET	pjdprmidx	pjdprm
+	DBC_MAP		mupdpjd
+
+/*--------------- dupdpjc ---------------*/
+MAP(mupdpjc)
+   cCLSD	pjcsts		DO_CALC
+
+DBCALCS(dupdpjc)
+	DBC_COMMAND	UPDATE
+	DBC_TARGET	pjcnoprcidx	pjdnobuk
+	DBC_MAP		mupdpjc
+
+/* -------------------- dupdpcm -------------------- */
+CALCS()
+cTUNAI		pcmtype == "T" || pcmtype == "M"
+ctypeCK		pcmtype == "C" || pcmtype == "K"
+c1		1
+
+MAP(mupdpcm)
+   cINPG                pcmsts          DO_CALC_IF ctypeCK
+   cCLSD                pcmsts          DO_CALC_IF cTUNAI
+
+DBCALCS(dupdpcm)
+        DBC_COMMAND     UPDATE
+        DBC_TARGET      pcmprmidx              pcmprm
+        DBC_MAP         mupdpcm
+
+/*--------------- dmappcm ---------------*/
+MAP(mmappcm)
+c1		lganti		DO_CALC
+
+DBCALCS(dmappcm)
+	DBC_COMMAND	MAPMAP
+	DBC_MAP		mmappcm
+
+SPCALCS(spcal1)
+	dupdppm <FONT
+COLOR="RED"
+>berfungsi untuk mengupdate file ppm yang menyimpan informasi piutang pelanggan</FONT
+>
+	dupdpjd <FONT
+COLOR="RED"
+>berfungsi untuk mengubah pjdsts dari OPEN menjadi CLSD</FONT
+>
+	dupdpjc <FONT
+COLOR="RED"
+>berfungsi untuk mengubah pjcsts dari OPEN menjadi CLSD</FONT
+>
+
+SPCALCS(spcal2)
+	dupdpcm <FONT
+COLOR="RED"
+>berfungsi mengubah pcmsts dari OPEN menjadi CLSD bila pembayaran tunai/mutasi dan menjadi INPG bila pembayaran melalui cek</FONT
+>
+	dmappcm
+
+POSTING(trans)
+	spcal1
+
+POSTING(trans2)
+	spcal2
+
+END_SCREEN
+</PRE
+><P
+>&#13;Tulisan yang berwarna merah di atas hanyalah keterangan saja jadi anda tidak perlu menuliskannya. Selanjutnya kita akan mencoba membuat laporan untuk layar penerimaan piutang ini</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x582.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x608.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Membuat File Detail</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c569.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Membuat Laporan</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

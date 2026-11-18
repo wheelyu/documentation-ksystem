@@ -1,0 +1,27 @@
+IMAGE(tmptranst)
+/------------------------------------------------------------\
+|t.HistorisTolakan                                           |
+|/----------------t-------------------------------t---------\|
+||t.Tanggal       |t.Ket                          |t.Nip    ||
+|\----------------.-------------------------------.---------/|
+\------------------------------------------------------------/
+
+
+IMAGE(tmptrans)
+!|________________|_______________________________|_________||
+
+
+FIELD(tmptrans)
+tldtglfak    PROTECT {DD-MM-YY}         INPUTRI          1
+tldket       TEXTAREA PROTECT                    INPUTRI          1
+tldplg       PROTECT                   INPUTRI          2
+
+
+SUBFILE(tmptrans)
+SFL_TITLE(tmptranst)
+SFL_LINES(12)        /* Jml record yang kelihatan di layar */
+SFL_SORT_BY_FIELD tldoto
+SFL_COND cbukanPenPnl
+
+SFL_TARGET
+tldstsbrgukr   tlmdata gv_OPEN tlmnobuk lHISBLM

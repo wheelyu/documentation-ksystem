@@ -1,0 +1,180 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Database File, Rekord, Field dan Index</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Tutorial Ksystem V2016.09.20"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="File - File Utama dan Field - Field Utamanya dalam Program Akuntansi Ksystem"
+HREF="c95.html"><LINK
+REL="NEXT"
+TITLE="Harddisk, Memori dan CPU (Central Processing Unit)"
+HREF="c106.html"></HEAD
+><BODY
+CLASS="chapter"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Tutorial Ksystem V2016.09.20</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="c95.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="c106.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="chapter"
+><H1
+><A
+NAME="AEN99"
+></A
+>Chapter 8. Database File, Rekord, Field dan Index</H1
+><P
+>&#13;    Satu file identik dengan satu buku. Misalnya file brg adalah sama
+    dengan kalau kita punya satu buku yang berisi banyak halaman mengenai
+    barang. Setiap halaman mempunyai informasi mengenai satu jenis barang
+    (mis. TV Toshiba Regza 21 inchi). 
+    </P
+><P
+>&#13;    Setiap halaman dalam buku barang ini adalah identik
+    dengan 1 rekord dalam jargon programmer. 
+    </P
+><P
+>&#13;    Untuk setiap rekord ini (dalam 
+    hal ini TV Toshiba Regza 21 inchi), kita punya informasi yang lebih detail 
+    mengenai harga pokok, resolusi layar, harga jual, stok yang tersisa dll.
+    Setiap detil informasi rekord ini kita sebut sebagai field.
+    Jadi kita bisa punya file brg yang di dalamnya terdapat banyak rekord
+    tergantung dari jenis barang yang kita miliki di dalam toko kita dan 
+    untuk setiap jenis barang, kita punya field brgkode, brghrgpok, brghrgjual,
+    brgstok dll.
+    </P
+><P
+>&#13;    Bila jumlah halaman dalam buku barang kita sangat banyak, misalnya 10 ribu
+    rekord. Maka sangatlah sulit untuk mencari informasi dari 1 barang tertentu
+    karena kita tidak tahu informasi barang tsb. ada di halaman berapa.
+    Untuk memudahkan pencarian, kita bisa membuat buku buku index yang masing
+    masing kita beri nama misalnya kita buat satu buku index brgkodidx dengan 
+    urutan berdasarkan brgkode. Jadi di dalam buku index brgkodidx ini ada 
+    isian brgkode yang sudah diurutkan abjad dan di sebelah kanan dari setiap 
+    kode barang ada nomor halaman yang menyimpan informasi dari kode barang tsb.
+    Buku buku index lain dapat dibuat dan field field yang diurutkan boleh
+    lebih dari 1 field (composite index). Setiap index juga harus ditentukan
+    apakah isiannya boleh duplikat atau tidak. Dalam hal brgkode ini index
+    brgkodidx akan kita buat tidak boleh duplikat karena kita tidak ingin
+    informasi barang yang sama bisa terjadi duplikat di banyak halaman.
+    </P
+><PRE
+CLASS="programlisting"
+>&#13;    Brgkode			Halaman
+    -----------------------------------
+    ACDAIKIN                      527
+    ACMITSUBISHI                  123
+    BEARINGNGK                    324
+    dst
+    </PRE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="c95.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="c106.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>File - File Utama dan Field - Field Utamanya dalam Program Akuntansi Ksystem</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Harddisk, Memori dan CPU (Central Processing Unit)</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

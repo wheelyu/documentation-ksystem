@@ -1,0 +1,75 @@
+IMAGE(tmptranst)
+/-------------------------------------------\
+|/-----------------------------------------\|
+|| t.NoBuk    : ___________________        ||
+|| t.Tglmeet  : ______________             ||
+|| t.Jam      : ______________             ||
+|| t.LinkZoom : __________________________ ||
+|| t.RoomZoom : ______                     ||
+|| t.Status   : ______                     ||
+||		        spasi                      ||
+||	______                                 ||
+|\-----------------------------------------/|
+| t.UplSaatProgClosemeetINPG                |
+|/-----------------------------------------\|
+||t.UplDOC                                 ||
+|\-----------------------------------------/|
+|/----------------DOCUPLOAD----------------\|
+||                                         ||
+||                                         ||
+|\-----------------------------------------/|
+\-------------------------------------------/
+
+IMAGE(tmptrans)
+
+FIELDS(tmptranst)
+tkdnobuk        PROTECT                             INPUTRI 1
+tkdtgl          ALLCAPS NOLIMIT {DD-MM-YY}          INPUTRI 2
+tkdsisstr       NOCHANGE                            INPUTRI 3
+tkdket          TEXTAREA                            INPUTRI 4
+tkdtype         ALLCAPS                             INPUTRI 5
+tkdsts          PROTECT                             INPUTRI 6
+
+ltombolket	    TOMBOL  		                    INPUTRI 6
+
+DEFAULTS(tmptranst)
+tkdsisstr       DFALT_SCAN  BLANKS
+                            09:00-10:00
+                            10:00-11:00
+                            11:00-12:00
+                            13:00-14:00
+                            14:00-15:00
+                            15:00-16:00
+                            16:00-17:00
+                            17:00-18:00
+tkdsts          INIT_ADD        OPEN
+
+EDITS(tmptranst)
+e.Mandatory     tkdtgl      MANDATORY
+e.Mandatory     tkdsisstr   MANDATORY
+e.Mandatory     tkdket      MANDATORY
+e.Mandatory     tkdtype     MANDATORY
+
+HOOKS(tmptranst)    
+CLICKED     	    cur_field=ltombolket     DO_MAP SHOW
+                    IF cketinpg mdum
+                    ELSE HKCURSOR NOSTAY
+                    HKMSG t.KirimSaatINPG
+CLICKED			    cur_field=ltombolket	 DO_SPCALCS spkreml
+
+SUBFILE(tmptrans)
+SFL_LINES(1)
+SFL_TITLE(tmptranst)
+SFL_UPL_DIRFLD  tlmtgl
+SFL_DOCUPLFLD tkdoto
+SFL_DOCUPLFLD_DBCALCS   dupddoctkdclose
+SFL_UPL_COND   csaatclsmeet
+SFL_UPL_COND_MSG Upload Saat Closemeet INPG
+SFL_SHOW_NEXT
+SFL_TARGET
+    tkddatbukll   lCLOSEMEET tlmnobuk 
+
+SFL_MAP
+lCLOSEMEET	tkddata   REPLACE
+tlmnobuk	tkdnobuk  REPLACE
+/*gv_OPEN     tkdsts    REPLACE*/

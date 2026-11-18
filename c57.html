@@ -1,0 +1,479 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Tipe Program &#38; 19 Perintah Bahasa K-System</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Langkah2 Untuk Membuat Program Dengan Bahasa K-System (K-Language)"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="Konsep Nomer Pelanggan Ksystem."
+HREF="c47.html"><LINK
+REL="NEXT"
+TITLE="IMAGE"
+HREF="x120.html"></HEAD
+><BODY
+CLASS="chapter"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Langkah2 Untuk Membuat Program Dengan Bahasa K-System (K-Language)</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="c47.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x120.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="chapter"
+><H1
+><A
+NAME="AEN57"
+></A
+>Chapter 6. Tipe Program &#38; 19 Perintah Bahasa K-System</H1
+><P
+>&#13;<SPAN
+CLASS="bold"
+><B
+CLASS="emphasis"
+> <SPAN
+CLASS="italic"
+><I
+CLASS="emphasis"
+>Program K-System dibedakan menjadi 4 type:</I
+></SPAN
+> </B
+></SPAN
+>  
+</P
+><P
+>&#13;<PRE
+CLASS="programlisting"
+>&#13;	  <SPAN
+CLASS="bold"
+><B
+CLASS="emphasis"
+> 1. MENU TYPE </B
+></SPAN
+>
+		Type Program untuk membuat menu
+
+	  <SPAN
+CLASS="bold"
+><B
+CLASS="emphasis"
+> 2. QUERY_TYPE </B
+></SPAN
+>
+		Type Program dimana operator bisa menambah, mengubah dan menghapus data.
+
+	  <SPAN
+CLASS="bold"
+><B
+CLASS="emphasis"
+> 3. APP_TYPE </B
+></SPAN
+>
+		Type Program untuk membuat proses data lanjutan. Misalnya: proses saat posting 
+		data untuk membuat jurnal, menambah FIFO barang, mengubah saldo barang dll
+
+	  <SPAN
+CLASS="bold"
+><B
+CLASS="emphasis"
+> 4. REPORT_TYPE </B
+></SPAN
+>
+		Type Program untuk mengeluarkan laporan. 
+
+</PRE
+>
+</P
+><P
+>&#13;<PRE
+CLASS="programlisting"
+>&#13;<SPAN
+CLASS="bold"
+><B
+CLASS="emphasis"
+> <SPAN
+CLASS="italic"
+><I
+CLASS="emphasis"
+>Susunan Pemakaian :</I
+></SPAN
+> </B
+></SPAN
+>  
+
+        SCREEN  ????  Tipe_Program   Judul_Program
+	
+	misal:  
+	<SPAN
+CLASS="bold"
+><B
+CLASS="emphasis"
+>SCR 2900 MENU_TYPE t.BelajarProgram
+	END_SCREEN </B
+></SPAN
+>
+
+
+	Keterangan:
+	SCREEN        adalah Perintah bahasa Ksystem untuk memulai menulisan program
+	END_SCREEN    adalah Perintah bahasa Ksystem untuk mengakhiri penulisan program 
+	???? adalah nomer scr. Misal 2900
+	Tipe_Program Misal MENU_TYPE
+	Judul_Program misal: Menu Belajar Program Ksystem
+
+</PRE
+>
+</P
+><P
+>&#13;<SPAN
+CLASS="bold"
+><B
+CLASS="emphasis"
+> <SPAN
+CLASS="italic"
+><I
+CLASS="emphasis"
+>19 Perintah Utama Bahasa K-System:</I
+></SPAN
+> </B
+></SPAN
+>  
+</P
+><P
+>&#13;    <P
+></P
+><OL
+TYPE="1"
+><LI
+><P
+>SCREEN</P
+></LI
+><LI
+><P
+>IMAGE</P
+></LI
+><LI
+><P
+>FIELD</P
+></LI
+><LI
+><P
+>EDIT</P
+></LI
+><LI
+><P
+>DEFAULT</P
+></LI
+><LI
+><P
+>PERMIT</P
+></LI
+><LI
+><P
+>HELP</P
+></LI
+><LI
+><P
+>LOCAL</P
+></LI
+><LI
+><P
+>HOOKS</P
+></LI
+><LI
+><P
+>CALCS</P
+></LI
+><LI
+><P
+>MAP</P
+></LI
+><LI
+><P
+>SUBFILE</P
+></LI
+><LI
+><P
+>SCAN</P
+></LI
+><LI
+><P
+>MASTER_MP</P
+></LI
+><LI
+><P
+>DBCALCS</P
+></LI
+><LI
+><P
+>SPCALCS</P
+></LI
+><LI
+><P
+>POSTING</P
+></LI
+><LI
+><P
+>RTREE</P
+></LI
+><LI
+><P
+>END_SCREEN</P
+></LI
+></OL
+>
+    </P
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN116"
+>6.1. SCREEN</A
+></H1
+><P
+>&#13;	Setiap program Ksystem diawali dengan perintah SCREEN.
+	Perintah SCREEN ini memberi informasi nomor layar, tipe layar dan
+	judul dari layar ini yang akan ditampilkan di sistem menu.
+	</P
+><PRE
+CLASS="programlisting"
+>&#13;	Cara Memakai: SCREEN nomor_layar tipe_layar judul_layar
+
+	Contoh: SCREEN 201 QUERY_TYPE Terima Kas
+
+	Nomor Layar mempunyai ruang lingkup dari 0 s/d 9999
+	Judul layar dapat diisi sembarang karakter yang dapat dicetak
+
+	Pilihan pada SCREEN:
+	   SCR_FILE  namaFile        
+		Khusus QUERY_TYPE, pilihan ini harus diisi untuk mengetahui nama dari master file 
+
+	   SCR_QRY_SCAN namaDbcalcs_yang_tipenya_SCANSCAN
+		Scan yang akan dijalankan secara otomatis pada saat query dan
+		pada saat pindah dari satu rekord ke rekord lain. Fungsi
+		utama untuk menghitung total barang dan dimasukkan ke field
+		brg (scr3124). 
+
+	   SCR_QRY_SCAN2 namaDbcalcs_yang_tipenya_SCANSCAN
+		Scan 2 yang akan dijalankan secara otomatis pada saat query dan
+		pada saat pindah dari satu rekord ke rekord lain. Fungsi
+		utama untuk menghitung total barang dan dimasukkan ke field
+
+	   SCR_TO_FLY nomor_layar nomor_layar ...
+		Layar layar lain yang dapat dijalankan langsung dari
+		layar ini dengan menggunakan tombol 'f' atau 'ctrl-f'
+
+	   RPT_TO_FLY nomor_layar nomor_layar ...
+		Layar layar laporan yang dapat dijalankan langsung untuk
+		mencetak rekord yang sudah diquery.
+
+	   SCR_REPORT_IF namaCalcs nomor_layar namaCalcs nomor layar
+		Menjalankan laporan di scr lain lewat tombol 'e'.
+
+	   SCR_NXT_POSTING nomor_layar
+		Pilihan ini untuk menjalankan program posting dari layar skrg 
+		dengan menekan tombol g, jika layar skrg adalah QUERY_TYPE.
+		Khusus untuk layar dengan tipe APP_TYPE akan dijalankan secara otomatis jika layar skrg sdh
+		selesai.
+
+	   SCR_NXT_POSTING_IF namaCalcs nomor_layar namaCalcs nomor layar
+	   	Fungsinya sama dengan SCR_NXT_POSTING, hanya ini ada kondisinya.
+		Tidak boleh bersamaan dengan SCR_NXT_POSTING.
+
+	   SCR_NXT_COND namaCalcs
+		Kondisi untuk melakukan SCR_NXT_POSTING. Jika kondisi terpenuhi maka 
+		SCR_NXT_POSTING dijalankan. Apabila kondisi tidak terpenuhi maka akan
+		keluar komentar yang ada di SCR_NXT_MSG
+
+	   SCR_NXT_MSG Pesan anda bila kondisi 'g' tidak memenuhi.
+
+	   SCR_NXT_MAP namaMap
+		Map yang dilakukan sebelum pindah ke layar lain untuk melakukan
+		POSTING.
+
+	   SCR_IMAGE_MAP namaMap
+		Map yang dilakukan untuk memilih tipe dari master 
+		dengan mengubah variabel global g_master_type.
+		Isinya  boleh 'a' s/d 'z'. Bila diisi 'a'
+		maka harus ada IMAGE(mastera) dan master2a bila
+		ada layar kedua.
+
+           SCR_ENTER_COND namaCalcs 	   
+		Kondisi untuk masuk ke layar ini, bila gagal pesan di
+		SCR_ENTER_MSG akan dikeluarkan
+
+	   SCR_ENTER_MSG Pesan
+		Pesan yang dikeluarkan bila gagal masuk ke layar karena tidak
+		memenuhi SCR_ENTER_COND
+
+	   SCR_APR NamaCalcs
+	   	Perintah ini menjalankan proses approval master lewat calcs.
+		Calcs ini harus memanggil ap_aprmt.
+	   SCR_APR_COND NamaCalcs
+		Kondisi untuk melakukan approval dengan pilihan 'v' di layar query.
+	   SCR_APR_MSG Pesan anda bila kondisi 'v' tidak terpenuhi.
+
+	   SCR_APR_TRANS Nama_trans NamaCalcs,  mis SCR_APR_TRANS transb capr_dt
+	   	Perintah ini menjalankan proses approval detil (trans?) lewat calcs.
+		Calcs ini harus memanggil ap_aprdt.
+
+           SCR_APR_TRANS_COND ccond_apr_transa
+		Kondisi untuk melakukan approval dengan pilihan 'v' di layar query.
+
+	   SCR_TGLTRN_PASS_OK
+		Bila ststrntoday diisi "Y" dan g_tgltrn &#60;&#62; SYSDATE maka
+		program tidak bisa masuk ke layar query maupun aplikasi.
+		Pilihan ini memungkinkah untuk tetap masuk ke layar
+		walaupun g_tgltrn &#60;&#62; SYSDATE. Pilihan ini juga memungkinkan
+		untuk masuk ke layar walau stsbintang berisi 'Y'.
+
+	   SCR_LOGFLD NamaField 
+	   	Mis. bkknobuk
+	        Dengan menambahkan perintah ini, secara otomatis akan menambah data file log dengan
+		informasi user,tgl,jam yg menambah,mengubah dan menghapus. Untuk menampilkan historis
+		log dari record suatu screen dengan menekan tombol F5
+
+	   SCR_JRNFLD namaField
+	   	Mis. bkknobuk
+	   	Field ini akan berisi nama field utama yang tidak duplikat
+		yang akan dipakai untuk membuat jurnal percobaan. Untuk menampilkan jurnal
+		percobaan dengan menekan tombol F2
+
+           SCR_AUTO_ADD_MST
+	   	Pilihan ini membuat pada saat menyimpan data di master akan
+		otomatis turun ke detail1 dan langsung pada posisi tambah.
+		Demikian juga sesudah menambah di detail1 akan pada posisi
+		tambah lagi masih di detail1.
+
+	   SCR_JOIN_FILE1 namaField
+	   SCR_JOIN_FILE2 namaJoinField
+	        Satu pasang pilihan di atas berfungsi untuk menggabung
+		file yang sedang diquery dengan file yang ingin dijoin
+		dengan perintah namaField = namaJoinField.
+		Dengan perintah ini semua field yang termasuk di file yang
+		dijoin akan ikut dalam pencarian (tidak diloncati).
+
+	   SCR_BATALPST untuk memberi tahu bahwa SCREEN untuk batal posting, 
+	       SCR_FILE harus btl.  Variabel global g_batalpst akan terisi 1 
+	       di saat proses batal posting. Semua calcs akan diubah + jadi -
+	       dan sebaliknya kecuali nama calcs diawali dengan ct_. Jurnal
+	       yang terbentuk pada saat posting akan dihapus.
+
+	   SCR_VOIDPST sama dengan SCR_BATALPST tapi jurnal yang terbentuk
+	       pada saat posting tidak dihapus, tapi jurnal balik akan
+	       ditambahkan untuk mengimbangkan (mengoffset) jurnal pada saat
+	       posting.
+
+           SCR_NO_REKAM berfungsi saat kita menekan tombol End di layar APP_TYPE, 
+	       tidak perlu lagi menekan tombol (R)ekam.
+	</PRE
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="c47.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x120.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Konsep Nomer Pelanggan Ksystem.</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>IMAGE</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

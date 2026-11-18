@@ -1,0 +1,306 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>DBCALCS</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Tutorial Ksystem V2016.09.20"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Daftar Perintah Program Ksystem"
+HREF="c173.html"><LINK
+REL="PREVIOUS"
+TITLE="MASTER_MP"
+HREF="x267.html"><LINK
+REL="NEXT"
+TITLE="SPCALCS"
+HREF="x275.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Tutorial Ksystem V2016.09.20</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x267.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 15. Daftar Perintah Program Ksystem</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x275.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN271"
+>15.15. DBCALCS</A
+></H1
+><P
+>&#13;   Perintah ini menambah, mengubah atau menghapus SATU rekord yang ada di 
+      hard-disk. Selain itu ada fungsi lain untuk mengecek keberadaan rekord
+      tertentu (DBC_COMMAND JOIN) atau menghitung sekumpulan rekord (SCANSCAN).
+	</P
+><PRE
+CLASS="programlisting"
+>&#13;   Cara memakai:
+DBCALCS(namaDbcalcs)
+      1. DBC_COMMAND  ADD/ADD_DIR/UPDATE/UPDATE_BUF3/UPDATE_DIR/DELETE/DELETE_RANGE/JOIN/JOIN_DIR/ADD_NO_CLEAR/ADD_NO_CLEAR_DIR/ADD_NO_CLEAR_PRM_DIR/UPDATE_LT/UPDATE_RANGE/JOIN_LT/JOIN_LAST_SFL/SCANSCAN
+         DBC_TARGET   namaIndex  namaField/lokal namaField/lokal ...
+         DBC_FILE     namaFile
+         DBC_MAP      namaMap
+         DBC_COND     namaCalc
+	 /* khusus ADD_DIR dan UPDATE_DIR*/
+	 DBC_DIR      0 atau nama subDirektori atau {namaField} 
+	 DBC_SELECT   NamaCalc
+	 /* Fasilitas ini hanya untuk DBC_COMMAND JOIN saja, fungsinya
+	 ** untuk memilih lagi diantara yang ditemukan. Misalnya kita
+	 ** ingin mencari faktur untuk pelanggan tertentu yang umurnya 
+	 ** sudah lebih dari 45 hari. Bila ada faktur yang umurnya lebih 
+	 ** dari 45 hari untuk pelanggan itu, maka pelanggan itu tidak
+	 ** bisa dilayani dulu. Rekord yang dijoin dimasukkan ke buf3, khusus
+	 ** untuk DBC_SELECT di JOIN, rekord di buf3 dimasukkan ke buf1 
+	 ** pada saat diperiksa calcsnya DBC_SELECT. Sesudah diperiksa, 
+	 ** buf1 yang asli dikembalikan kembali.
+	 */
+
+	 /* khusus SCAN */
+	 DBC_SCAN       namaScan  /* scan harus diatas dbcalcs ini */
+	 DBC_SUM_FIELD  namaField/namaCalcs  /* hasil masuk r_double8 */
+	 DBC_SUM_FIELD2 namaField/namaCalcs /* hasil masuk r_double7 */
+	 DBC_SUM_FIELD3 namaField/namaCalcs  /* hasil masuk r_double6 */
+	 DBC_SUM_FIELD4 namaField/namaCalcs  /* hasil masuk r_double5 */
+	 DBC_SUM_MAP    namaMap          /* Menjumlah lewat MAP */
+		Map dari scan ini akan menjumlah ke field
+		tujuan, baik itu REPLACE maupun DO_CALC. Bila ada
+		field yang bukan total, misalnya harga rata yang dihitung
+		sesudah  DBC_SUM_MAP, gunakan DBC_MAP yang akan dijalankan
+		sesudah DBC_SUM_MAP ini..
+	 DBC_SCAND_IMAGE namaImage /* ditampilkan di layar
+				      ** bila run -d
+				      */
+         DBC_LAST_TARGET   namaIndex  namaField/lokal namaField/lokal ..
+	 				/* batas akhir dari scan */
+         DBC_JOIN_TARGET   namaIndex  namaField/lokal 
+	 		/* khusus untuk SCANSCAN */
+	 DBC_SCAN_COND  namaCalcs /* Kondisi untuk mengecek
+				     ** apakah rekord ditambahkan 
+				     ** ke SUM_FIELD atau tidak
+				     */
+ 
+         Catatan: 
+	    1. DBC_COMMAND tipe ADD tidak membutuhkan DBC_TARGET
+	    2. DBC_FILE  hanya untuk tipe ADD
+	    3. Index harus tidak duplikat kecuali untuk tipe JOIN
+	    4. Bila DBC_COMMAND tipe UPDATE atau UPDATE_DIR, rekord 
+	       dibaca dulu dan diperhitungkan untuk menentukan 
+	       perhitungan DBC_COND 
+	       a. DBC_COND dicek, keluar bila gagal
+	       b. DBC_MAP akan dijalankan 
+	       c. rekord di hard-disk akan berusaha diubah 
+	       d. bila update gagal karena rekord sudah diubah orang
+		  lain, rekord terbaru akan dibaca dan proses 
+		  a s/d d diatas akan diulang lagi.
+	    5. Untuk DBC_COMMAND tipe UPDATE_BUF3 (biasanya untuk 
+	       retur), DBC_COND dicek dengan rekord asli dan hanya
+	       dicek sekali saja. Bila lolos dari DBC_COND, maka
+	       a. DBC_MAP akan dijalankan 
+	       b. rekord di hard-disk akan berusaha diubah 
+	       c. bila update gagal karena rekord sudah diubah orang
+		  lain, rekord terbaru akan dibaca dan proses 
+		  a s/d c diatas akan diulang lagi.
+		
+	    6. DBC_COMMAND tipe JOIN hanya akan menghasilkan nilai benar (1)
+	       atau salah (0). Benar bila satu rekord ditemukan dan tidak
+	       bila tidak ada yang ditemukan.
+	    7. DBC_COMMAND tipe ADD_NO_CLEAR tidak akan mengosongkan
+	       rekord yang akan ditambahkan. Fungsinya untuk menambah
+	       rekord yang sedang ada di layar. Misalnya menambah
+	       rekord bkm pada saat trans1 di app_type juga bkm.
+	    8. UPDATE_LT dan JOIN_LT mencari rekord dengan target kemudian
+	       mundur satu rekord ke belakang sesuai dengan index di target.
+	    9. Untuk DBC_COMMAND SCANSCAN, jumlah field yang dipakai untuk
+	       mencari rekord di DBC_TARGET namaIndex namaField namaField
+	       adalah jumlah field yang ada - 1, jadi mis. bila
+	       DBC_TARGET brtkodtglidx brgkode brttgl
+
+	       maka field yang dipakai untuk mencari rekord dengan index
+	       brtkodtglidx adalah brgkode saja, tidak termasuk brttgl.
+	       Fasilitas USE_SET tidak dipakai untuk SCANSCAN.
+	   10. UPDATE_RANGE akan mengubah satu range rekord
+	       yang dimulai dari DBC_TARGET s/d DBC_LAST_TARGET.
+	       Index yang dipakai harus sama, cuma targetnya yang
+	       beda.
+	   11. JOIN_LAST_SFL berguna untuk mendapatkan rekord terakhir 
+	       dari satu index dengan target yang tidak penuh. Misalnya 
+	       dengan index ppdfakurtidx dan target F-1, kita akan 
+	       mendapatkan nomor urut terakhir dari faktur F-1. 
+	       Index ppdfakurtidx boleh duplikat.
+	   12. Fasilitas ADD_DIR untuk menambah rekord ke direktori lain.
+	   13. Fasilitas UPDATE_DIR untuk mengubah rekord di direktori lain.
+
+
+      2. DBCALCS(dsadd???)
+         Fungsi: Untuk layar dengan tipe QUERY_TYPE, penambahan rekord yang 
+	 normal akan digantikan oleh DBCALCS ini. Fungsi terpenting adalah 
+	 meniadakan pengisian nomor sejenis faktur yang harus bertambah 
+	 dengan sendirinya.
+
+         MAP(msadd???)
+             namaField		namaField		REPLACE
+
+         DBCALCS(dsadd???)
+	 	 DBC_COMMAND	ADD_SUBSTITUTE
+	 	 DBC_FILE	namaFile
+	 	 DBC_MAP        namaMap
+	 	 DBC_PREFIX      prefix
+	 	 DBC_LAST_LEN    panjangDigit atau {namaField}
+	 	 DBC_LAST_TARGET
+			 namaIndex	namaField
+
+	 MAP(msupd???)
+     		  namaField	namaField		REPLACE
+
+         DBCALCS(dsupd???)
+		 DBC_COMMAND	UPD_SUBSTITUTE
+		 DBC_TARGET      namaIndex	namaField
+		 DBC_MAP         msupd???
+		 DBC_PREFIX      ???              
+		 DBC_LAST_LEN    panjangDigit
+		 DBC_LAST_TARGET namaIndex	namaField
+
+	 Catatan:
+	    1. Bila ada DBC_PREFIX, prefix akan digunakan misalnya
+	       DBC_PREFIX  F- dan DBC_LAST_LEN = 7, maka rekord pertama akan
+	       menjadi F-00001
+	    2. Bila DBC_PREFIX tidak ada tapi field dari DBC_LAST_TARGET sudah 
+	       mempunyai isi tertentu, maka isi field akan digunakan sebagai 
+	       awalan.
+	    3. Bila DBC_PREFIX ada dan field terisi sesuatu pada saat DBCALCS 
+	       ini dijalankan, maka DBC_PREFIX  yang akan digunakan.
+	    4. DBC_LAST_TARGET harus menggunakan index yang tidak duplikat
+	       dan hanya berisi satu field
+	    5. Map dengan nama field sebagai asal dan tujuan harus ada untuk
+	       menampilkan nilai dari field itu di layar.
+	    6. PST_SUB_ADDCMD harus ada pada POSTING untuk ADD_SUBSTITUTE
+	    7. PST_SUB_UPDCMD harus ada pada POSTING untuk UPD_SUBSTITUTE
+
+	    8. DBC_MAP dijalankan sesudah DBC_TARGET untuk ADD_SUBSTITUTE 
+	       dan UPDATE_SUBSTITUTE tetapi sebelum DBC_TARGET untuk 
+	       ADD dan UPDATE.
+      4. DBCALCS(dmap???)
+	 Fungsi: Menjalankan MAP dengan melalui DBCALCS. Fungsi ini
+	    dibutuhkan karena SPCALCS hanya dapat melaksanakan DBCALCS
+	    dan tidak MAP. Maka untuk memberikan fasilitas MAP pada SPCALCS,
+	    DBCALCS dengan tipe MAPMAP diadakan.
+
+		DBC_COMMAND MAPMAP
+		DBC_MAP     m?????
+
+	</PRE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x267.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x275.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>MASTER_MP</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c173.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>SPCALCS</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,205 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>CALCS</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Tutorial Ksystem V2016.09.20"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Daftar Perintah Program Ksystem"
+HREF="c173.html"><LINK
+REL="PREVIOUS"
+TITLE="HOOKS"
+HREF="x247.html"><LINK
+REL="NEXT"
+TITLE="MAP"
+HREF="x255.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Tutorial Ksystem V2016.09.20</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x247.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 15. Daftar Perintah Program Ksystem</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x255.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN251"
+>15.10. CALCS</A
+></H1
+><P
+>&#13;   	Perintah ini menghitung satu nilai tertentu atau mendapatkan kondisi 
+	betul atau salah, nama calcs harus diawali dengan karakter 'c'.
+	</P
+><PRE
+CLASS="programlisting"
+>&#13;   Cara memakai:
+   CALCS()
+   nama calcs      perhitungan
+   contoh:
+   CALCS()
+      cnol          0
+      ctotpjl       ppdjmu * ppdhrg
+      cstsOPNaCLSD  ppmsts == "OPEN"  ||  ppmsts == "CLSD"
+      cABCdanOPEN   ppmplg == "ABC" &#38;&#38; ppmsts == "OPEN"
+      cppdada       djoinppd == 1  
+      cststgl       lsts + STRING(ltgl1) /* ubah jadi STRING, untuk index */
+      ccoba         lsts + FLD_TO_STRING(ltgl) /* semua tipe ke string tanpa 
+						** ada spasi baik di depan
+						** maupun di belakang
+						*/
+      cstsutk       lsts + STRIP(luntuk) /* hapus spasi di belakang luntuk */
+         djoinppd adalah nama DBCALCS tipe JOIN
+      cperintah     "cp EXPORT/\* 1111/IMPORT" /* '*' harus ditulis \* */
+      cbulat        DO_LIB ap_bulat(lnilai,lbulat_ke,&#38;lhasil)
+      c2pangkat3    2 $ 3
+      cthbln        DO_LIB ap_thbln()   /* string -&#62; r_string8, sedang
+      cakmhr        DO_LIB ap_akmhr()   ** lainnya -&#62; r_double8
+      ctambl        DO_LIB ap_tambl()   */
+      cakhbl        DO_LIB ap_akhbl()
+      cbulanprj     BULAN(ltgl)   /* bulan dari tanggal ltgl =&#62; numeric */
+      cthnbulanprj  THBLN(ltgl) /* tahun_bulan dari tanggal ltgl =&#62; numeric */
+      cnofak        "PJ" + THBLS(ltgl) /* hasil string mis. PJ0702 */
+      cnofak        "PJ" + THS(ltgl) /* hasil string, mis. PJ07 */
+      cdirada       CHKDR(ldir) /* cek apakah ldir ada sebagai direktori,
+                                ** ldir = STRING, hasil =&#62; numeric
+				*/
+      cdirada       CHKDR_TGL(ltgl)
+      				/* cek apakah ada direktori yang
+                                ** namanya = YYMM dari ltgl = DATE.
+                                ** hasil =&#62; numeric 
+				*/
+      ctglok        CHKTG(bkktgl) 
+      				/* Untuk mengecek tanggal mundur hingga
+                                ** sebelum bulan ini, mundur hanya bulan 
+				** ini (B) atau tidak bisa mundur (T),
+				** tergantung dari isian stsyt16
+				*/
+      crekordjrnisi	FLISI(jrnprm) == 1 
+	                        /* Mengecek bila database file jrn sudah
+	                        ** ada isinya atau belum
+				*/
+     cbesarfile         FLSIZ(lnamafile) 
+     				/* melihat besar file, file apapun */
+
+     cname	        LASTWORD(ppdket) 
+     				/* melihat kata terakhir dari 
+				  /home/ksystem/laporan/msg.txt, 
+				  menghasilkan msg.txt */
+      
+	</PRE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x247.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x255.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>HOOKS</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c173.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>MAP</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

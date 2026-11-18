@@ -1,0 +1,31 @@
+IMAGE(tmptranst)
+/--------------------------------------------------------------------------\
+|/-----------------------------------------------------------------\       |
+||t.RekapOJT                              t.Total ___ _____________|	   |
+|\-----------------------------------------------------------------/	   |
+|-------------t--------t--------------t--------------.------------.--------|             
+|t.Keterangan |t.Jual  |t.TglMulai    |t.TglSelesai  |t.RpPoint   |t.Unit  |             
+\-------------.- ------.--------------.--------------.------------.--------/                  
+
+
+IMAGE(tmptrans)
+|_____________|________|______________|______________|____________|_________|                   
+
+FIELD(tmptranst)
+tlmperdisd      PROTECT                 INPUTRI         1
+tlmperdis	PROTECT			INPUTRI		2
+
+FIELD(tmptrans)
+tldsat	        PROTECT			INPUTRI		1
+tldkat          PROTECT                 INPUTRI         1
+tldtgl2         PROTECT  {DD-MM-YY}                 INPUTRI         2
+tldtgl3         PROTECT  {DD-MM-YY}                 INPUTRI         3
+tldhrg 		PROTECT			INPUTRI		4
+tldjml          PROTECT                 INPUTRI         5
+
+SUBFILE(tmptrans)
+	SFL_SORT_BY_FIELD tldtgl2
+        SFL_LINES(8)
+        SFL_TITLE(tmptranst)
+        SFL_TARGET
+        tldstsbrgukr   lRKPOJTMGA gv_CLSD tlmnobuk 

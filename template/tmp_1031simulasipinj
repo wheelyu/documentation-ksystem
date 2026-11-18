@@ -1,0 +1,82 @@
+IMAGE(tmptranst)
+/------------------------------------\
+|/---i.SimulasiPinj-----------------\|
+||t.PokokPinj  :_________           ||
+||t.Lama       :_________           ||
+||t.Sewa       :_________           ||
+||t.Admin      :_________           ||
+||t.Diterima   :_________           ||
+|\----------------------------------/|
+\------------------------------------/
+
+IMAGE(tmptrans)
+
+FIELD(tmptranst)
+tldhrg       NUMERIC                    INPUTRI  1
+tldket2      NOCHANGE                   INPUTRI  2
+tldperdis    PROTECT QPROTECT      INPUTRI  3
+tldtotdis    PROTECT QPROTECT      INPUTRI  4
+tldsubtot    PROTECT QPROTECT      INPUTRI  5
+
+DEFAULTS(tmptranst)
+tldhrg    INIT_ADD          {lmaxpemberian}
+tldket2   DFALT_LIST        15
+                            30
+
+EDITS(tmptranst)
+Harga Tidak bisa kurang dari nol    tldhrg    MAND_PLUS
+
+HOOKS(tmptranst)
+AFTER_INPUT cur_field=tldhrg DO_MAP SHOW
+             IF cpokokvalid mvalidpokok
+             ELSE HKCURSOR STAY
+             HKMSG Pokok pinjaman tidak boleh lebih dari max pemberian
+AFTER_INPUT cur_field=tldhrg DO_MAP SHOW mhitungsimulasi
+AFTER_INPUT cur_field=tldhrg DO_SCAN djointlmcab
+AFTER_INPUT cur_field=tldhrg DO_SCAN djoincabtbd
+AFTER_INPUT cur_field=tldhrg DO_MAP mrmdbatas
+AFTER_INPUT cur_field=tldhrg DO_LIB_IF cjoinrmdkab ap_ambts(gv_INPG,lrmdbatasgab,ltenor,l0,l0,&lhslbatas1,&lhslbatas2,&lhslbatas3,lbtstxt1,lbtstxt2)
+AFTER_INPUT cur_field=tldhrg DO_MAP SHOW
+             IF cbatas300 mdum
+             ELSE HKCURSOR STAY
+             HKMSG t.PinjamanMin300rb
+AFTER_INPUT cur_field=tldhrg DO_MAP SHOW
+             IF cbatas500 mdum
+             ELSE HKCURSOR STAY
+             HKMSG t.PinjamanMin500rb
+AFTER_INPUT cur_field=tldhrg DO_MAP SHOW
+             IF cbatas1jt mdum
+             ELSE HKCURSOR STAY
+             HKMSG t.PinjamanMin1jt
+AFTER_INPUT cur_field=tldhrg DO_MAP SHOW
+            IF cmorethanhalf mvalidpokok
+            ELSE HKCURSOR STAY
+            HKMSG Pokok pinjaman tidak boleh kurang dari setengah
+AFTER_INPUT cur_field=tldket2 DO_MAP SHOW mhitungsimulasi
+AFTER_INPUT cur_field=tldket2 DO_SCAN djointlmcab
+AFTER_INPUT cur_field=tldket2 DO_SCAN djoincabtbd
+AFTER_INPUT cur_field=tldket2 DO_MAP mrmdbatas
+AFTER_INPUT cur_field=tldket2 DO_LIB_IF cjoinrmdkab ap_ambts(gv_INPG,lrmdbatasgab,ltenor,l0,l0,&lhslbatas1,&lhslbatas2,&lhslbatas3,lbtstxt1,lbtstxt2)
+AFTER_INPUT cur_field=tldket2 DO_MAP SHOW
+             IF cbatas300 mdum
+             ELSE HKCURSOR tldhrg
+             HKMSG t.PinjamanMin300rb
+AFTER_INPUT cur_field=tldket2 DO_MAP SHOW
+             IF cbatas500 mdum
+             ELSE HKCURSOR tldhrg
+             HKMSG t.PinjamanMin500rb
+AFTER_INPUT cur_field=tldket2 DO_MAP SHOW
+             IF cbatas1jt mdum
+             ELSE HKCURSOR tldhrg
+             HKMSG t.PinjamanMin1jt
+
+SUBFILE(tmptrans)
+SFL_LINES(1)
+SFL_TITLE(tmptranst)
+SFL_COND ckond5OK
+SFL_TARGET
+tldbukbrglok    tlmnobuk    ltagsimpjm
+SFL_MAP
+tlmnobuk       tldnobuk    REPLACE
+ltagsimpjm     tldbrg      REPLACE
+ldttksrmga     tlddata     REPLACE
